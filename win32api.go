@@ -1,7 +1,6 @@
 package win32api
 
 import (
-	"log"
 	"syscall"
 	"unsafe"
 )
@@ -34,7 +33,6 @@ type UINT uint32
 //type LPCWSTR *uint16
 //type LONG_PTR uintptr
 
-// 構造体は、サイズを C.sizeof_ と unsafe.Sizeof を比べる。
 type Wndclassex struct {
 	Size       uint32
 	Style      uint32
@@ -49,27 +47,23 @@ type Wndclassex struct {
 	ClassName  *uint16
 	IconSm     HICON
 }
+const sizeof_WNDCLASSEX = C.sizeof_WNDCLASSEX
 
 type Createstruct struct {
 	CreateParams LPVOID
 	Instance     HINSTANCE
 	Menu         HMENU
 	Parent       HWND
-	Cy           int
-	Cx           int
-	X            int
-	Y            int
+	Cy           int32
+	Cx           int32
+	X            int32
+	Y            int32
 	Style        LONG
 	Name         *uint16
 	Class        *uint16
 	ExStyle      DWORD
 }
-
-func init() {
-	if unsafe.Sizeof(Wndclassex{}) != C.sizeof_WNDCLASSEX {
-		log.Panicln("T100: size dose not match!")
-	}
-}
+const sizeof_CREATESTRUCTW = C.sizeof_CREATESTRUCTW
 
 func MakeIntResource(id uint16) *uint16 {
 	return (*uint16)(unsafe.Pointer(uintptr(id)))
@@ -81,6 +75,7 @@ func MakeIntResource(id uint16) *uint16 {
 // GetWindowLongPtr does not return syscall.EINVAL
 //sys getWindowLongPtr(hWnd HWND, nIndex int) (longPtr uintptr, err error) = user32.GetWindowLongPtrW
 func GetWindowLongPtr(hWnd HWND, nIndex int) (longPtr uintptr, err error) {
+	longPtr, err = getWindowLongPtr(hWnd, nIndex)
 	if err == syscall.EINVAL {
 		err = nil
 	}
@@ -103,7 +98,7 @@ func SetWindowLongPtr(hWnd HWND, nIndex int, dwNewLong uintptr) (longPtr uintptr
 //sys LoadIcon(hInstance HINSTANCE, lpIconName *uint16) (icon HICON, err error) = user32.LoadIconW
 //sys LoadCursor(hInstance HINSTANCE, lpCursorName *uint16) (cursor HCURSOR, err error) = user32.LoadCursorW
 //sys RegisterClassEx(Arg1 *Wndclassex) (atm ATOM) = user32.RegisterClassExW
-//sys GetClientRect(hWnd HWND, lpRect *RECT) (b bool) = user32.GetClientRect
+//sys GetClientRect(hWnd HWND, lpRect *RECT) (b bool, err error) [failretval==false] = user32.GetClientRect
 //sys ShowWindow(hWnd HWND, nCmdShow int) (b bool)= user32.ShowWindow
 //sys UpdateWindow(hWnd HWND) (b bool) = user32.UpdateWindow
 //sys DefWindowProc(hWnd HWND, Msg UINT, wParam WPARAM, lParam LPARAM) (result LRESULT) = user32.DefWindowProcW
@@ -111,6 +106,6 @@ func SetWindowLongPtr(hWnd HWND, nIndex int, dwNewLong uintptr) (longPtr uintptr
 //sys GetDC(hwnd HWND) (hdc HDC) = user32.GetDC
 //sys GetDeviceCaps(hdc HDC, index int) (i int) = user32.GetDeviceCaps
 //sys ReleaseDC(hWnd HWND, hDC HDC) (b bool) = user32.ReleaseDC
-//sys  GetProcessDpiAwareness(hprocess HANDLE , value *ProcessDpiAwareness) (result HRESULT) = shcore.GetProcessDpiAwareness
+//sys  GetProcessDpiAwareness(hprocess syscall.Handle , value *ProcessDpiAwareness) (result HRESULT) = shcore.GetProcessDpiAwareness
 
 //sys CreateSolidBrush(color COLORREF) (hBrush HBRUSH) = gdi32.CreateSolidBrush

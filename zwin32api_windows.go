@@ -158,9 +158,16 @@ func RegisterClassEx(Arg1 *Wndclassex) (atm ATOM) {
 	return
 }
 
-func GetClientRect(hWnd HWND, lpRect *RECT) (b bool) {
-	r0, _, _ := syscall.Syscall(procGetClientRect.Addr(), 2, uintptr(hWnd), uintptr(unsafe.Pointer(lpRect)), 0)
+func GetClientRect(hWnd HWND, lpRect *RECT) (b bool, err error) {
+	r0, _, e1 := syscall.Syscall(procGetClientRect.Addr(), 2, uintptr(hWnd), uintptr(unsafe.Pointer(lpRect)), 0)
 	b = r0 != 0
+	if b == false {
+		if e1 != 0 {
+			err = errnoErr(e1)
+		} else {
+			err = syscall.EINVAL
+		}
+	}
 	return
 }
 
