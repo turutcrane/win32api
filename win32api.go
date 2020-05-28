@@ -27,8 +27,17 @@ type LPVOID uintptr
 type LRESULT uintptr
 type WPARAM uintptr // UINT_PTR
 type LPARAM uintptr // LONG_PTR
-type RECT C.RECT
+type Rect struct {
+	Left   LONG
+	Top    LONG
+	Right  LONG
+	Bottom LONG
+}
+
+const sizeof_RECT = C.sizeof_RECT
+
 type UINT uint32
+type WNDPROC uintptr
 
 //type LPCWSTR *uint16
 //type LONG_PTR uintptr
@@ -47,6 +56,7 @@ type Wndclassex struct {
 	ClassName  *uint16
 	IconSm     HICON
 }
+
 const sizeof_WNDCLASSEX = C.sizeof_WNDCLASSEX
 
 type Createstruct struct {
@@ -63,6 +73,7 @@ type Createstruct struct {
 	Class        *uint16
 	ExStyle      DWORD
 }
+
 const sizeof_CREATESTRUCTW = C.sizeof_CREATESTRUCTW
 
 func MakeIntResource(id uint16) *uint16 {
@@ -98,7 +109,7 @@ func SetWindowLongPtr(hWnd HWND, nIndex int, dwNewLong uintptr) (longPtr uintptr
 //sys LoadIcon(hInstance HINSTANCE, lpIconName *uint16) (icon HICON, err error) = user32.LoadIconW
 //sys LoadCursor(hInstance HINSTANCE, lpCursorName *uint16) (cursor HCURSOR, err error) = user32.LoadCursorW
 //sys RegisterClassEx(Arg1 *Wndclassex) (atm ATOM) = user32.RegisterClassExW
-//sys GetClientRect(hWnd HWND, lpRect *RECT) (b bool, err error) [failretval==false] = user32.GetClientRect
+//sys GetClientRect(hWnd HWND, lpRect *Rect) (b bool, err error) [failretval==false] = user32.GetClientRect
 //sys ShowWindow(hWnd HWND, nCmdShow int) (b bool)= user32.ShowWindow
 //sys UpdateWindow(hWnd HWND) (b bool) = user32.UpdateWindow
 //sys DefWindowProc(hWnd HWND, Msg UINT, wParam WPARAM, lParam LPARAM) (result LRESULT) = user32.DefWindowProcW
@@ -106,6 +117,7 @@ func SetWindowLongPtr(hWnd HWND, nIndex int, dwNewLong uintptr) (longPtr uintptr
 //sys GetDC(hwnd HWND) (hdc HDC) = user32.GetDC
 //sys GetDeviceCaps(hdc HDC, index int) (i int) = user32.GetDeviceCaps
 //sys ReleaseDC(hWnd HWND, hDC HDC) (b bool) = user32.ReleaseDC
-//sys  GetProcessDpiAwareness(hprocess syscall.Handle , value *ProcessDpiAwareness) (result HRESULT) = shcore.GetProcessDpiAwareness
+//sys GetProcessDpiAwareness(hprocess syscall.Handle , value *ProcessDpiAwareness) (result HRESULT) = shcore.GetProcessDpiAwareness
+//sys CallWindowProc(lpPrevWndFunc WNDPROC, hWnd HWND, Msg UINT, wParam WPARAM, lParam LPARAM) (result LRESULT) = user32.CallWindowProcW
 
 //sys CreateSolidBrush(color COLORREF) (hBrush HBRUSH) = gdi32.CreateSolidBrush

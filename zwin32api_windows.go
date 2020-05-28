@@ -60,6 +60,7 @@ var (
 	procGetDeviceCaps             = moduser32.NewProc("GetDeviceCaps")
 	procReleaseDC                 = moduser32.NewProc("ReleaseDC")
 	procGetProcessDpiAwareness    = modshcore.NewProc("GetProcessDpiAwareness")
+	procCallWindowProcW           = moduser32.NewProc("CallWindowProcW")
 	procCreateSolidBrush          = modgdi32.NewProc("CreateSolidBrush")
 )
 
@@ -158,7 +159,7 @@ func RegisterClassEx(Arg1 *Wndclassex) (atm ATOM) {
 	return
 }
 
-func GetClientRect(hWnd HWND, lpRect *RECT) (b bool, err error) {
+func GetClientRect(hWnd HWND, lpRect *Rect) (b bool, err error) {
 	r0, _, e1 := syscall.Syscall(procGetClientRect.Addr(), 2, uintptr(hWnd), uintptr(unsafe.Pointer(lpRect)), 0)
 	b = r0 != 0
 	if b == false {
@@ -223,6 +224,12 @@ func ReleaseDC(hWnd HWND, hDC HDC) (b bool) {
 func GetProcessDpiAwareness(hprocess syscall.Handle, value *ProcessDpiAwareness) (result HRESULT) {
 	r0, _, _ := syscall.Syscall(procGetProcessDpiAwareness.Addr(), 2, uintptr(hprocess), uintptr(unsafe.Pointer(value)), 0)
 	result = HRESULT(r0)
+	return
+}
+
+func CallWindowProc(lpPrevWndFunc WNDPROC, hWnd HWND, Msg UINT, wParam WPARAM, lParam LPARAM) (result LRESULT) {
+	r0, _, _ := syscall.Syscall6(procCallWindowProcW.Addr(), 5, uintptr(lpPrevWndFunc), uintptr(hWnd), uintptr(Msg), uintptr(wParam), uintptr(lParam), 0)
+	result = LRESULT(r0)
 	return
 }
 
