@@ -61,6 +61,8 @@ var (
 	procReleaseDC                 = moduser32.NewProc("ReleaseDC")
 	procGetProcessDpiAwareness    = modshcore.NewProc("GetProcessDpiAwareness")
 	procCallWindowProcW           = moduser32.NewProc("CallWindowProcW")
+	procEnableWindow              = moduser32.NewProc("EnableWindow")
+	procSendMessageW              = moduser32.NewProc("SendMessageW")
 	procCreateSolidBrush          = modgdi32.NewProc("CreateSolidBrush")
 )
 
@@ -230,6 +232,24 @@ func GetProcessDpiAwareness(hprocess syscall.Handle, value *ProcessDpiAwareness)
 func CallWindowProc(lpPrevWndFunc WNDPROC, hWnd HWND, Msg UINT, wParam WPARAM, lParam LPARAM) (result LRESULT) {
 	r0, _, _ := syscall.Syscall6(procCallWindowProcW.Addr(), 5, uintptr(lpPrevWndFunc), uintptr(hWnd), uintptr(Msg), uintptr(wParam), uintptr(lParam), 0)
 	result = LRESULT(r0)
+	return
+}
+
+func EnableWindow(hWnd HWND, bEnable bool) (b bool) {
+	var _p0 uint32
+	if bEnable {
+		_p0 = 1
+	} else {
+		_p0 = 0
+	}
+	r0, _, _ := syscall.Syscall(procEnableWindow.Addr(), 2, uintptr(hWnd), uintptr(_p0), 0)
+	b = r0 != 0
+	return
+}
+
+func SendMessage(hWnd HWND, Msg UINT, wParam WPARAM, lParam LPARAM) (resust LRESULT) {
+	r0, _, _ := syscall.Syscall6(procSendMessageW.Addr(), 4, uintptr(hWnd), uintptr(Msg), uintptr(wParam), uintptr(lParam), 0, 0)
+	resust = LRESULT(r0)
 	return
 }
 

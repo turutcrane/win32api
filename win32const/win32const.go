@@ -1,7 +1,9 @@
-package win32api
+package win32const
 
 import (
 	"unsafe"
+
+	"github.com/turutcrane/win32api"
 )
 
 // #include <windows.h>
@@ -66,6 +68,65 @@ const (
 )
 
 const (
+	EsLeft        = C.ES_LEFT
+	EsCenter      = C.ES_CENTER
+	EsRight       = C.ES_RIGHT
+	EsMultiline   = C.ES_MULTILINE
+	EsUppercase   = C.ES_UPPERCASE
+	EsLowercase   = C.ES_LOWERCASE
+	EsPassword    = C.ES_PASSWORD
+	EsAutovscroll = C.ES_AUTOVSCROLL
+	EsAutohscroll = C.ES_AUTOHSCROLL
+	EsNohidesel   = C.ES_NOHIDESEL
+	EsOemconvert  = C.ES_OEMCONVERT
+	EsReadonly    = C.ES_READONLY
+	EsWantreturn  = C.ES_WANTRETURN
+	EsNumber      = C.ES_NUMBER
+)
+
+const (
+	EmGetsel              = C.EM_GETSEL
+	EmSetsel              = C.EM_SETSEL
+	EmGetrect             = C.EM_GETRECT
+	EmSetrect             = C.EM_SETRECT
+	EmSetrectnp           = C.EM_SETRECTNP
+	EmScroll              = C.EM_SCROLL
+	EmLinescroll          = C.EM_LINESCROLL
+	EmScrollcaret         = C.EM_SCROLLCARET
+	EmGetmodify           = C.EM_GETMODIFY
+	EmSetmodify           = C.EM_SETMODIFY
+	EmGetlinecount        = C.EM_GETLINECOUNT
+	EmLineindex           = C.EM_LINEINDEX
+	EmSethandle           = C.EM_SETHANDLE
+	EmGethandle           = C.EM_GETHANDLE
+	EmGetthumb            = C.EM_GETTHUMB
+	EmLinelength          = C.EM_LINELENGTH
+	EmReplacesel          = C.EM_REPLACESEL
+	EmGetline             = C.EM_GETLINE
+	EmLimittext           = C.EM_LIMITTEXT
+	EmCanundo             = C.EM_CANUNDO
+	EmUndo                = C.EM_UNDO
+	EmFmtlines            = C.EM_FMTLINES
+	EmLinefromchar        = C.EM_LINEFROMCHAR
+	EmSettabstops         = C.EM_SETTABSTOPS
+	EmSetpasswordchar     = C.EM_SETPASSWORDCHAR
+	EmEmptyundobuffer     = C.EM_EMPTYUNDOBUFFER
+	EmGetfirstvisibleline = C.EM_GETFIRSTVISIBLELINE
+	EmSetreadonly         = C.EM_SETREADONLY
+	EmSetwordbreakproc    = C.EM_SETWORDBREAKPROC
+	EmGetwordbreakproc    = C.EM_GETWORDBREAKPROC
+	EmGetpasswordchar     = C.EM_GETPASSWORDCHAR
+	EmSetmargins          = C.EM_SETMARGINS
+	EmGetmargins          = C.EM_GETMARGINS
+	EmSetlimittext        = C.EM_SETLIMITTEXT
+	EmGetlimittext        = C.EM_GETLIMITTEXT
+	EmPosfromchar         = C.EM_POSFROMCHAR
+	EmCharfrompos         = C.EM_CHARFROMPOS
+	EmSetimestatus        = C.EM_SETIMESTATUS
+	EmGetimestatus        = C.EM_GETIMESTATUS
+)
+
+const (
 	GwlpWndproc    = C.GWLP_WNDPROC
 	GwlpHinstance  = C.GWLP_HINSTANCE
 	GwlpHwndparent = C.GWLP_HWNDPARENT
@@ -92,6 +153,168 @@ var (
 	IdcHelp        = (*uint16)(unsafe.Pointer(C.IDC_HELP))
 )
 
+const (
+	VkLbutton           = C.VK_LBUTTON
+	VkRbutton           = C.VK_RBUTTON
+	VkCancel            = C.VK_CANCEL
+	VkMbutton           = C.VK_MBUTTON
+	VkXbutton1          = C.VK_XBUTTON1
+	VkXbutton2          = C.VK_XBUTTON2
+	VkBack              = C.VK_BACK
+	VkTab               = C.VK_TAB
+	VkClear             = C.VK_CLEAR
+	VkReturn            = C.VK_RETURN
+	VkShift             = C.VK_SHIFT
+	VkControl           = C.VK_CONTROL
+	VkMenu              = C.VK_MENU
+	VkPause             = C.VK_PAUSE
+	VkCapital           = C.VK_CAPITAL
+	VkKana              = C.VK_KANA
+	VkHangeul           = C.VK_HANGEUL
+	VkHangul            = C.VK_HANGUL
+	VkJunja             = C.VK_JUNJA
+	VkFinal             = C.VK_FINAL
+	VkHanja             = C.VK_HANJA
+	VkKanji             = C.VK_KANJI
+	VkEscape            = C.VK_ESCAPE
+	VkConvert           = C.VK_CONVERT
+	VkNonconvert        = C.VK_NONCONVERT
+	VkAccept            = C.VK_ACCEPT
+	VkModechange        = C.VK_MODECHANGE
+	VkSpace             = C.VK_SPACE
+	VkPrior             = C.VK_PRIOR
+	VkNext              = C.VK_NEXT
+	VkEnd               = C.VK_END
+	VkHome              = C.VK_HOME
+	VkLeft              = C.VK_LEFT
+	VkUp                = C.VK_UP
+	VkRight             = C.VK_RIGHT
+	VkDown              = C.VK_DOWN
+	VkSelect            = C.VK_SELECT
+	VkPrint             = C.VK_PRINT
+	VkExecute           = C.VK_EXECUTE
+	VkSnapshot          = C.VK_SNAPSHOT
+	VkInsert            = C.VK_INSERT
+	VkDelete            = C.VK_DELETE
+	VkHelp              = C.VK_HELP
+	VkLwin              = C.VK_LWIN
+	VkRwin              = C.VK_RWIN
+	VkApps              = C.VK_APPS
+	VkSleep             = C.VK_SLEEP
+	VkNumpad0           = C.VK_NUMPAD0
+	VkNumpad1           = C.VK_NUMPAD1
+	VkNumpad2           = C.VK_NUMPAD2
+	VkNumpad3           = C.VK_NUMPAD3
+	VkNumpad4           = C.VK_NUMPAD4
+	VkNumpad5           = C.VK_NUMPAD5
+	VkNumpad6           = C.VK_NUMPAD6
+	VkNumpad7           = C.VK_NUMPAD7
+	VkNumpad8           = C.VK_NUMPAD8
+	VkNumpad9           = C.VK_NUMPAD9
+	VkMultiply          = C.VK_MULTIPLY
+	VkAdd               = C.VK_ADD
+	VkSeparator         = C.VK_SEPARATOR
+	VkSubtract          = C.VK_SUBTRACT
+	VkDecimal           = C.VK_DECIMAL
+	VkDivide            = C.VK_DIVIDE
+	VkF1                = C.VK_F1
+	VkF2                = C.VK_F2
+	VkF3                = C.VK_F3
+	VkF4                = C.VK_F4
+	VkF5                = C.VK_F5
+	VkF6                = C.VK_F6
+	VkF7                = C.VK_F7
+	VkF8                = C.VK_F8
+	VkF9                = C.VK_F9
+	VkF10               = C.VK_F10
+	VkF11               = C.VK_F11
+	VkF12               = C.VK_F12
+	VkF13               = C.VK_F13
+	VkF14               = C.VK_F14
+	VkF15               = C.VK_F15
+	VkF16               = C.VK_F16
+	VkF17               = C.VK_F17
+	VkF18               = C.VK_F18
+	VkF19               = C.VK_F19
+	VkF20               = C.VK_F20
+	VkF21               = C.VK_F21
+	VkF22               = C.VK_F22
+	VkF23               = C.VK_F23
+	VkF24               = C.VK_F24
+	VkNumlock           = C.VK_NUMLOCK
+	VkScroll            = C.VK_SCROLL
+	VkOemNecEqual       = C.VK_OEM_NEC_EQUAL
+	VkOemFjJisho        = C.VK_OEM_FJ_JISHO
+	VkOemFjMasshou      = C.VK_OEM_FJ_MASSHOU
+	VkOemFjTouroku      = C.VK_OEM_FJ_TOUROKU
+	VkOemFjLoya         = C.VK_OEM_FJ_LOYA
+	VkOemFjRoya         = C.VK_OEM_FJ_ROYA
+	VkLshift            = C.VK_LSHIFT
+	VkRshift            = C.VK_RSHIFT
+	VkLcontrol          = C.VK_LCONTROL
+	VkRcontrol          = C.VK_RCONTROL
+	VkLmenu             = C.VK_LMENU
+	VkRmenu             = C.VK_RMENU
+	VkBrowserBack       = C.VK_BROWSER_BACK
+	VkBrowserForward    = C.VK_BROWSER_FORWARD
+	VkBrowserRefresh    = C.VK_BROWSER_REFRESH
+	VkBrowserStop       = C.VK_BROWSER_STOP
+	VkBrowserSearch     = C.VK_BROWSER_SEARCH
+	VkBrowserFavorites  = C.VK_BROWSER_FAVORITES
+	VkBrowserHome       = C.VK_BROWSER_HOME
+	VkVolumeMute        = C.VK_VOLUME_MUTE
+	VkVolumeDown        = C.VK_VOLUME_DOWN
+	VkVolumeUp          = C.VK_VOLUME_UP
+	VkMediaNextTrack    = C.VK_MEDIA_NEXT_TRACK
+	VkMediaPrevTrack    = C.VK_MEDIA_PREV_TRACK
+	VkMediaStop         = C.VK_MEDIA_STOP
+	VkMediaPlayPause    = C.VK_MEDIA_PLAY_PAUSE
+	VkLaunchMail        = C.VK_LAUNCH_MAIL
+	VkLaunchMediaSelect = C.VK_LAUNCH_MEDIA_SELECT
+	VkLaunchApp1        = C.VK_LAUNCH_APP1
+	VkLaunchApp2        = C.VK_LAUNCH_APP2
+	VkOem1              = C.VK_OEM_1
+	VkOemPlus           = C.VK_OEM_PLUS
+	VkOemComma          = C.VK_OEM_COMMA
+	VkOemMinus          = C.VK_OEM_MINUS
+	VkOemPeriod         = C.VK_OEM_PERIOD
+	VkOem2              = C.VK_OEM_2
+	VkOem3              = C.VK_OEM_3
+	VkOem4              = C.VK_OEM_4
+	VkOem5              = C.VK_OEM_5
+	VkOem6              = C.VK_OEM_6
+	VkOem7              = C.VK_OEM_7
+	VkOem8              = C.VK_OEM_8
+	VkOemAx             = C.VK_OEM_AX
+	VkOem102            = C.VK_OEM_102
+	VkIcoHelp           = C.VK_ICO_HELP
+	VkIco00             = C.VK_ICO_00
+	VkProcesskey        = C.VK_PROCESSKEY
+	VkIcoClear          = C.VK_ICO_CLEAR
+	VkPacket            = C.VK_PACKET
+	VkOemReset          = C.VK_OEM_RESET
+	VkOemJump           = C.VK_OEM_JUMP
+	VkOemPa1            = C.VK_OEM_PA1
+	VkOemPa2            = C.VK_OEM_PA2
+	VkOemPa3            = C.VK_OEM_PA3
+	VkOemWsctrl         = C.VK_OEM_WSCTRL
+	VkOemCusel          = C.VK_OEM_CUSEL
+	VkOemAttn           = C.VK_OEM_ATTN
+	VkOemFinish         = C.VK_OEM_FINISH
+	VkOemCopy           = C.VK_OEM_COPY
+	VkOemAuto           = C.VK_OEM_AUTO
+	VkOemEnlw           = C.VK_OEM_ENLW
+	VkOemBacktab        = C.VK_OEM_BACKTAB
+	VkAttn              = C.VK_ATTN
+	VkCrsel             = C.VK_CRSEL
+	VkExsel             = C.VK_EXSEL
+	VkEreof             = C.VK_EREOF
+	VkPlay              = C.VK_PLAY
+	VkZoom              = C.VK_ZOOM
+	VkNoname            = C.VK_NONAME
+	VkPa1               = C.VK_PA1
+	VkOemClear          = C.VK_OEM_CLEAR
+)
 const (
 	WmNull                   = C.WM_NULL
 	WmCreate                 = C.WM_CREATE
@@ -429,14 +652,18 @@ const (
 	WsActivecaption = C.WS_ACTIVECAPTION
 )
 
-type ProcessDpiAwareness int
-
 const (
-	ProcessDpiUnaware         ProcessDpiAwareness = C.PROCESS_DPI_UNAWARE
-	ProcessSystemDpiAware     ProcessDpiAwareness = C.PROCESS_SYSTEM_DPI_AWARE
-	ProcessPerMonitorDpiAware ProcessDpiAwareness = C.PROCESS_PER_MONITOR_DPI_AWARE
+	ProcessDpiUnaware         win32api.ProcessDpiAwareness = C.PROCESS_DPI_UNAWARE
+	ProcessSystemDpiAware     win32api.ProcessDpiAwareness = C.PROCESS_SYSTEM_DPI_AWARE
+	ProcessPerMonitorDpiAware win32api.ProcessDpiAwareness = C.PROCESS_PER_MONITOR_DPI_AWARE
 )
 
 const (
 	SOk = C.S_OK
+)
+
+const (
+	sizeof_RECT          = C.sizeof_RECT
+	sizeof_WNDCLASSEX    = C.sizeof_WNDCLASSEX
+	sizeof_CREATESTRUCTW = C.sizeof_CREATESTRUCTW
 )

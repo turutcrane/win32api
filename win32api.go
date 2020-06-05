@@ -7,9 +7,6 @@ import (
 
 //go:generate go run golang.org/x/sys/windows/mkwinsyscall -output zwin32api_windows.go win32api.go
 
-// #include <windows.h>
-import "C"
-
 type ATOM int16
 type COLORREF DWORD
 type DWORD uint32
@@ -33,8 +30,7 @@ type Rect struct {
 	Right  LONG
 	Bottom LONG
 }
-
-const sizeof_RECT = C.sizeof_RECT
+type ProcessDpiAwareness int
 
 type UINT uint32
 type WNDPROC uintptr
@@ -57,8 +53,6 @@ type Wndclassex struct {
 	IconSm     HICON
 }
 
-const sizeof_WNDCLASSEX = C.sizeof_WNDCLASSEX
-
 type Createstruct struct {
 	CreateParams LPVOID
 	Instance     HINSTANCE
@@ -74,10 +68,12 @@ type Createstruct struct {
 	ExStyle      DWORD
 }
 
-const sizeof_CREATESTRUCTW = C.sizeof_CREATESTRUCTW
-
 func MakeIntResource(id uint16) *uint16 {
 	return (*uint16)(unsafe.Pointer(uintptr(id)))
+}
+
+func ToPCreatestruct(lparam LPARAM) *Createstruct {
+	return (*Createstruct)(unsafe.Pointer(lparam))
 }
 
 //sys GetModuleHandle(m *uint16) (handle HMODULE, err error) = GetModuleHandleW
@@ -119,5 +115,7 @@ func SetWindowLongPtr(hWnd HWND, nIndex int, dwNewLong uintptr) (longPtr uintptr
 //sys ReleaseDC(hWnd HWND, hDC HDC) (b bool) = user32.ReleaseDC
 //sys GetProcessDpiAwareness(hprocess syscall.Handle , value *ProcessDpiAwareness) (result HRESULT) = shcore.GetProcessDpiAwareness
 //sys CallWindowProc(lpPrevWndFunc WNDPROC, hWnd HWND, Msg UINT, wParam WPARAM, lParam LPARAM) (result LRESULT) = user32.CallWindowProcW
+//sys EnableWindow(hWnd HWND, bEnable bool) (b bool) = user32.EnableWindow
+//sys SendMessage(hWnd HWND, Msg UINT, wParam WPARAM, lParam LPARAM) (resust LRESULT)= user32.SendMessageW
 
 //sys CreateSolidBrush(color COLORREF) (hBrush HBRUSH) = gdi32.CreateSolidBrush
