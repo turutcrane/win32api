@@ -14,17 +14,18 @@ import (
 
 func main() {
 	prefix := flag.String("prefix", "", "Const prefix ex) WS_")
+	postfix := flag.String("postfix", "", "Const prefix ex) _CAHRSET")
 	// prologue := flag.Bool("prologue", false, "Outpput preprocesser prologue")
 	flag.Parse()
-	if *prefix == "" {
-		log.Fatalln("Usage: ex) mkwinconst -prefix WS_")
+	if *prefix == "" && *postfix == "" {
+		log.Fatalln("Usage: ex) mkwinconst -prefix WS_ -postfix _CHARSET")
 	}
 
 	// if *prologue {
 	// 	fmt.Println("#define MAKEINTRESOURCE")
 	// 	fmt.Println("#include <windows.h>")
 	// }
-	re := regexp.MustCompile("#define[\t ]+(" + *prefix + "[_[:alnum:]]+)")
+	re := regexp.MustCompile("#define[\t ]+(" + *prefix + "[_[:alnum:]]+" + *postfix +")")
 	scanner := bufio.NewScanner(os.Stdin)
 	for scanner.Scan() {
 		line := scanner.Text()

@@ -63,7 +63,18 @@ var (
 	procCallWindowProcW           = moduser32.NewProc("CallWindowProcW")
 	procEnableWindow              = moduser32.NewProc("EnableWindow")
 	procSendMessageW              = moduser32.NewProc("SendMessageW")
+	procBeginPaint                = moduser32.NewProc("BeginPaint")
+	procEndPaint                  = moduser32.NewProc("EndPaint")
+	procIsWindowEnabled           = moduser32.NewProc("IsWindowEnabled")
+	procSetWindowPos              = moduser32.NewProc("SetWindowPos")
+	procIsWindowVisible           = moduser32.NewProc("IsWindowVisible")
+	procSetMenu                   = moduser32.NewProc("SetMenu")
+	procBeginDeferWindowPos       = moduser32.NewProc("BeginDeferWindowPos")
+	procDeferWindowPos            = moduser32.NewProc("DeferWindowPos")
+	procEndDeferWindowPos         = moduser32.NewProc("EndDeferWindowPos")
 	procCreateSolidBrush          = modgdi32.NewProc("CreateSolidBrush")
+	procDeleteObject              = modgdi32.NewProc("DeleteObject")
+	procCreateFontW               = modgdi32.NewProc("CreateFontW")
 )
 
 func GetModuleHandle(m *uint16) (handle HMODULE, err error) {
@@ -253,8 +264,126 @@ func SendMessage(hWnd HWND, Msg UINT, wParam WPARAM, lParam LPARAM) (resust LRES
 	return
 }
 
+func BeginPaint(hWnd HWND, lpPaint *Paintstruct) (hdc HDC) {
+	r0, _, _ := syscall.Syscall(procBeginPaint.Addr(), 2, uintptr(hWnd), uintptr(unsafe.Pointer(lpPaint)), 0)
+	hdc = HDC(r0)
+	return
+}
+
+func EndPaint(hWnd HWND, lpPaint *Paintstruct) {
+	syscall.Syscall(procEndPaint.Addr(), 2, uintptr(hWnd), uintptr(unsafe.Pointer(lpPaint)), 0)
+	return
+}
+
+func IsWindowEnabled(hWnd HWND) (b bool) {
+	r0, _, _ := syscall.Syscall(procIsWindowEnabled.Addr(), 1, uintptr(hWnd), 0, 0)
+	b = r0 != 0
+	return
+}
+
+func SetWindowPos(hWnd HWND, hWndInsertAfter HWND, X int, Y int, cx int, cy int, uFlags UINT) (b bool, err error) {
+	r0, _, e1 := syscall.Syscall9(procSetWindowPos.Addr(), 7, uintptr(hWnd), uintptr(hWndInsertAfter), uintptr(X), uintptr(Y), uintptr(cx), uintptr(cy), uintptr(uFlags), 0, 0)
+	b = r0 != 0
+	if b == false {
+		if e1 != 0 {
+			err = errnoErr(e1)
+		} else {
+			err = syscall.EINVAL
+		}
+	}
+	return
+}
+
+func IsWindowVisible(hWnd HWND) (b bool) {
+	r0, _, _ := syscall.Syscall(procIsWindowVisible.Addr(), 1, uintptr(hWnd), 0, 0)
+	b = r0 != 0
+	return
+}
+
+func SetMenu(hWnd HWND, hMenu HMENU) (b bool, err error) {
+	r0, _, e1 := syscall.Syscall(procSetMenu.Addr(), 2, uintptr(hWnd), uintptr(hMenu), 0)
+	b = r0 != 0
+	if b == false {
+		if e1 != 0 {
+			err = errnoErr(e1)
+		} else {
+			err = syscall.EINVAL
+		}
+	}
+	return
+}
+
+func BeginDeferWindowPos(nNumWindows int) (hdwp HDWP, err error) {
+	r0, _, e1 := syscall.Syscall(procBeginDeferWindowPos.Addr(), 1, uintptr(nNumWindows), 0, 0)
+	hdwp = HDWP(r0)
+	if hdwp == 0 {
+		if e1 != 0 {
+			err = errnoErr(e1)
+		} else {
+			err = syscall.EINVAL
+		}
+	}
+	return
+}
+
+func DeferWindowPos(hWinPosInfo HDWP, hWnd HWND, hWndInsertAfter HWND, x int, y int, cx int, cy int, uFlags UINT) (hdwp HDWP, err error) {
+	r0, _, e1 := syscall.Syscall9(procDeferWindowPos.Addr(), 8, uintptr(hWinPosInfo), uintptr(hWnd), uintptr(hWndInsertAfter), uintptr(x), uintptr(y), uintptr(cx), uintptr(cy), uintptr(uFlags), 0)
+	hdwp = HDWP(r0)
+	if hdwp == 0 {
+		if e1 != 0 {
+			err = errnoErr(e1)
+		} else {
+			err = syscall.EINVAL
+		}
+	}
+	return
+}
+
+func EndDeferWindowPos(hWinPosInfo HDWP) (b bool, err error) {
+	r0, _, e1 := syscall.Syscall(procEndDeferWindowPos.Addr(), 1, uintptr(hWinPosInfo), 0, 0)
+	b = r0 != 0
+	if b == false {
+		if e1 != 0 {
+			err = errnoErr(e1)
+		} else {
+			err = syscall.EINVAL
+		}
+	}
+	return
+}
+
 func CreateSolidBrush(color COLORREF) (hBrush HBRUSH) {
 	r0, _, _ := syscall.Syscall(procCreateSolidBrush.Addr(), 1, uintptr(color), 0, 0)
 	hBrush = HBRUSH(r0)
+	return
+}
+
+func DeleteObject(ho HGDIOBJ) (b bool) {
+	r0, _, _ := syscall.Syscall(procDeleteObject.Addr(), 1, uintptr(ho), 0, 0)
+	b = r0 != 0
+	return
+}
+
+func CreateFont(cHeight int, cWidth int, cEscapement int, cOrientation int, cWeight int, bItalic bool, bUnderline bool, bStrikeOut bool, iCharSet DWORD, iOutPrecision DWORD, iClipPrecision DWORD, iQuality DWORD, iPitchAndFamily DWORD, pszFaceName *uint16) (hFont HFONT) {
+	var _p0 uint32
+	if bItalic {
+		_p0 = 1
+	} else {
+		_p0 = 0
+	}
+	var _p1 uint32
+	if bUnderline {
+		_p1 = 1
+	} else {
+		_p1 = 0
+	}
+	var _p2 uint32
+	if bStrikeOut {
+		_p2 = 1
+	} else {
+		_p2 = 0
+	}
+	r0, _, _ := syscall.Syscall15(procCreateFontW.Addr(), 14, uintptr(cHeight), uintptr(cWidth), uintptr(cEscapement), uintptr(cOrientation), uintptr(cWeight), uintptr(_p0), uintptr(_p1), uintptr(_p2), uintptr(iCharSet), uintptr(iOutPrecision), uintptr(iClipPrecision), uintptr(iQuality), uintptr(iPitchAndFamily), uintptr(unsafe.Pointer(pszFaceName)), 0)
+	hFont = HFONT(r0)
 	return
 }

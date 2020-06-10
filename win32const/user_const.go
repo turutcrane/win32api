@@ -10,6 +10,13 @@ import (
 // #include "shellscalingapi.h"
 import "C"
 
+const (
+	sizeof_RECT          = C.sizeof_RECT
+	sizeof_WNDCLASSEX    = C.sizeof_WNDCLASSEX
+	sizeof_CREATESTRUCTW = C.sizeof_CREATESTRUCTW
+	sizeof_PAINTSTRUCT   = C.sizeof_PAINTSTRUCT
+)
+
 // index of GetDevoceCaps
 const (
 	Logpixelsx = C.LOGPIXELSX
@@ -151,6 +158,32 @@ var (
 	IdcHand        = (*uint16)(unsafe.Pointer(C.IDC_HAND))
 	IdcAppstarting = (*uint16)(unsafe.Pointer(C.IDC_APPSTARTING))
 	IdcHelp        = (*uint16)(unsafe.Pointer(C.IDC_HELP))
+)
+
+const (
+	SizeRestored  = C.SIZE_RESTORED
+	SizeMinimized = C.SIZE_MINIMIZED
+	SizeMaximized = C.SIZE_MAXIMIZED
+	SizeMaxshow   = C.SIZE_MAXSHOW
+	SizeMaxhide   = C.SIZE_MAXHIDE
+)
+
+const (
+	SwpNosize         = C.SWP_NOSIZE
+	SwpNomove         = C.SWP_NOMOVE
+	SwpNozorder       = C.SWP_NOZORDER
+	SwpNoredraw       = C.SWP_NOREDRAW
+	SwpNoactivate     = C.SWP_NOACTIVATE
+	SwpFramechanged   = C.SWP_FRAMECHANGED
+	SwpShowwindow     = C.SWP_SHOWWINDOW
+	SwpHidewindow     = C.SWP_HIDEWINDOW
+	SwpNocopybits     = C.SWP_NOCOPYBITS
+	SwpNoownerzorder  = C.SWP_NOOWNERZORDER
+	SwpNosendchanging = C.SWP_NOSENDCHANGING
+	SwpDrawframe      = C.SWP_DRAWFRAME
+	SwpNoreposition   = C.SWP_NOREPOSITION
+	SwpDefererase     = C.SWP_DEFERERASE
+	SwpAsyncwindowpos = C.SWP_ASYNCWINDOWPOS
 )
 
 const (
@@ -315,6 +348,13 @@ const (
 	VkPa1               = C.VK_PA1
 	VkOemClear          = C.VK_OEM_CLEAR
 )
+
+const (
+	WaInactive    = C.WA_INACTIVE
+	WaActive      = C.WA_ACTIVE
+	WaClickactive = C.WA_CLICKACTIVE
+)
+
 const (
 	WmNull                   = C.WM_NULL
 	WmCreate                 = C.WM_CREATE
@@ -660,10 +700,4 @@ const (
 
 const (
 	SOk = C.S_OK
-)
-
-const (
-	sizeof_RECT          = C.sizeof_RECT
-	sizeof_WNDCLASSEX    = C.sizeof_WNDCLASSEX
-	sizeof_CREATESTRUCTW = C.sizeof_CREATESTRUCTW
 )

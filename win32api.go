@@ -8,11 +8,16 @@ import (
 //go:generate go run golang.org/x/sys/windows/mkwinsyscall -output zwin32api_windows.go win32api.go
 
 type ATOM int16
+type BOOL int32
+type BYTE byte
 type COLORREF DWORD
 type DWORD uint32
 type HBRUSH syscall.Handle
 type HCURSOR syscall.Handle
 type HDC syscall.Handle
+type HDWP syscall.Handle
+type HFONT uintptr
+type HGDIOBJ uintptr
 type HICON syscall.Handle
 type HINSTANCE syscall.Handle
 type HMENU syscall.Handle
@@ -68,6 +73,15 @@ type Createstruct struct {
 	ExStyle      DWORD
 }
 
+type Paintstruct struct {
+	hdc         HDC
+	fErase      BOOL
+	rcPaint     Rect
+	fRestore    BOOL
+	fIncUpdate  BOOL
+	rgbReserved [32]BYTE
+}
+
 func MakeIntResource(id uint16) *uint16 {
 	return (*uint16)(unsafe.Pointer(uintptr(id)))
 }
@@ -117,5 +131,34 @@ func SetWindowLongPtr(hWnd HWND, nIndex int, dwNewLong uintptr) (longPtr uintptr
 //sys CallWindowProc(lpPrevWndFunc WNDPROC, hWnd HWND, Msg UINT, wParam WPARAM, lParam LPARAM) (result LRESULT) = user32.CallWindowProcW
 //sys EnableWindow(hWnd HWND, bEnable bool) (b bool) = user32.EnableWindow
 //sys SendMessage(hWnd HWND, Msg UINT, wParam WPARAM, lParam LPARAM) (resust LRESULT)= user32.SendMessageW
+//sys BeginPaint(hWnd HWND, lpPaint *Paintstruct) (hdc HDC) = user32.BeginPaint
+//sys EndPaint(hWnd HWND, lpPaint *Paintstruct) = user32.EndPaint
+//sys IsWindowEnabled(hWnd HWND) (b bool) = user32.IsWindowEnabled
+//sys SetWindowPos(hWnd HWND, hWndInsertAfter HWND, X int, Y int, cx int, cy int, uFlags UINT) (b bool, err error) [failretval==false] = user32.SetWindowPos
+//sys IsWindowVisible(hWnd HWND) (b bool) = user32.IsWindowVisible
+//sys SetMenu(hWnd HWND, hMenu HMENU) (b bool, err error) [failretval==false] = user32.SetMenu
+//sys BeginDeferWindowPos(nNumWindows int) (hdwp HDWP, err error) = user32.BeginDeferWindowPos
+//sys DeferWindowPos(hWinPosInfo HDWP, hWnd HWND, hWndInsertAfter HWND, x int, y int, cx int, cy int, uFlags UINT) (hdwp HDWP, err error) = user32.DeferWindowPos
+//sys EndDeferWindowPos(hWinPosInfo HDWP) (b bool, err error) [failretval==false] = user32.EndDeferWindowPos
 
 //sys CreateSolidBrush(color COLORREF) (hBrush HBRUSH) = gdi32.CreateSolidBrush
+//sys DeleteObject(ho HGDIOBJ) (b bool) = gdi32.DeleteObject
+//sys CreateFont(cHeight int, cWidth int, cEscapement int, cOrientation int, cWeight int, bItalic bool, bUnderline bool, bStrikeOut bool, iCharSet DWORD, iOutPrecision DWORD, iClipPrecision DWORD, iQuality DWORD, iPitchAndFamily DWORD, pszFaceName *uint16) (hFont HFONT) = gdi32.CreateFontW
+
+func BoolToBOOL(b bool) BOOL {
+	if b {
+		return 1
+	}
+	return 0
+}
+
+func BOOLToBool(b BOOL) bool {
+	if b != 0 {
+		return true
+	}
+	return false
+}
+
+func LOWORD(w WPARAM) uintptr {
+	return uintptr(w & 0xffff)
+}

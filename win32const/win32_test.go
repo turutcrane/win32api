@@ -18,4 +18,7 @@ func TestStructSize(t *testing.T) {
 	if unsafe.Sizeof(win32api.Rect{}) != sizeof_RECT {
 		t.Error("T13: Createstruct: size dose not match!", unsafe.Sizeof(win32api.Createstruct{}), sizeof_RECT)
 	}
+	if unsafe.Sizeof(win32api.Paintstruct{}) != sizeof_PAINTSTRUCT {
+		t.Error("T13: Createstruct: size dose not match!", unsafe.Sizeof(win32api.Paintstruct{}), sizeof_PAINTSTRUCT)
+	}
 }
