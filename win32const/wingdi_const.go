@@ -2,7 +2,9 @@ package win32const
 
 import ()
 
-// #include <windows.h>
+// #include <windef.h>
+// #include <winbase.h>
+// #include <wingdi.h>
 import "C"
 
 // wingdi.h

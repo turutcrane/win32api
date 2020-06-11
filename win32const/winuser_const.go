@@ -6,7 +6,9 @@ import (
 	"github.com/turutcrane/win32api"
 )
 
-// #include <windows.h>
+// #include <windef.h>
+// #include <winbase.h>
+// #include <winuser.h>
 // #include "shellscalingapi.h"
 import "C"
 
