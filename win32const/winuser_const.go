@@ -143,6 +143,38 @@ const (
 	GwlpId         = C.GWLP_ID
 )
 
+const (
+	Hterror       = C.HTERROR
+	Httransparent = C.HTTRANSPARENT
+	Htnowhere     = C.HTNOWHERE
+	Htclient      = C.HTCLIENT
+	Htcaption     = C.HTCAPTION
+	Htsysmenu     = C.HTSYSMENU
+	Htgrowbox     = C.HTGROWBOX
+	Htsize        = C.HTSIZE
+	Htmenu        = C.HTMENU
+	Hthscroll     = C.HTHSCROLL
+	Htvscroll     = C.HTVSCROLL
+	Htminbutton   = C.HTMINBUTTON
+	Htmaxbutton   = C.HTMAXBUTTON
+	Htleft        = C.HTLEFT
+	Htright       = C.HTRIGHT
+	Httop         = C.HTTOP
+	Httopleft     = C.HTTOPLEFT
+	Httopright    = C.HTTOPRIGHT
+	Htbottom      = C.HTBOTTOM
+	Htbottomleft  = C.HTBOTTOMLEFT
+	Htbottomright = C.HTBOTTOMRIGHT
+	Htborder      = C.HTBORDER
+	Htreduce      = C.HTREDUCE
+	Htzoom        = C.HTZOOM
+	Htsizefirst   = C.HTSIZEFIRST
+	Htsizelast    = C.HTSIZELAST
+	Htobject      = C.HTOBJECT
+	Htclose       = C.HTCLOSE
+	Hthelp        = C.HTHELP
+)
+
 var (
 	IdcArrow       = (*uint16)(unsafe.Pointer(C.IDC_ARROW))
 	IdcIbeam       = (*uint16)(unsafe.Pointer(C.IDC_IBEAM))

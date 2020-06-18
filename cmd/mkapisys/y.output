@@ -1,0 +1,274 @@
+
+state 0
+	$accept: .funcdefs $end 
+	funcdefs: .    (1)
+	funcquals: .    (6)
+
+	IDENT  reduce 6 (src line 107)
+	'@'  shift 8
+	.  reduce 1 (src line 74)
+
+	funcdefs  goto 1
+	funcdef  goto 2
+	nsqual  goto 5
+	failretvalqual  goto 6
+	noerrqual  goto 7
+	funcqual  goto 4
+	funcquals  goto 3
+
+state 1
+	$accept:  funcdefs.$end 
+
+	$end  accept
+	.  error
+
+
+state 2
+	funcdefs:  funcdef.funcdefs 
+	funcdefs: .    (1)
+	funcquals: .    (6)
+
+	IDENT  reduce 6 (src line 107)
+	'@'  shift 8
+	.  reduce 1 (src line 74)
+
+	funcdefs  goto 9
+	funcdef  goto 2
+	nsqual  goto 5
+	failretvalqual  goto 6
+	noerrqual  goto 7
+	funcqual  goto 4
+	funcquals  goto 3
+
+state 3
+	funcdef:  funcquals.typespec funcname '(' params ')' ';' 
+
+	IDENT  shift 11
+	.  error
+
+	typespec  goto 10
+
+state 4
+	funcquals:  funcqual.funcquals 
+	funcquals: .    (6)
+
+	'@'  shift 8
+	.  reduce 6 (src line 107)
+
+	nsqual  goto 5
+	failretvalqual  goto 6
+	noerrqual  goto 7
+	funcqual  goto 4
+	funcquals  goto 12
+
+state 5
+	funcqual:  nsqual.    (8)
+
+	.  reduce 8 (src line 117)
+
+
+state 6
+	funcqual:  failretvalqual.    (9)
+
+	.  reduce 9 (src line 119)
+
+
+state 7
+	funcqual:  noerrqual.    (10)
+
+	.  reduce 10 (src line 120)
+
+
+state 8
+	nsqual:  '@'.NS IDENT 
+	failretvalqual:  '@'.FAILRETVAL NUMBER 
+	failretvalqual:  '@'.FAILRETVAL '-' NUMBER 
+	failretvalqual:  '@'.FAILRETVAL IDENT 
+	noerrqual:  '@'.NOERR 
+
+	NS  shift 13
+	FAILRETVAL  shift 14
+	NOERR  shift 15
+	.  error
+
+
+state 9
+	funcdefs:  funcdef funcdefs.    (2)
+
+	.  reduce 2 (src line 82)
+
+
+state 10
+	funcdef:  funcquals typespec.funcname '(' params ')' ';' 
+
+	IDENT  shift 17
+	.  error
+
+	funcname  goto 16
+
+state 11
+	typespec:  IDENT.    (4)
+
+	.  reduce 4 (src line 101)
+
+
+state 12
+	funcquals:  funcqual funcquals.    (7)
+
+	.  reduce 7 (src line 112)
+
+
+state 13
+	nsqual:  '@' NS.IDENT 
+
+	IDENT  shift 18
+	.  error
+
+
+state 14
+	failretvalqual:  '@' FAILRETVAL.NUMBER 
+	failretvalqual:  '@' FAILRETVAL.'-' NUMBER 
+	failretvalqual:  '@' FAILRETVAL.IDENT 
+
+	IDENT  shift 21
+	NUMBER  shift 19
+	'-'  shift 20
+	.  error
+
+
+state 15
+	noerrqual:  '@' NOERR.    (15)
+
+	.  reduce 15 (src line 141)
+
+
+state 16
+	funcdef:  funcquals typespec funcname.'(' params ')' ';' 
+
+	'('  shift 22
+	.  error
+
+
+state 17
+	funcname:  IDENT.    (5)
+
+	.  reduce 5 (src line 104)
+
+
+state 18
+	nsqual:  '@' NS IDENT.    (11)
+
+	.  reduce 11 (src line 122)
+
+
+state 19
+	failretvalqual:  '@' FAILRETVAL NUMBER.    (12)
+
+	.  reduce 12 (src line 127)
+
+
+state 20
+	failretvalqual:  '@' FAILRETVAL '-'.NUMBER 
+
+	NUMBER  shift 23
+	.  error
+
+
+state 21
+	failretvalqual:  '@' FAILRETVAL IDENT.    (14)
+
+	.  reduce 14 (src line 136)
+
+
+state 22
+	funcdef:  funcquals typespec funcname '('.params ')' ';' 
+	params: .    (16)
+
+	IDENT  shift 11
+	.  reduce 16 (src line 146)
+
+	typespec  goto 26
+	params  goto 24
+	param  goto 25
+
+state 23
+	failretvalqual:  '@' FAILRETVAL '-' NUMBER.    (13)
+
+	.  reduce 13 (src line 132)
+
+
+state 24
+	funcdef:  funcquals typespec funcname '(' params.')' ';' 
+	params:  params.',' param 
+
+	')'  shift 27
+	','  shift 28
+	.  error
+
+
+state 25
+	params:  param.    (17)
+
+	.  reduce 17 (src line 150)
+
+
+state 26
+	param:  typespec.pname 
+
+	IDENT  shift 30
+	.  error
+
+	pname  goto 29
+
+state 27
+	funcdef:  funcquals typespec funcname '(' params ')'.';' 
+
+	';'  shift 31
+	.  error
+
+
+state 28
+	params:  params ','.param 
+
+	IDENT  shift 11
+	.  error
+
+	typespec  goto 26
+	param  goto 32
+
+state 29
+	param:  typespec pname.    (19)
+
+	.  reduce 19 (src line 159)
+
+
+state 30
+	pname:  IDENT.    (20)
+
+	.  reduce 20 (src line 164)
+
+
+state 31
+	funcdef:  funcquals typespec funcname '(' params ')' ';'.    (3)
+
+	.  reduce 3 (src line 90)
+
+
+state 32
+	params:  params ',' param.    (18)
+
+	.  reduce 18 (src line 154)
+
+
+15 terminals, 13 nonterminals
+21 grammar rules, 33/8000 states
+0 shift/reduce, 0 reduce/reduce conflicts reported
+62 working sets used
+memory: parser 27/120000
+0 extra closures
+20 shift entries, 3 exceptions
+16 goto entries
+11 entries saved by goto default
+Optimizer space used: output 32/120000
+32 table entries, 0 zero
+maximum spread: 15, maximum offset: 28

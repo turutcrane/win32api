@@ -71,10 +71,13 @@ var (
 	procSetMenu                   = moduser32.NewProc("SetMenu")
 	procBeginDeferWindowPos       = moduser32.NewProc("BeginDeferWindowPos")
 	procDeferWindowPos            = moduser32.NewProc("DeferWindowPos")
+	procScreenToClient            = moduser32.NewProc("ScreenToClient")
+	procPtInRegion                = modgdi32.NewProc("PtInRegion")
 	procEndDeferWindowPos         = moduser32.NewProc("EndDeferWindowPos")
 	procCreateSolidBrush          = modgdi32.NewProc("CreateSolidBrush")
 	procDeleteObject              = modgdi32.NewProc("DeleteObject")
 	procCreateFontW               = modgdi32.NewProc("CreateFontW")
+	procCreateRectRgn             = modgdi32.NewProc("CreateRectRgn")
 )
 
 func GetModuleHandle(m *uint16) (handle HMODULE, err error) {
@@ -339,10 +342,22 @@ func DeferWindowPos(hWinPosInfo HDWP, hWnd HWND, hWndInsertAfter HWND, x int, y 
 	return
 }
 
-func EndDeferWindowPos(hWinPosInfo HDWP) (b bool, err error) {
+func ScreenToClient(hWnd HWND, lpPoint *Point) (r bool) {
+	r0, _, _ := syscall.Syscall(procScreenToClient.Addr(), 2, uintptr(hWnd), uintptr(unsafe.Pointer(lpPoint)), 0)
+	r = r0 != 0
+	return
+}
+
+func PtInRegion(hrgn HRGN, x int, y int) (r bool) {
+	r0, _, _ := syscall.Syscall(procPtInRegion.Addr(), 3, uintptr(hrgn), uintptr(x), uintptr(y))
+	r = r0 != 0
+	return
+}
+
+func EndDeferWindowPos(hWinPosInfo HDWP) (r bool, err error) {
 	r0, _, e1 := syscall.Syscall(procEndDeferWindowPos.Addr(), 1, uintptr(hWinPosInfo), 0, 0)
-	b = r0 != 0
-	if b == false {
+	r = r0 != 0
+	if r == false {
 		if e1 != 0 {
 			err = errnoErr(e1)
 		} else {
@@ -352,19 +367,19 @@ func EndDeferWindowPos(hWinPosInfo HDWP) (b bool, err error) {
 	return
 }
 
-func CreateSolidBrush(color COLORREF) (hBrush HBRUSH) {
+func CreateSolidBrush(color COLORREF) (r HBRUSH) {
 	r0, _, _ := syscall.Syscall(procCreateSolidBrush.Addr(), 1, uintptr(color), 0, 0)
-	hBrush = HBRUSH(r0)
+	r = HBRUSH(r0)
 	return
 }
 
-func DeleteObject(ho HGDIOBJ) (b bool) {
+func DeleteObject(ho HGDIOBJ) (r bool) {
 	r0, _, _ := syscall.Syscall(procDeleteObject.Addr(), 1, uintptr(ho), 0, 0)
-	b = r0 != 0
+	r = r0 != 0
 	return
 }
 
-func CreateFont(cHeight int, cWidth int, cEscapement int, cOrientation int, cWeight int, bItalic bool, bUnderline bool, bStrikeOut bool, iCharSet DWORD, iOutPrecision DWORD, iClipPrecision DWORD, iQuality DWORD, iPitchAndFamily DWORD, pszFaceName *uint16) (hFont HFONT) {
+func CreateFont(cHeight int, cWidth int, cEscapement int, cOrientation int, cWeight int, bItalic bool, bUnderline bool, bStrikeOut bool, iCharSet DWORD, iOutPrecision DWORD, iClipPrecision DWORD, iQuality DWORD, iPitchAndFamily DWORD, pszFaceName *uint16) (r HFONT) {
 	var _p0 uint32
 	if bItalic {
 		_p0 = 1
@@ -384,6 +399,12 @@ func CreateFont(cHeight int, cWidth int, cEscapement int, cOrientation int, cWei
 		_p2 = 0
 	}
 	r0, _, _ := syscall.Syscall15(procCreateFontW.Addr(), 14, uintptr(cHeight), uintptr(cWidth), uintptr(cEscapement), uintptr(cOrientation), uintptr(cWeight), uintptr(_p0), uintptr(_p1), uintptr(_p2), uintptr(iCharSet), uintptr(iOutPrecision), uintptr(iClipPrecision), uintptr(iQuality), uintptr(iPitchAndFamily), uintptr(unsafe.Pointer(pszFaceName)), 0)
-	hFont = HFONT(r0)
+	r = HFONT(r0)
+	return
+}
+
+func CreateRectRgn(x1 int, y1 int, x2 int, y2 int) (r HRGN) {
+	r0, _, _ := syscall.Syscall6(procCreateRectRgn.Addr(), 4, uintptr(x1), uintptr(y1), uintptr(x2), uintptr(y2), 0, 0)
+	r = HRGN(r0)
 	return
 }

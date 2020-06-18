@@ -5,7 +5,7 @@ import (
 	"unsafe"
 )
 
-//go:generate go run golang.org/x/sys/windows/mkwinsyscall -output zwin32api_windows.go win32api.go
+//go:generate go run golang.org/x/sys/windows/mkwinsyscall -output zwin32api_windows.go win32api.go w32api_windows.go
 
 type ATOM int16
 type BOOL int32
@@ -24,11 +24,15 @@ type HMENU syscall.Handle
 type HMODULE syscall.Handle
 type HWND syscall.Handle
 type HRESULT LONG
+type HRGN syscall.Handle
 type LONG int32
 type LPVOID uintptr
 type LRESULT uintptr
 type WPARAM uintptr // UINT_PTR
 type LPARAM uintptr // LONG_PTR
+type WORD int16
+type SHORT int16
+
 type Rect struct {
 	Left   LONG
 	Top    LONG
@@ -82,12 +86,29 @@ type Paintstruct struct {
 	rgbReserved [32]BYTE
 }
 
+type Point struct {
+	X LONG
+	Y LONG
+}
+
+type Points struct {
+	X SHORT
+	Y SHORT
+}
+
 func MakeIntResource(id uint16) *uint16 {
 	return (*uint16)(unsafe.Pointer(uintptr(id)))
 }
 
 func ToPCreatestruct(lparam LPARAM) *Createstruct {
 	return (*Createstruct)(unsafe.Pointer(lparam))
+}
+
+func Makepoints(lParam LPARAM) (points Points) {
+	points.X = SHORT(lParam & 0xff)
+	points.Y = SHORT((lParam >> 16) & 0xff)
+	
+	return points
 }
 
 //sys GetModuleHandle(m *uint16) (handle HMODULE, err error) = GetModuleHandleW
@@ -115,7 +136,7 @@ func SetWindowLongPtr(hWnd HWND, nIndex int, dwNewLong uintptr) (longPtr uintptr
 }
 
 //sys GetDpiForWindow(hwnd HWND) (dpi UINT) = user32.GetDpiForWindow
-//sys CreateWindowEx(dwExStyle DWORD, lpClassName *uint16, lpWindowName *uint16, dwStyle DWORD, x int, y int, nWidth int, nHeight int, hWndParent HWND, hMenu HMENU, hInstance HINSTANCE, lpParam LPVOID) (hwnd HWND, err error) = user32.CreateWindowExW
+//sys CreateWindowEx (dwExStyle DWORD, lpClassName *uint16, lpWindowName *uint16, dwStyle DWORD, x int, y int, nWidth int, nHeight int, hWndParent HWND, hMenu HMENU, hInstance HINSTANCE, lpParam LPVOID) (hwnd HWND, err error) = user32.CreateWindowExW
 //sys LoadIcon(hInstance HINSTANCE, lpIconName *uint16) (icon HICON, err error) = user32.LoadIconW
 //sys LoadCursor(hInstance HINSTANCE, lpCursorName *uint16) (cursor HCURSOR, err error) = user32.LoadCursorW
 //sys RegisterClassEx(Arg1 *Wndclassex) (atm ATOM) = user32.RegisterClassExW
@@ -139,11 +160,6 @@ func SetWindowLongPtr(hWnd HWND, nIndex int, dwNewLong uintptr) (longPtr uintptr
 //sys SetMenu(hWnd HWND, hMenu HMENU) (b bool, err error) [failretval==false] = user32.SetMenu
 //sys BeginDeferWindowPos(nNumWindows int) (hdwp HDWP, err error) = user32.BeginDeferWindowPos
 //sys DeferWindowPos(hWinPosInfo HDWP, hWnd HWND, hWndInsertAfter HWND, x int, y int, cx int, cy int, uFlags UINT) (hdwp HDWP, err error) = user32.DeferWindowPos
-//sys EndDeferWindowPos(hWinPosInfo HDWP) (b bool, err error) [failretval==false] = user32.EndDeferWindowPos
-
-//sys CreateSolidBrush(color COLORREF) (hBrush HBRUSH) = gdi32.CreateSolidBrush
-//sys DeleteObject(ho HGDIOBJ) (b bool) = gdi32.DeleteObject
-//sys CreateFont(cHeight int, cWidth int, cEscapement int, cOrientation int, cWeight int, bItalic bool, bUnderline bool, bStrikeOut bool, iCharSet DWORD, iOutPrecision DWORD, iClipPrecision DWORD, iQuality DWORD, iPitchAndFamily DWORD, pszFaceName *uint16) (hFont HFONT) = gdi32.CreateFontW
 
 func BoolToBOOL(b bool) BOOL {
 	if b {
@@ -161,4 +177,12 @@ func BOOLToBool(b BOOL) bool {
 
 func LOWORD(w WPARAM) uintptr {
 	return uintptr(w & 0xffff)
+}
+
+func HIWORD(w WPARAM) uintptr {
+	return uintptr((w >> 16) & 0xffff)
+}
+
+func LParamToPRect(lParam LPARAM) *Rect {
+	return (*Rect)(unsafe.Pointer(lParam))
 }

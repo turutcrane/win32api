@@ -1,0 +1,60 @@
+@ns user32
+@noerr
+BOOL ScreenToClient(
+  HWND    hWnd,
+  LPPOINT lpPoint
+);
+
+@ns gdi32
+@noerr
+BOOL PtInRegion(
+  HRGN hrgn,
+  int  x,
+  int  y
+);
+
+@ns user32
+@failretval false
+BOOL EndDeferWindowPos(
+  HDWP hWinPosInfo
+);
+
+@ns gdi32
+@noerr
+HBRUSH CreateSolidBrush(
+  COLORREF color
+);
+
+@ns gdi32
+@noerr
+BOOL DeleteObject(
+  HGDIOBJ ho
+);
+
+@ns gdi32
+@noerr
+HFONT CreateFontW(
+  int     cHeight,
+  int     cWidth,
+  int     cEscapement,
+  int     cOrientation,
+  int     cWeight,
+  bool    bItalic,      // DWORD -> bool
+  bool    bUnderline,   // DWORD -> bool
+  bool    bStrikeOut,   // DWORD -> bool
+  DWORD   iCharSet,
+  DWORD   iOutPrecision,
+  DWORD   iClipPrecision,
+  DWORD   iQuality,
+  DWORD   iPitchAndFamily,
+  LPCWSTR pszFaceName
+);
+
+@ns gdi32
+@noerr
+HRGN CreateRectRgn(
+  int x1,
+  int y1,
+  int x2,
+  int y2
+);
