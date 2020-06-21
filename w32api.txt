@@ -1,3 +1,61 @@
+//
+typedef struct tagWNDCLASSEXW {
+  UINT      cbSize;
+  UINT      style;
+  WNDPROC   lpfnWndProc;
+  int       cbClsExtra;
+  int       cbWndExtra;
+  HINSTANCE hInstance;
+  HICON     hIcon;
+  HCURSOR   hCursor;
+  HBRUSH    hbrBackground;
+  LPCWSTR   lpszMenuName;
+  LPCWSTR   lpszClassName;
+  HICON     hIconSm;
+} WNDCLASSEXW, *PWNDCLASSEXW, *NPWNDCLASSEXW, *LPWNDCLASSEXW;
+
+typedef struct tagCREATESTRUCTW {
+  LPVOID    lpCreateParams;
+  HINSTANCE hInstance;
+  HMENU     hMenu;
+  HWND      hwndParent;
+  int       cy;
+  int       cx;
+  int       y;
+  int       x;
+  LONG      style;
+  LPCWSTR   lpszName;
+  LPCWSTR   lpszClass;
+  DWORD     dwExStyle;
+} CREATESTRUCTW, *LPCREATESTRUCTW;
+
+typedef struct tagPOINT {
+  LONG x;
+  LONG y;
+} POINT, *PPOINT, *NPPOINT, *LPPOINT;
+
+typedef struct tagPOINTS {
+  SHORT x;
+  SHORT y;
+} POINTS, *PPOINTS, *LPPOINTS;
+
+typedef struct tagRECT {
+  LONG left;
+  LONG top;
+  LONG right;
+  LONG bottom;
+} RECT, *PRECT, *NPRECT, *LPRECT;
+
+typedef struct tagPAINTSTRUCT {
+  HDC  hdc;
+  BOOL fErase;
+  RECT rcPaint;
+  BOOL fRestore;
+  BOOL fIncUpdate;
+  BYTE rgbReserved[32];
+} PAINTSTRUCT, *PPAINTSTRUCT, *NPPAINTSTRUCT, *LPPAINTSTRUCT;
+
+//
 @ns user32
 @noerr
 BOOL ScreenToClient(

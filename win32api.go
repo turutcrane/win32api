@@ -33,12 +33,6 @@ type LPARAM uintptr // LONG_PTR
 type WORD int16
 type SHORT int16
 
-type Rect struct {
-	Left   LONG
-	Top    LONG
-	Right  LONG
-	Bottom LONG
-}
 type ProcessDpiAwareness int
 
 type UINT uint32
@@ -46,55 +40,6 @@ type WNDPROC uintptr
 
 //type LPCWSTR *uint16
 //type LONG_PTR uintptr
-
-type Wndclassex struct {
-	Size       uint32
-	Style      uint32
-	WndProc    uintptr
-	ClsExtra   int32
-	WndExtra   int32
-	Instance   HINSTANCE
-	Icon       HICON
-	Cursor     HCURSOR
-	Background HBRUSH
-	MenuName   *uint16
-	ClassName  *uint16
-	IconSm     HICON
-}
-
-type Createstruct struct {
-	CreateParams LPVOID
-	Instance     HINSTANCE
-	Menu         HMENU
-	Parent       HWND
-	Cy           int32
-	Cx           int32
-	X            int32
-	Y            int32
-	Style        LONG
-	Name         *uint16
-	Class        *uint16
-	ExStyle      DWORD
-}
-
-type Paintstruct struct {
-	hdc         HDC
-	fErase      BOOL
-	rcPaint     Rect
-	fRestore    BOOL
-	fIncUpdate  BOOL
-	rgbReserved [32]BYTE
-}
-
-type Point struct {
-	X LONG
-	Y LONG
-}
-
-type Points struct {
-	X SHORT
-	Y SHORT
-}
 
 func MakeIntResource(id uint16) *uint16 {
 	return (*uint16)(unsafe.Pointer(uintptr(id)))
@@ -107,7 +52,7 @@ func ToPCreatestruct(lparam LPARAM) *Createstruct {
 func Makepoints(lParam LPARAM) (points Points) {
 	points.X = SHORT(lParam & 0xff)
 	points.Y = SHORT((lParam >> 16) & 0xff)
-	
+
 	return points
 }
 

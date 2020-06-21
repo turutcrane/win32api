@@ -4,6 +4,7 @@ package main
 
 import (
     "log"
+    "strconv"
     "text/scanner"
 )
 
@@ -14,7 +15,7 @@ type Token struct {
 }
 
 type Funcdef struct {
-    typespec Token
+    typespec *Typespec
     funcname Token
     params []*Param
     funcQuals []*FuncQual
@@ -33,13 +34,31 @@ type FuncQual struct {
     val string
 }
 
+type Typespec struct {
+    name Token
+    isArray bool
+    arraySize int
+}
+
 type Param struct {
-    typespec Token
+    typespec *Typespec
     pname Token
+}
+
+type Typedef struct {
+    name Token
+    members []*Param
+    defnames []*TypedefName
+}
+
+type TypedefName struct {
+    name Token
+    isPointer bool
 }
 
 var keywords = map[string]int{
 	"struct":     STRUCT,
+    "typedef":    TYPEDEF,
 	"ns":         NS,
 	"failretval": FAILRETVAL,
 	"noerr":      NOERR,
@@ -50,49 +69,60 @@ var keywords = map[string]int{
 // fields inside this union end up as the fields in a structure known
 // as ${PREFIX}SymType, of which a reference is passed to the lexer.
 %union{
-    funcdef *Funcdef
-    funcdefs []*Funcdef
     token Token
-    param *Param
-    params []*Param
-    funcqual *FuncQual
-    funcquals []*FuncQual
+    def  interface{}
+    defs []interface{}
+
+    aElement     interface{}
+
+    params      []*Param
+    funcquals   []*FuncQual
+    typespecs   []*Typespec
+    members     []*Param
+    defnames    []*TypedefName
 }
 
-%type<funcdefs> funcdefs
-%type<funcdef> funcdef
-%type<token> typespec funcname pname
-%type<params> params 
-%type<param> param
-%type<funcqual> nsqual failretvalqual noerrqual funcqual
-%type<funcquals> funcquals
+%type<token> funcname pname
 
-%token<token> IDENT STRUCT NUMBER NS FAILRETVAL NOERR
+%type<defs>     defs
+%type<def>      def funcdef typedef
+%type<aElement> defname param nsqual failretvalqual noerrqual funcqual typespec
+
+%type<params>   params 
+%type<funcquals>    funcquals
+%type<defnames> defnames
+%type<members>  members
+
+%token<token> IDENT STRUCT NUMBER NS FAILRETVAL NOERR TYPEDEF 
 
 %%
 
-funcdefs
-    :
-	{
-		$$ = nil
+defs:
+    {
+        $$ = nil
 		if l, isLexerWrapper := yylex.(*LexerWrapper); isLexerWrapper {
-			l.funcdefs = $$
+			l.defs = $$
 		}
-	}
-    | funcdef funcdefs
-	{
-		$$ = append([]*Funcdef{$1}, $2...)
+    }
+    | def defs
+    {
+		$$ = append([]interface{}{$1}, $2...)
 		if l, isLexerWrapper := yylex.(*LexerWrapper); isLexerWrapper {
-			l.funcdefs = $$
+			l.defs = $$
 		}
-	}
+    }
+
+def
+    : funcdef
+    | typedef
 
 funcdef
     : funcquals typespec funcname '(' params ')' ';'
       {
+          typespec :=  $2.(*Typespec)
           $$ = &Funcdef{
               funcQuals: $1,
-              typespec: $2,
+              typespec: typespec,
               funcname: $3,
               params: $5,
           }
@@ -100,6 +130,13 @@ funcdef
 
 typespec
     : IDENT
+    {
+        $$ = &Typespec{
+            name: $1,
+            isArray: false,
+            arraySize: 0,
+        }
+    }
 
 funcname
     : IDENT
@@ -111,7 +148,8 @@ funcquals
     }
     | funcqual funcquals
     {
-        $$ = append([]*FuncQual{$1}, $2...)
+        funcqual := $1.(*FuncQual)
+        $$ = append([]*FuncQual{funcqual}, $2...)
     }
 
 funcqual
@@ -149,19 +187,84 @@ params:
       }
     | param
       {
-          $$ = []*Param{$1}
+          param := $1.(*Param)
+          $$ = []*Param{param}
       }
     | params ',' param
       {
-          $$ = append($1, $3)
+          param := $3.(*Param)
+          $$ = append($1, param)
       }
 
-param: typespec pname
+param
+    : typespec pname
     {
-        $$ = &Param{$1, $2}
+        typespec := $1.(*Typespec)
+        $$ = &Param{typespec, $2}
+    }
+    | typespec pname '[' NUMBER ']'
+    {
+        i, err := strconv.ParseInt($4.literal, 10, 32)
+        if err != nil {
+            log.Panicln("T208:", err)
+        }
+        ts := $1.(*Typespec)
+        ts.isArray = true
+        ts.arraySize = int(i)
+
+        $$ = &Param{ts, $2}
     }
 
 pname: IDENT
+
+typedef
+    : TYPEDEF STRUCT IDENT '{' members '}' defnames ';'
+    {
+        $$ = &Typedef {
+            name: $3,
+            members: $5,
+            defnames: $7,
+        }
+    }
+
+members
+    :
+    {
+        $$ = []*Param{}
+    }
+    | param ';' members
+    {
+        member := $1.(*Param)
+        $$ = append([]*Param{member}, $3...)
+    }
+
+defnames
+    : defname
+    {
+        defname := $1.(*TypedefName)
+        $$ = []*TypedefName{defname}
+    }
+    | defname ',' defnames
+    {
+        defname := $1.(*TypedefName)
+        $$ = append([]*TypedefName{defname}, $3...)
+    }
+ 
+defname
+    : IDENT
+    {
+        $$ = &TypedefName{
+            name: $1,
+            isPointer: false,
+        }
+    }
+    | '*' IDENT
+    {
+        $$ = &TypedefName{
+            name: $2,
+            isPointer: true,
+        }
+    }
 
 %%
 
@@ -170,7 +273,7 @@ type LexerWrapper struct {
     scanner.Scanner
 	// recentLit  string
 	// recentPos  scanner.Position
-	funcdefs []*Funcdef
+	defs          []interface{}
 }
 
 func (l *LexerWrapper) Lex(lval *yySymType) int {
@@ -193,29 +296,13 @@ func (l *LexerWrapper) Lex(lval *yySymType) int {
 func (l *LexerWrapper) Error(e string) {
 	log.Fatalf("Line %d, Column %d: %q %s",
         l.Position.Line, l.Position.Column, l.TokenText(), e)
-		// l.recentPos.Line, l.recentPos.Column, l.recentLit, e)
+	    // l.recentPos.Line, l.recentPos.Column, l.recentLit, e)
 }
 
-// func (l *LexerWrapper) Lex(lval *yySymType) int {
-// 	tok, lit, pos := l.s.Scan()
-// 	if tok == EOF {
-// 		return 0
-// 	}
-// 	lval.token = Token{tok: tok, lit: lit, pos: pos}
-// 	l.recentLit = lit
-// 	l.recentPos = pos
-// 	return tok
-// }
-
-// func (l *LexerWrapper) Error(e string) {
-// 	log.Fatalf("Line %d, Column %d: %q %s",
-// 		l.recentPos.Line, l.recentPos.Column, l.recentLit, e)
-// }
-
-func Parse(s *scanner.Scanner) []*Funcdef {
-	l := LexerWrapper{*s, []*Funcdef{}}
+func Parse(s *scanner.Scanner) []interface{} {
+	l := LexerWrapper{*s, nil}
 	if yyParse(&l) != 0 {
 		panic("Parse error")
 	}
-	return l.funcdefs
+	return l.defs
 }

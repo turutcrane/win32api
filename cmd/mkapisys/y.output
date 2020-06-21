@@ -1,274 +1,444 @@
 
 state 0
-	$accept: .funcdefs $end 
-	funcdefs: .    (1)
-	funcquals: .    (6)
+	$accept: .defs $end 
+	defs: .    (1)
+	funcquals: .    (8)
 
-	IDENT  reduce 6 (src line 107)
-	'@'  shift 8
-	.  reduce 1 (src line 74)
+	IDENT  reduce 8 (src line 144)
+	TYPEDEF  shift 6
+	'@'  shift 11
+	.  reduce 1 (src line 100)
 
-	funcdefs  goto 1
-	funcdef  goto 2
-	nsqual  goto 5
-	failretvalqual  goto 6
-	noerrqual  goto 7
-	funcqual  goto 4
-	funcquals  goto 3
+	defs  goto 1
+	def  goto 2
+	funcdef  goto 3
+	typedef  goto 4
+	nsqual  goto 8
+	failretvalqual  goto 9
+	noerrqual  goto 10
+	funcqual  goto 7
+	funcquals  goto 5
 
 state 1
-	$accept:  funcdefs.$end 
+	$accept:  defs.$end 
 
 	$end  accept
 	.  error
 
 
 state 2
-	funcdefs:  funcdef.funcdefs 
-	funcdefs: .    (1)
-	funcquals: .    (6)
+	defs:  def.defs 
+	defs: .    (1)
+	funcquals: .    (8)
 
-	IDENT  reduce 6 (src line 107)
-	'@'  shift 8
-	.  reduce 1 (src line 74)
+	IDENT  reduce 8 (src line 144)
+	TYPEDEF  shift 6
+	'@'  shift 11
+	.  reduce 1 (src line 100)
 
-	funcdefs  goto 9
-	funcdef  goto 2
-	nsqual  goto 5
-	failretvalqual  goto 6
-	noerrqual  goto 7
-	funcqual  goto 4
-	funcquals  goto 3
+	defs  goto 12
+	def  goto 2
+	funcdef  goto 3
+	typedef  goto 4
+	nsqual  goto 8
+	failretvalqual  goto 9
+	noerrqual  goto 10
+	funcqual  goto 7
+	funcquals  goto 5
 
 state 3
-	funcdef:  funcquals.typespec funcname '(' params ')' ';' 
+	def:  funcdef.    (3)
 
-	IDENT  shift 11
-	.  error
+	.  reduce 3 (src line 115)
 
-	typespec  goto 10
 
 state 4
-	funcquals:  funcqual.funcquals 
-	funcquals: .    (6)
+	def:  typedef.    (4)
 
-	'@'  shift 8
-	.  reduce 6 (src line 107)
+	.  reduce 4 (src line 117)
 
-	nsqual  goto 5
-	failretvalqual  goto 6
-	noerrqual  goto 7
-	funcqual  goto 4
-	funcquals  goto 12
 
 state 5
-	funcqual:  nsqual.    (8)
+	funcdef:  funcquals.typespec funcname '(' params ')' ';' 
 
-	.  reduce 8 (src line 117)
+	IDENT  shift 14
+	.  error
 
+	typespec  goto 13
 
 state 6
-	funcqual:  failretvalqual.    (9)
+	typedef:  TYPEDEF.STRUCT IDENT '{' members '}' defnames ';' 
 
-	.  reduce 9 (src line 119)
+	STRUCT  shift 15
+	.  error
 
 
 state 7
-	funcqual:  noerrqual.    (10)
+	funcquals:  funcqual.funcquals 
+	funcquals: .    (8)
 
-	.  reduce 10 (src line 120)
+	'@'  shift 11
+	.  reduce 8 (src line 144)
 
+	nsqual  goto 8
+	failretvalqual  goto 9
+	noerrqual  goto 10
+	funcqual  goto 7
+	funcquals  goto 16
 
 state 8
+	funcqual:  nsqual.    (10)
+
+	.  reduce 10 (src line 155)
+
+
+state 9
+	funcqual:  failretvalqual.    (11)
+
+	.  reduce 11 (src line 157)
+
+
+state 10
+	funcqual:  noerrqual.    (12)
+
+	.  reduce 12 (src line 158)
+
+
+state 11
 	nsqual:  '@'.NS IDENT 
 	failretvalqual:  '@'.FAILRETVAL NUMBER 
 	failretvalqual:  '@'.FAILRETVAL '-' NUMBER 
 	failretvalqual:  '@'.FAILRETVAL IDENT 
 	noerrqual:  '@'.NOERR 
 
-	NS  shift 13
-	FAILRETVAL  shift 14
-	NOERR  shift 15
+	NS  shift 17
+	FAILRETVAL  shift 18
+	NOERR  shift 19
 	.  error
-
-
-state 9
-	funcdefs:  funcdef funcdefs.    (2)
-
-	.  reduce 2 (src line 82)
-
-
-state 10
-	funcdef:  funcquals typespec.funcname '(' params ')' ';' 
-
-	IDENT  shift 17
-	.  error
-
-	funcname  goto 16
-
-state 11
-	typespec:  IDENT.    (4)
-
-	.  reduce 4 (src line 101)
 
 
 state 12
-	funcquals:  funcqual funcquals.    (7)
+	defs:  def defs.    (2)
 
-	.  reduce 7 (src line 112)
+	.  reduce 2 (src line 107)
 
 
 state 13
-	nsqual:  '@' NS.IDENT 
+	funcdef:  funcquals typespec.funcname '(' params ')' ';' 
 
-	IDENT  shift 18
+	IDENT  shift 21
+	.  error
+
+	funcname  goto 20
+
+state 14
+	typespec:  IDENT.    (6)
+
+	.  reduce 6 (src line 131)
+
+
+state 15
+	typedef:  TYPEDEF STRUCT.IDENT '{' members '}' defnames ';' 
+
+	IDENT  shift 22
 	.  error
 
 
-state 14
+state 16
+	funcquals:  funcqual funcquals.    (9)
+
+	.  reduce 9 (src line 149)
+
+
+state 17
+	nsqual:  '@' NS.IDENT 
+
+	IDENT  shift 23
+	.  error
+
+
+state 18
 	failretvalqual:  '@' FAILRETVAL.NUMBER 
 	failretvalqual:  '@' FAILRETVAL.'-' NUMBER 
 	failretvalqual:  '@' FAILRETVAL.IDENT 
 
-	IDENT  shift 21
-	NUMBER  shift 19
-	'-'  shift 20
+	IDENT  shift 26
+	NUMBER  shift 24
+	'-'  shift 25
 	.  error
-
-
-state 15
-	noerrqual:  '@' NOERR.    (15)
-
-	.  reduce 15 (src line 141)
-
-
-state 16
-	funcdef:  funcquals typespec funcname.'(' params ')' ';' 
-
-	'('  shift 22
-	.  error
-
-
-state 17
-	funcname:  IDENT.    (5)
-
-	.  reduce 5 (src line 104)
-
-
-state 18
-	nsqual:  '@' NS IDENT.    (11)
-
-	.  reduce 11 (src line 122)
 
 
 state 19
-	failretvalqual:  '@' FAILRETVAL NUMBER.    (12)
+	noerrqual:  '@' NOERR.    (17)
 
-	.  reduce 12 (src line 127)
+	.  reduce 17 (src line 179)
 
 
 state 20
-	failretvalqual:  '@' FAILRETVAL '-'.NUMBER 
+	funcdef:  funcquals typespec funcname.'(' params ')' ';' 
 
-	NUMBER  shift 23
+	'('  shift 27
 	.  error
 
 
 state 21
-	failretvalqual:  '@' FAILRETVAL IDENT.    (14)
+	funcname:  IDENT.    (7)
 
-	.  reduce 14 (src line 136)
+	.  reduce 7 (src line 141)
 
 
 state 22
-	funcdef:  funcquals typespec funcname '('.params ')' ';' 
-	params: .    (16)
+	typedef:  TYPEDEF STRUCT IDENT.'{' members '}' defnames ';' 
 
-	IDENT  shift 11
-	.  reduce 16 (src line 146)
+	'{'  shift 28
+	.  error
 
-	typespec  goto 26
-	params  goto 24
-	param  goto 25
 
 state 23
-	failretvalqual:  '@' FAILRETVAL '-' NUMBER.    (13)
+	nsqual:  '@' NS IDENT.    (13)
 
-	.  reduce 13 (src line 132)
+	.  reduce 13 (src line 160)
 
 
 state 24
-	funcdef:  funcquals typespec funcname '(' params.')' ';' 
-	params:  params.',' param 
+	failretvalqual:  '@' FAILRETVAL NUMBER.    (14)
 
-	')'  shift 27
-	','  shift 28
-	.  error
+	.  reduce 14 (src line 165)
 
 
 state 25
-	params:  param.    (17)
+	failretvalqual:  '@' FAILRETVAL '-'.NUMBER 
 
-	.  reduce 17 (src line 150)
+	NUMBER  shift 29
+	.  error
 
 
 state 26
-	param:  typespec.pname 
+	failretvalqual:  '@' FAILRETVAL IDENT.    (16)
 
-	IDENT  shift 30
-	.  error
+	.  reduce 16 (src line 174)
 
-	pname  goto 29
 
 state 27
-	funcdef:  funcquals typespec funcname '(' params ')'.';' 
+	funcdef:  funcquals typespec funcname '('.params ')' ';' 
+	params: .    (18)
 
-	';'  shift 31
-	.  error
+	IDENT  shift 14
+	.  reduce 18 (src line 184)
 
+	param  goto 31
+	typespec  goto 32
+	params  goto 30
 
 state 28
-	params:  params ','.param 
+	typedef:  TYPEDEF STRUCT IDENT '{'.members '}' defnames ';' 
+	members: .    (25)
 
-	IDENT  shift 11
-	.  error
+	IDENT  shift 14
+	.  reduce 25 (src line 230)
 
-	typespec  goto 26
-	param  goto 32
+	param  goto 34
+	typespec  goto 32
+	members  goto 33
 
 state 29
-	param:  typespec pname.    (19)
+	failretvalqual:  '@' FAILRETVAL '-' NUMBER.    (15)
 
-	.  reduce 19 (src line 159)
+	.  reduce 15 (src line 170)
 
 
 state 30
-	pname:  IDENT.    (20)
+	funcdef:  funcquals typespec funcname '(' params.')' ';' 
+	params:  params.',' param 
 
-	.  reduce 20 (src line 164)
+	')'  shift 35
+	','  shift 36
+	.  error
 
 
 state 31
-	funcdef:  funcquals typespec funcname '(' params ')' ';'.    (3)
+	params:  param.    (19)
 
-	.  reduce 3 (src line 90)
+	.  reduce 19 (src line 188)
 
 
 state 32
-	params:  params ',' param.    (18)
+	param:  typespec.pname 
+	param:  typespec.pname '[' NUMBER ']' 
 
-	.  reduce 18 (src line 154)
+	IDENT  shift 38
+	.  error
+
+	pname  goto 37
+
+state 33
+	typedef:  TYPEDEF STRUCT IDENT '{' members.'}' defnames ';' 
+
+	'}'  shift 39
+	.  error
 
 
-15 terminals, 13 nonterminals
-21 grammar rules, 33/8000 states
+state 34
+	members:  param.';' members 
+
+	';'  shift 40
+	.  error
+
+
+state 35
+	funcdef:  funcquals typespec funcname '(' params ')'.';' 
+
+	';'  shift 41
+	.  error
+
+
+state 36
+	params:  params ','.param 
+
+	IDENT  shift 14
+	.  error
+
+	param  goto 42
+	typespec  goto 32
+
+state 37
+	param:  typespec pname.    (21)
+	param:  typespec pname.'[' NUMBER ']' 
+
+	'['  shift 43
+	.  reduce 21 (src line 199)
+
+
+state 38
+	pname:  IDENT.    (23)
+
+	.  reduce 23 (src line 218)
+
+
+state 39
+	typedef:  TYPEDEF STRUCT IDENT '{' members '}'.defnames ';' 
+
+	IDENT  shift 46
+	'*'  shift 47
+	.  error
+
+	defname  goto 45
+	defnames  goto 44
+
+state 40
+	members:  param ';'.members 
+	members: .    (25)
+
+	IDENT  shift 14
+	.  reduce 25 (src line 230)
+
+	param  goto 34
+	typespec  goto 32
+	members  goto 48
+
+state 41
+	funcdef:  funcquals typespec funcname '(' params ')' ';'.    (5)
+
+	.  reduce 5 (src line 119)
+
+
+state 42
+	params:  params ',' param.    (20)
+
+	.  reduce 20 (src line 193)
+
+
+state 43
+	param:  typespec pname '['.NUMBER ']' 
+
+	NUMBER  shift 49
+	.  error
+
+
+state 44
+	typedef:  TYPEDEF STRUCT IDENT '{' members '}' defnames.';' 
+
+	';'  shift 50
+	.  error
+
+
+state 45
+	defnames:  defname.    (27)
+	defnames:  defname.',' defnames 
+
+	','  shift 51
+	.  reduce 27 (src line 241)
+
+
+state 46
+	defname:  IDENT.    (29)
+
+	.  reduce 29 (src line 253)
+
+
+state 47
+	defname:  '*'.IDENT 
+
+	IDENT  shift 52
+	.  error
+
+
+state 48
+	members:  param ';' members.    (26)
+
+	.  reduce 26 (src line 235)
+
+
+state 49
+	param:  typespec pname '[' NUMBER.']' 
+
+	']'  shift 53
+	.  error
+
+
+state 50
+	typedef:  TYPEDEF STRUCT IDENT '{' members '}' defnames ';'.    (24)
+
+	.  reduce 24 (src line 220)
+
+
+state 51
+	defnames:  defname ','.defnames 
+
+	IDENT  shift 46
+	'*'  shift 47
+	.  error
+
+	defname  goto 45
+	defnames  goto 54
+
+state 52
+	defname:  '*' IDENT.    (30)
+
+	.  reduce 30 (src line 261)
+
+
+state 53
+	param:  typespec pname '[' NUMBER ']'.    (22)
+
+	.  reduce 22 (src line 205)
+
+
+state 54
+	defnames:  defname ',' defnames.    (28)
+
+	.  reduce 28 (src line 247)
+
+
+21 terminals, 18 nonterminals
+31 grammar rules, 55/8000 states
 0 shift/reduce, 0 reduce/reduce conflicts reported
-62 working sets used
-memory: parser 27/120000
+67 working sets used
+memory: parser 47/120000
 0 extra closures
-20 shift entries, 3 exceptions
-16 goto entries
-11 entries saved by goto default
-Optimizer space used: output 32/120000
-32 table entries, 0 zero
-maximum spread: 15, maximum offset: 28
+39 shift entries, 3 exceptions
+24 goto entries
+17 entries saved by goto default
+Optimizer space used: output 55/120000
+55 table entries, 0 zero
+maximum spread: 21, maximum offset: 51

@@ -195,6 +195,23 @@ var (
 )
 
 const (
+	ObjidWindow            = C.OBJID_WINDOW
+	ObjidSysmenu           = C.OBJID_SYSMENU
+	ObjidTitlebar          = C.OBJID_TITLEBAR
+	ObjidMenu              = C.OBJID_MENU
+	ObjidClient            = C.OBJID_CLIENT
+	ObjidVscroll           = C.OBJID_VSCROLL
+	ObjidHscroll           = C.OBJID_HSCROLL
+	ObjidSizegrip          = C.OBJID_SIZEGRIP
+	ObjidCaret             = C.OBJID_CARET
+	ObjidCursor            = C.OBJID_CURSOR
+	ObjidAlert             = C.OBJID_ALERT
+	ObjidSound             = C.OBJID_SOUND
+	ObjidQueryclassnameidx = C.OBJID_QUERYCLASSNAMEIDX
+	ObjidNativeom          = C.OBJID_NATIVEOM
+)
+
+const (
 	SizeRestored  = C.SIZE_RESTORED
 	SizeMinimized = C.SIZE_MINIMIZED
 	SizeMaximized = C.SIZE_MAXIMIZED

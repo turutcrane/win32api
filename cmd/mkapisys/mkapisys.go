@@ -7,8 +7,12 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"strconv"
 	"strings"
 	"text/scanner"
+	"unicode"
+
+	strcase "github.com/stoewer/go-strcase"
 )
 
 //go:generate goyacc.exe -o win32.y.go win32.y
@@ -17,6 +21,7 @@ var typeMap = map[string]string{
 	"LPCWSTR": "*uint16",
 	"LPPOINT": "*Point",
 	"BOOL":    "bool",
+	"UINT":    "uint32",
 }
 
 func main() {
@@ -39,40 +44,14 @@ func main() {
 			log.Fatalln("T23", arg, err)
 		}
 		scanner.Init(f)
-		for _, fdef := range Parse(scanner) {
-			var ns, fv string
-			var noerr bool
-			for _, q := range fdef.funcQuals {
-				switch q.qt {
-				case QtNs:
-					ns = q.val
-				case QtFailRetVal:
-					fv = q.val
-				case QtNoerr:
-					noerr = true
-				default:
-					log.Panicln("T41:", q)
-				}
-			}
-			fmt.Fprintf(&buf, "//sys %s(", fname(*fdef))
-			for i, p := range fdef.params {
-				if i > 0 {
-					buf.WriteString(", ")
-				}
-				fmt.Fprintf(&buf, "%s %s", p.pname.literal, convType(p.typespec))
-			}
-			fmt.Fprintf(&buf, ") (r %s", convType(fdef.typespec))
-			if !noerr {
-				buf.WriteString(", err error")
-			}
-			buf.WriteString(") ")
-			if fv != "" {
-				fmt.Fprintf(&buf, "[failretval==%s]", fv)
-			}
-			if ns != "" {
-				fmt.Fprintf(&buf, " = %s.%s\n", ns, fdef.funcname.literal)
-			} else {
-				fmt.Fprintf(&buf, " = %s\n", fdef.funcname.literal)
+		for _, def := range Parse(scanner) {
+			switch d := def.(type) {
+			case *Funcdef:
+				outFuncdef(d, &buf)
+			case *Typedef:
+				outTypedef(d, &buf)
+			default:
+				log.Fatalln("T48: Not Supportd", d)
 			}
 		}
 	}
@@ -86,16 +65,91 @@ func main() {
 	}
 }
 
-func fname(f Funcdef) string {
-	if strings.HasSuffix(f.funcname.literal, "W") {
-		return f.funcname.literal[0 : len(f.funcname.literal)-1]
+func removeLastW(name string) string {
+	if strings.HasSuffix(name, "W") {
+		return name[0 : len(name)-1]
 	}
-	return f.funcname.literal
+	return name
 }
 
-func convType(t Token) string {
-	if t, ok := typeMap[t.literal]; ok {
-		return t
+// type string for functin parameter and return value
+func convType(t Typespec) (ts string) {
+	var ok bool
+	if ts, ok = typeMap[t.name.literal]; !ok {
+		ts = t.name.literal
 	}
-	return t.literal
+	if t.isArray {
+		ts = "[" + strconv.FormatInt(int64(t.arraySize), 10) + "]" + ts
+	}
+	return ts
+}
+
+func outFuncdef(d *Funcdef, out *bytes.Buffer) {
+	var ns, fv string
+	var noerr bool
+	for _, q := range d.funcQuals {
+		switch q.qt {
+		case QtNs:
+			ns = q.val
+		case QtFailRetVal:
+			fv = q.val
+		case QtNoerr:
+			noerr = true
+		default:
+			log.Panicln("T41:", q)
+		}
+	}
+	fmt.Fprintf(out, "//sys %s(", removeLastW(*&d.funcname.literal))
+	for i, p := range d.params {
+		if i > 0 {
+			out.WriteString(", ")
+		}
+		fmt.Fprintf(out, "%s %s", p.pname.literal, convType(*p.typespec))
+	}
+	fmt.Fprintf(out, ") (r %s", convType(*d.typespec))
+	if !noerr {
+		out.WriteString(", err error")
+	}
+	out.WriteString(") ")
+	if fv != "" {
+		fmt.Fprintf(out, "[failretval==%s]", fv)
+	}
+	if ns != "" {
+		fmt.Fprintf(out, " = %s.%s\n", ns, d.funcname.literal)
+	} else {
+		fmt.Fprintf(out, " = %s\n", d.funcname.literal)
+	}
+}
+
+func outTypedef(td *Typedef, out *bytes.Buffer) {
+	cStructName := td.defnames[0].name.literal
+	goStructName := removeLastW(cStructName)
+	goStructName = strcase.UpperCamelCase(goStructName)
+	fmt.Fprintf(out, "type %s struct {\n", goStructName)
+	for _, m := range td.members {
+		name := strings.TrimLeftFunc(m.pname.literal, unicode.IsLower)
+		var goname string
+		if len(name) == 0 {
+			goname = strings.Title(m.pname.literal)
+		} else {
+			goname = strings.Title(name)
+		}
+		fmt.Fprintf(out, "\t%s %s\n", goname, convTypeSt(*m.typespec))
+	}
+	fmt.Fprintf(out, "}\n\n")
+
+	typeMap[cStructName] = goStructName
+}
+
+// type string for struct member
+func convTypeSt(ty Typespec) (tyStr string) {
+	switch ty.name.literal {
+	case "BOOL":
+		tyStr = ty.name.literal
+	case "int":
+		tyStr = "int32"
+	default:
+		tyStr = convType(ty)
+	}
+	return tyStr
 }
