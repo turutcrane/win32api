@@ -97,9 +97,9 @@ HFONT CreateFontW(
   int     cEscapement,
   int     cOrientation,
   int     cWeight,
-  bool    bItalic,      // DWORD -> bool
-  bool    bUnderline,   // DWORD -> bool
-  bool    bStrikeOut,   // DWORD -> bool
+  DWORD   bItalic,
+  DWORD   bUnderline,
+  DWORD   bStrikeOut,
   DWORD   iCharSet,
   DWORD   iOutPrecision,
   DWORD   iClipPrecision,

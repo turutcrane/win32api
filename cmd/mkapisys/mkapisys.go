@@ -66,13 +66,22 @@ func main() {
 }
 
 func removeLastW(name string) string {
-	if strings.HasSuffix(name, "W") {
-		return name[0 : len(name)-1]
-	}
-	return name
+	return strings.TrimSuffix(name, "W")
 }
 
-// type string for functin parameter and return value
+func convTypeParam(p Param) string {
+	pname := p.pname.literal
+	upperIndex := strings.IndexFunc(pname, unicode.IsUpper)
+	if upperIndex > 0 {
+		prefix := pname[:upperIndex]
+		if prefix == "b" && convType(*p.typespec) == "DWORD" {
+			return "bool"
+		}
+	}
+	return convType(*p.typespec)
+}
+
+// type string
 func convType(t Typespec) (ts string) {
 	var ok bool
 	if ts, ok = typeMap[t.name.literal]; !ok {
@@ -104,7 +113,7 @@ func outFuncdef(d *Funcdef, out *bytes.Buffer) {
 		if i > 0 {
 			out.WriteString(", ")
 		}
-		fmt.Fprintf(out, "%s %s", p.pname.literal, convType(*p.typespec))
+		fmt.Fprintf(out, "%s %s", p.pname.literal, convTypeParam(*p))
 	}
 	fmt.Fprintf(out, ") (r %s", convType(*d.typespec))
 	if !noerr {
@@ -123,8 +132,7 @@ func outFuncdef(d *Funcdef, out *bytes.Buffer) {
 
 func outTypedef(td *Typedef, out *bytes.Buffer) {
 	cStructName := td.defnames[0].name.literal
-	goStructName := removeLastW(cStructName)
-	goStructName = strcase.UpperCamelCase(goStructName)
+	goStructName := strcase.UpperCamelCase(removeLastW(cStructName))
 	fmt.Fprintf(out, "type %s struct {\n", goStructName)
 	for _, m := range td.members {
 		name := strings.TrimLeftFunc(m.pname.literal, unicode.IsLower)
