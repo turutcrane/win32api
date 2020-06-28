@@ -78,6 +78,10 @@ var (
 	procDeleteObject              = modgdi32.NewProc("DeleteObject")
 	procCreateFontW               = modgdi32.NewProc("CreateFontW")
 	procCreateRectRgn             = modgdi32.NewProc("CreateRectRgn")
+	procDestroyWindow             = moduser32.NewProc("DestroyWindow")
+	procPostMessageW              = moduser32.NewProc("PostMessageW")
+	procIsRectEmpty               = moduser32.NewProc("IsRectEmpty")
+	procAdjustWindowRectEx        = moduser32.NewProc("AdjustWindowRectEx")
 )
 
 func GetModuleHandle(m *uint16) (handle HMODULE, err error) {
@@ -406,5 +410,56 @@ func CreateFont(cHeight int, cWidth int, cEscapement int, cOrientation int, cWei
 func CreateRectRgn(x1 int, y1 int, x2 int, y2 int) (r HRGN) {
 	r0, _, _ := syscall.Syscall6(procCreateRectRgn.Addr(), 4, uintptr(x1), uintptr(y1), uintptr(x2), uintptr(y2), 0, 0)
 	r = HRGN(r0)
+	return
+}
+
+func DestroyWindow(hWnd HWND) (r bool, err error) {
+	r0, _, e1 := syscall.Syscall(procDestroyWindow.Addr(), 1, uintptr(hWnd), 0, 0)
+	r = r0 != 0
+	if r == false {
+		if e1 != 0 {
+			err = errnoErr(e1)
+		} else {
+			err = syscall.EINVAL
+		}
+	}
+	return
+}
+
+func PostMessage(hWnd HWND, Msg uint32, wParam WPARAM, lParam LPARAM) (r bool, err error) {
+	r0, _, e1 := syscall.Syscall6(procPostMessageW.Addr(), 4, uintptr(hWnd), uintptr(Msg), uintptr(wParam), uintptr(lParam), 0, 0)
+	r = r0 != 0
+	if r == false {
+		if e1 != 0 {
+			err = errnoErr(e1)
+		} else {
+			err = syscall.EINVAL
+		}
+	}
+	return
+}
+
+func IsRectEmpty(lprc *Rect) (r bool) {
+	r0, _, _ := syscall.Syscall(procIsRectEmpty.Addr(), 1, uintptr(unsafe.Pointer(lprc)), 0, 0)
+	r = r0 != 0
+	return
+}
+
+func AdjustWindowRectEx(lpRect *Rect, dwStyle DWORD, bMenu bool, dwExStyle DWORD) (r bool, err error) {
+	var _p0 uint32
+	if bMenu {
+		_p0 = 1
+	} else {
+		_p0 = 0
+	}
+	r0, _, e1 := syscall.Syscall6(procAdjustWindowRectEx.Addr(), 4, uintptr(unsafe.Pointer(lpRect)), uintptr(dwStyle), uintptr(_p0), uintptr(dwExStyle), 0, 0)
+	r = r0 != 0
+	if r == false {
+		if e1 != 0 {
+			err = errnoErr(e1)
+		} else {
+			err = syscall.EINVAL
+		}
+	}
 	return
 }

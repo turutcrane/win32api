@@ -87,6 +87,9 @@ func convType(t Typespec) (ts string) {
 	if ts, ok = typeMap[t.name.literal]; !ok {
 		ts = t.name.literal
 	}
+	if t.isPointer {
+		ts = "*" + ts
+	}
 	if t.isArray {
 		ts = "[" + strconv.FormatInt(int64(t.arraySize), 10) + "]" + ts
 	}
@@ -146,7 +149,14 @@ func outTypedef(td *Typedef, out *bytes.Buffer) {
 	}
 	fmt.Fprintf(out, "}\n\n")
 
-	typeMap[cStructName] = goStructName
+	for _, name := range td.defnames {
+		cName := name.name.literal
+		if name.isPointer {
+			typeMap[cName] = "*" + goStructName
+		} else {
+			typeMap[cName] = goStructName
+		}
+	}
 }
 
 // type string for struct member

@@ -64,3 +64,7 @@ type Paintstruct struct {
 //sys DeleteObject(ho HGDIOBJ) (r bool)  = gdi32.DeleteObject
 //sys CreateFont(cHeight int, cWidth int, cEscapement int, cOrientation int, cWeight int, bItalic bool, bUnderline bool, bStrikeOut bool, iCharSet DWORD, iOutPrecision DWORD, iClipPrecision DWORD, iQuality DWORD, iPitchAndFamily DWORD, pszFaceName *uint16) (r HFONT)  = gdi32.CreateFontW
 //sys CreateRectRgn(x1 int, y1 int, x2 int, y2 int) (r HRGN)  = gdi32.CreateRectRgn
+//sys DestroyWindow(hWnd HWND) (r bool, err error) [failretval==false] = user32.DestroyWindow
+//sys PostMessage(hWnd HWND, Msg uint32, wParam WPARAM, lParam LPARAM) (r bool, err error) [failretval==false] = user32.PostMessageW
+//sys IsRectEmpty(lprc *Rect) (r bool)  = user32.IsRectEmpty
+//sys AdjustWindowRectEx(lpRect *Rect, dwStyle DWORD, bMenu bool, dwExStyle DWORD) (r bool, err error) [failretval==false] = user32.AdjustWindowRectEx

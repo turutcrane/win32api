@@ -38,6 +38,9 @@ type ProcessDpiAwareness int
 type UINT uint32
 type WNDPROC uintptr
 
+// type WndProc func(hWnd win32api.HWND, message win32api.UINT, wParam win32api.WPARAM, lParam win32api.LPARAM) win32api.LRESULT
+type WndProc func(hWnd HWND, message UINT, wParam WPARAM, lParam LPARAM) LRESULT
+
 //type LPCWSTR *uint16
 //type LONG_PTR uintptr
 

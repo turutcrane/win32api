@@ -116,3 +116,34 @@ HRGN CreateRectRgn(
   int x2,
   int y2
 );
+
+@ns user32
+@failretval false
+BOOL DestroyWindow(
+  HWND hWnd
+);
+
+@ns user32
+@failretval false
+BOOL PostMessageW(
+  HWND   hWnd,
+  UINT   Msg,
+  WPARAM wParam,
+  LPARAM lParam
+);
+
+@ns user32
+@noerr
+BOOL IsRectEmpty(
+  const RECT *lprc
+);
+
+@ns user32
+@failretval false
+BOOL AdjustWindowRectEx(
+  LPRECT lpRect,
+  DWORD  dwStyle,
+  BOOL   bMenu,
+  DWORD  dwExStyle
+);
+
