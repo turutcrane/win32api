@@ -66,7 +66,6 @@ var (
 	procBeginPaint                = moduser32.NewProc("BeginPaint")
 	procEndPaint                  = moduser32.NewProc("EndPaint")
 	procIsWindowEnabled           = moduser32.NewProc("IsWindowEnabled")
-	procSetWindowPos              = moduser32.NewProc("SetWindowPos")
 	procIsWindowVisible           = moduser32.NewProc("IsWindowVisible")
 	procSetMenu                   = moduser32.NewProc("SetMenu")
 	procBeginDeferWindowPos       = moduser32.NewProc("BeginDeferWindowPos")
@@ -82,6 +81,8 @@ var (
 	procPostMessageW              = moduser32.NewProc("PostMessageW")
 	procIsRectEmpty               = moduser32.NewProc("IsRectEmpty")
 	procAdjustWindowRectEx        = moduser32.NewProc("AdjustWindowRectEx")
+	procSetParent                 = moduser32.NewProc("SetParent")
+	procSetWindowPos              = moduser32.NewProc("SetWindowPos")
 )
 
 func GetModuleHandle(m *uint16) (handle HMODULE, err error) {
@@ -288,19 +289,6 @@ func IsWindowEnabled(hWnd HWND) (b bool) {
 	return
 }
 
-func SetWindowPos(hWnd HWND, hWndInsertAfter HWND, X int, Y int, cx int, cy int, uFlags UINT) (b bool, err error) {
-	r0, _, e1 := syscall.Syscall9(procSetWindowPos.Addr(), 7, uintptr(hWnd), uintptr(hWndInsertAfter), uintptr(X), uintptr(Y), uintptr(cx), uintptr(cy), uintptr(uFlags), 0, 0)
-	b = r0 != 0
-	if b == false {
-		if e1 != 0 {
-			err = errnoErr(e1)
-		} else {
-			err = syscall.EINVAL
-		}
-	}
-	return
-}
-
 func IsWindowVisible(hWnd HWND) (b bool) {
 	r0, _, _ := syscall.Syscall(procIsWindowVisible.Addr(), 1, uintptr(hWnd), 0, 0)
 	b = r0 != 0
@@ -453,6 +441,32 @@ func AdjustWindowRectEx(lpRect *Rect, dwStyle DWORD, bMenu bool, dwExStyle DWORD
 		_p0 = 0
 	}
 	r0, _, e1 := syscall.Syscall6(procAdjustWindowRectEx.Addr(), 4, uintptr(unsafe.Pointer(lpRect)), uintptr(dwStyle), uintptr(_p0), uintptr(dwExStyle), 0, 0)
+	r = r0 != 0
+	if r == false {
+		if e1 != 0 {
+			err = errnoErr(e1)
+		} else {
+			err = syscall.EINVAL
+		}
+	}
+	return
+}
+
+func SetParent(hWndChild HWND, hWndNewParent HWND) (r HWND, err error) {
+	r0, _, e1 := syscall.Syscall(procSetParent.Addr(), 2, uintptr(hWndChild), uintptr(hWndNewParent), 0)
+	r = HWND(r0)
+	if r == 0 {
+		if e1 != 0 {
+			err = errnoErr(e1)
+		} else {
+			err = syscall.EINVAL
+		}
+	}
+	return
+}
+
+func SetWindowPos(hWnd HWND, hWndInsertAfter HWND, X int, Y int, cx int, cy int, uFlags uint32) (r bool, err error) {
+	r0, _, e1 := syscall.Syscall9(procSetWindowPos.Addr(), 7, uintptr(hWnd), uintptr(hWndInsertAfter), uintptr(X), uintptr(Y), uintptr(cx), uintptr(cy), uintptr(uFlags), 0, 0)
 	r = r0 != 0
 	if r == false {
 		if e1 != 0 {

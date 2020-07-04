@@ -147,3 +147,20 @@ BOOL AdjustWindowRectEx(
   DWORD  dwExStyle
 );
 
+@ns user32
+HWND SetParent(
+  HWND hWndChild,
+  HWND hWndNewParent
+);
+
+@ns user32
+@failretval false
+BOOL SetWindowPos(
+  HWND hWnd,
+  HWND hWndInsertAfter,
+  int  X,
+  int  Y,
+  int  cx,
+  int  cy,
+  UINT uFlags
+);

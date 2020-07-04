@@ -68,3 +68,5 @@ type Paintstruct struct {
 //sys PostMessage(hWnd HWND, Msg uint32, wParam WPARAM, lParam LPARAM) (r bool, err error) [failretval==false] = user32.PostMessageW
 //sys IsRectEmpty(lprc *Rect) (r bool)  = user32.IsRectEmpty
 //sys AdjustWindowRectEx(lpRect *Rect, dwStyle DWORD, bMenu bool, dwExStyle DWORD) (r bool, err error) [failretval==false] = user32.AdjustWindowRectEx
+//sys SetParent(hWndChild HWND, hWndNewParent HWND) (r HWND, err error)  = user32.SetParent
+//sys SetWindowPos(hWnd HWND, hWndInsertAfter HWND, X int, Y int, cx int, cy int, uFlags uint32) (r bool, err error) [failretval==false] = user32.SetWindowPos

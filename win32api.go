@@ -52,6 +52,10 @@ func ToPCreatestruct(lparam LPARAM) *Createstruct {
 	return (*Createstruct)(unsafe.Pointer(lparam))
 }
 
+func WndProcToWNDPROC(wp WndProc) WNDPROC {
+	return WNDPROC(syscall.NewCallback(wp))
+}
+
 func Makepoints(lParam LPARAM) (points Points) {
 	points.X = SHORT(lParam & 0xff)
 	points.Y = SHORT((lParam >> 16) & 0xff)
@@ -103,7 +107,6 @@ func SetWindowLongPtr(hWnd HWND, nIndex int, dwNewLong uintptr) (longPtr uintptr
 //sys BeginPaint(hWnd HWND, lpPaint *Paintstruct) (hdc HDC) = user32.BeginPaint
 //sys EndPaint(hWnd HWND, lpPaint *Paintstruct) = user32.EndPaint
 //sys IsWindowEnabled(hWnd HWND) (b bool) = user32.IsWindowEnabled
-//sys SetWindowPos(hWnd HWND, hWndInsertAfter HWND, X int, Y int, cx int, cy int, uFlags UINT) (b bool, err error) [failretval==false] = user32.SetWindowPos
 //sys IsWindowVisible(hWnd HWND) (b bool) = user32.IsWindowVisible
 //sys SetMenu(hWnd HWND, hMenu HMENU) (b bool, err error) [failretval==false] = user32.SetMenu
 //sys BeginDeferWindowPos(nNumWindows int) (hdwp HDWP, err error) = user32.BeginDeferWindowPos

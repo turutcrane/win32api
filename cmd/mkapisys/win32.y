@@ -71,16 +71,16 @@ var keywords = map[string]int{
 // fields inside this union end up as the fields in a structure known
 // as ${PREFIX}SymType, of which a reference is passed to the lexer.
 %union{
-	token Token
-	def  interface{}
-	defs []interface{}
+	token		Token
+	def		interface{}
+	defs		[]interface{}
 
-	aElement	 interface{}
+	aElement	interface{}
 
-	params	  []*Param
-	funcquals   []*FuncQual
-	typespecs   []*Typespec
-	members	 []*Param
+	params		[]*Param
+	funcquals	[]*FuncQual
+	typespecs	[]*Typespec
+	members		[]*Param
 	defnames	[]*TypedefName
 }
 

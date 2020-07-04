@@ -136,6 +136,16 @@ const (
 )
 
 const (
+	// GwlWndproc    = C.GWL_WNDPROC
+	// GwlHinstance  = C.GWL_HINSTANCE
+	// GwlHwndparent = C.GWL_HWNDPARENT
+	GwlStyle   = C.GWL_STYLE
+	GwlExstyle = C.GWL_EXSTYLE
+	// GwlUserdata   = C.GWL_USERDATA
+	GwlId = C.GWL_ID
+)
+
+const (
 	GwlpWndproc    = C.GWLP_WNDPROC
 	GwlpHinstance  = C.GWLP_HINSTANCE
 	GwlpHwndparent = C.GWLP_HWNDPARENT
