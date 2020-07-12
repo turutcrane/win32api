@@ -25,7 +25,7 @@ func main() {
 	// 	fmt.Println("#define MAKEINTRESOURCE")
 	// 	fmt.Println("#include <windows.h>")
 	// }
-	re := regexp.MustCompile("#define[\t ]+(" + *prefix + "[_[:alnum:]]+" + *postfix +")")
+	re := regexp.MustCompile("#define[\t ]+(" + *prefix + "[_[:alnum:]]+" + *postfix +")[\t ]")
 	scanner := bufio.NewScanner(os.Stdin)
 	for scanner.Scan() {
 		line := scanner.Text()
