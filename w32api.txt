@@ -55,6 +55,20 @@ typedef struct tagPAINTSTRUCT {
   BYTE rgbReserved[32];
 } PAINTSTRUCT, *PPAINTSTRUCT, *NPPAINTSTRUCT, *LPPAINTSTRUCT;
 
+typedef struct tagFINDREPLACEW {
+  DWORD        lStructSize;
+  HWND         hwndOwner;
+  HINSTANCE    hInstance;
+  DWORD        Flags;
+  LPWSTR       lpstrFindWhat;
+  LPWSTR       lpstrReplaceWith;
+  WORD         wFindWhatLen;
+  WORD         wReplaceWithLen;
+  LPARAM       lCustData;
+  LPFRHOOKPROC lpfnHook;
+  LPCWSTR      lpTemplateName;
+} FINDREPLACEW, *LPFINDREPLACEW;
+
 //
 @ns user32
 @noerr
@@ -163,4 +177,42 @@ BOOL SetWindowPos(
   int  cx,
   int  cy,
   UINT uFlags
+);
+
+@ns user32
+@failretval 0xffffffff
+@funcname   dialogBoxParamW
+INT_PTR DialogBoxParamW(
+  HINSTANCE hInstance,
+  LPCWSTR   lpTemplateName,
+  HWND      hWndParent,
+  DLGPROC   lpDialogFunc,
+  LPARAM    dwInitParam
+);
+
+@ns user32
+@failretval false
+BOOL EndDialog(
+  HWND    hDlg,
+  INT_PTR nResult
+);
+
+@ns user32
+HWND SetFocus(
+  HWND hWnd
+);
+
+@ns comdlg32
+@noerr
+HWND FindTextW(
+  LPFINDREPLACEW Arg1
+);
+
+@ns comdlg32
+@noerr
+DWORD CommDlgExtendedError();
+
+@ns user32
+UINT RegisterWindowMessageW(
+  LPCWSTR lpString
 );

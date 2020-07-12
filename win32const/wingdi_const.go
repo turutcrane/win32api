@@ -1,7 +1,5 @@
 package win32const
 
-import ()
-
 // #include <windef.h>
 // #include <winbase.h>
 // #include <wingdi.h>

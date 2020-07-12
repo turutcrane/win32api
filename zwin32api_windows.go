@@ -41,6 +41,7 @@ var (
 	moduser32   = windows.NewLazySystemDLL("user32.dll")
 	modshcore   = windows.NewLazySystemDLL("shcore.dll")
 	modgdi32    = windows.NewLazySystemDLL("gdi32.dll")
+	modcomdlg32 = windows.NewLazySystemDLL("comdlg32.dll")
 
 	procGetModuleHandleW          = modkernel32.NewProc("GetModuleHandleW")
 	procSetLastError              = modkernel32.NewProc("SetLastError")
@@ -83,6 +84,12 @@ var (
 	procAdjustWindowRectEx        = moduser32.NewProc("AdjustWindowRectEx")
 	procSetParent                 = moduser32.NewProc("SetParent")
 	procSetWindowPos              = moduser32.NewProc("SetWindowPos")
+	procDialogBoxParamW           = moduser32.NewProc("DialogBoxParamW")
+	procEndDialog                 = moduser32.NewProc("EndDialog")
+	procSetFocus                  = moduser32.NewProc("SetFocus")
+	procFindTextW                 = modcomdlg32.NewProc("FindTextW")
+	procCommDlgExtendedError      = modcomdlg32.NewProc("CommDlgExtendedError")
+	procRegisterWindowMessageW    = moduser32.NewProc("RegisterWindowMessageW")
 )
 
 func GetModuleHandle(m *uint16) (handle HMODULE, err error) {
@@ -414,7 +421,7 @@ func DestroyWindow(hWnd HWND) (r bool, err error) {
 	return
 }
 
-func PostMessage(hWnd HWND, Msg uint32, wParam WPARAM, lParam LPARAM) (r bool, err error) {
+func PostMessage(hWnd HWND, Msg UINT, wParam WPARAM, lParam LPARAM) (r bool, err error) {
 	r0, _, e1 := syscall.Syscall6(procPostMessageW.Addr(), 4, uintptr(hWnd), uintptr(Msg), uintptr(wParam), uintptr(lParam), 0, 0)
 	r = r0 != 0
 	if r == false {
@@ -465,10 +472,74 @@ func SetParent(hWndChild HWND, hWndNewParent HWND) (r HWND, err error) {
 	return
 }
 
-func SetWindowPos(hWnd HWND, hWndInsertAfter HWND, X int, Y int, cx int, cy int, uFlags uint32) (r bool, err error) {
+func SetWindowPos(hWnd HWND, hWndInsertAfter HWND, X int, Y int, cx int, cy int, uFlags UINT) (r bool, err error) {
 	r0, _, e1 := syscall.Syscall9(procSetWindowPos.Addr(), 7, uintptr(hWnd), uintptr(hWndInsertAfter), uintptr(X), uintptr(Y), uintptr(cx), uintptr(cy), uintptr(uFlags), 0, 0)
 	r = r0 != 0
 	if r == false {
+		if e1 != 0 {
+			err = errnoErr(e1)
+		} else {
+			err = syscall.EINVAL
+		}
+	}
+	return
+}
+
+func dialogBoxParamW(hInstance HINSTANCE, lpTemplateName *uint16, hWndParent HWND, lpDialogFunc DLGPROC, dwInitParam LPARAM) (r INT_PTR, err error) {
+	r0, _, e1 := syscall.Syscall6(procDialogBoxParamW.Addr(), 5, uintptr(hInstance), uintptr(unsafe.Pointer(lpTemplateName)), uintptr(hWndParent), uintptr(lpDialogFunc), uintptr(dwInitParam), 0)
+	r = INT_PTR(r0)
+	if r == 0xffffffff {
+		if e1 != 0 {
+			err = errnoErr(e1)
+		} else {
+			err = syscall.EINVAL
+		}
+	}
+	return
+}
+
+func EndDialog(hDlg HWND, nResult INT_PTR) (r bool, err error) {
+	r0, _, e1 := syscall.Syscall(procEndDialog.Addr(), 2, uintptr(hDlg), uintptr(nResult), 0)
+	r = r0 != 0
+	if r == false {
+		if e1 != 0 {
+			err = errnoErr(e1)
+		} else {
+			err = syscall.EINVAL
+		}
+	}
+	return
+}
+
+func SetFocus(hWnd HWND) (r HWND, err error) {
+	r0, _, e1 := syscall.Syscall(procSetFocus.Addr(), 1, uintptr(hWnd), 0, 0)
+	r = HWND(r0)
+	if r == 0 {
+		if e1 != 0 {
+			err = errnoErr(e1)
+		} else {
+			err = syscall.EINVAL
+		}
+	}
+	return
+}
+
+func FindText(Arg1 *Findreplace) (r HWND) {
+	r0, _, _ := syscall.Syscall(procFindTextW.Addr(), 1, uintptr(unsafe.Pointer(Arg1)), 0, 0)
+	r = HWND(r0)
+	return
+}
+
+func CommDlgExtendedError() (r DWORD) {
+	r0, _, _ := syscall.Syscall(procCommDlgExtendedError.Addr(), 0, 0, 0, 0)
+	r = DWORD(r0)
+	return
+}
+
+func RegisterWindowMessage(lpString *uint16) (r UINT, err error) {
+	r0, _, e1 := syscall.Syscall(procRegisterWindowMessageW.Addr(), 1, uintptr(unsafe.Pointer(lpString)), 0, 0)
+	r = UINT(r0)
+	if r == 0 {
 		if e1 != 0 {
 			err = errnoErr(e1)
 		} else {

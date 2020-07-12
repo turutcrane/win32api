@@ -13,10 +13,16 @@ import (
 import "C"
 
 const (
+	False = 0
+	True = 1
+)
+
+const (
 	sizeof_RECT          = C.sizeof_RECT
 	sizeof_WNDCLASSEX    = C.sizeof_WNDCLASSEX
 	sizeof_CREATESTRUCTW = C.sizeof_CREATESTRUCTW
 	sizeof_PAINTSTRUCT   = C.sizeof_PAINTSTRUCT
+	sizeof_FINDREPLACE   = C.sizeof_FINDREPLACE
 )
 
 // index of GetDevoceCaps
@@ -183,6 +189,21 @@ const (
 	Htobject      = C.HTOBJECT
 	Htclose       = C.HTCLOSE
 	Hthelp        = C.HTHELP
+)
+
+var (
+	Idok       = C.IDOK
+	Idcancel   = C.IDCANCEL
+	Idabort    = C.IDABORT
+	Idretry    = C.IDRETRY
+	Idignore   = C.IDIGNORE
+	Idyes      = C.IDYES
+	Idno       = C.IDNO
+	Idclose    = C.IDCLOSE
+	Idhelp     = C.IDHELP
+	Idtryagain = C.IDTRYAGAIN
+	Idcontinue = C.IDCONTINUE
+	Idtimeout  = C.IDTIMEOUT
 )
 
 var (

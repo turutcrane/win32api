@@ -33,7 +33,9 @@ const (
 	QtUnknown qualtype = iota
 	QtNs
 	QtFailRetVal
+	QtFuncname
 	QtNoerr
+	QtNoreturn
 )
 
 type FuncQual struct {
@@ -69,11 +71,13 @@ var keywords = map[string]int{
 	"typedef":    TYPEDEF,
 	"ns":         NS,
 	"failretval": FAILRETVAL,
+	"funcname":   FUNCNAME,
 	"noerr":      NOERR,
 	"const":      CONST,
+	"noreturn":   NORETURN,
 }
 
-//line win32.y:73
+//line win32.y:77
 type yySymType struct {
 	yys   int
 	token Token
@@ -94,9 +98,11 @@ const STRUCT = 57347
 const NUMBER = 57348
 const NS = 57349
 const FAILRETVAL = 57350
-const NOERR = 57351
-const TYPEDEF = 57352
-const CONST = 57353
+const FUNCNAME = 57351
+const NOERR = 57352
+const NORETURN = 57353
+const TYPEDEF = 57354
+const CONST = 57355
 
 var yyToknames = [...]string{
 	"$end",
@@ -107,7 +113,9 @@ var yyToknames = [...]string{
 	"NUMBER",
 	"NS",
 	"FAILRETVAL",
+	"FUNCNAME",
 	"NOERR",
+	"NORETURN",
 	"TYPEDEF",
 	"CONST",
 	"'('",
@@ -128,7 +136,7 @@ const yyEofCode = 1
 const yyErrCode = 2
 const yyInitialStackSize = 16
 
-//line win32.y:281
+//line win32.y:297
 
 type LexerWrapper struct {
 	// s		  *Scanner
@@ -180,75 +188,80 @@ var yyExca = [...]int{
 	-1, 2,
 	1, 1,
 	-2, 10,
-	-1, 29,
+	-1, 34,
 	4, 7,
-	-2, 20,
-	-1, 30,
-	22, 28,
+	-2, 24,
+	-1, 35,
+	24, 32,
 	-2, 7,
-	-1, 43,
-	22, 28,
+	-1, 48,
+	24, 32,
 	-2, 7,
 }
 
 const yyPrivate = 57344
 
-const yyLast = 60
+const yyLast = 65
 
 var yyAct = [...]int{
 
-	48, 35, 39, 36, 42, 50, 41, 30, 57, 46,
-	37, 28, 55, 26, 38, 6, 29, 15, 11, 53,
-	11, 51, 40, 27, 54, 44, 43, 18, 19, 20,
-	5, 31, 16, 33, 34, 56, 41, 25, 17, 24,
-	13, 23, 45, 47, 22, 52, 1, 14, 32, 12,
-	7, 10, 9, 8, 49, 4, 58, 3, 2, 21,
+	53, 40, 44, 41, 47, 55, 46, 35, 62, 51,
+	42, 32, 60, 30, 43, 6, 13, 58, 34, 36,
+	13, 59, 49, 56, 45, 31, 48, 20, 21, 24,
+	22, 23, 17, 5, 39, 18, 61, 46, 38, 33,
+	15, 19, 29, 28, 27, 26, 1, 50, 52, 14,
+	57, 16, 37, 7, 11, 10, 12, 9, 8, 54,
+	4, 63, 3, 2, 25,
 }
 var yyPact = [...]int{
 
-	5, -1000, 5, -1000, -1000, 6, 27, 3, -1000, -1000,
-	-1000, 20, -1000, 40, 37, -1000, 35, -1000, 33, 7,
-	-1000, 4, -1000, -1000, -14, -1000, -1000, 25, -1000, 6,
-	6, -1000, -3, -1000, 2, -18, 12, 11, 6, -9,
-	32, -1000, 1, 6, -1000, -1000, 13, -1000, 10, -5,
-	-1000, 31, -1000, -11, -1000, 1, -1000, -1000, -1000,
+	3, -1000, 3, -1000, -1000, 19, 30, -1, -1000, -1000,
+	-1000, -1000, -1000, 20, -1000, 41, 40, -1000, 39, -1000,
+	38, 7, -1000, -1000, 35, 4, -1000, -1000, -16, -1000,
+	-1000, 13, -1000, -1000, 19, 19, -1000, -5, -1000, 2,
+	-20, 10, 6, 19, -11, 33, -1000, 1, 19, -1000,
+	-1000, 11, -1000, 5, -7, -1000, 32, -1000, -13, -1000,
+	1, -1000, -1000, -1000,
 }
 var yyPgo = [...]int{
 
-	0, 59, 2, 46, 58, 57, 55, 54, 3, 53,
-	52, 51, 50, 34, 48, 30, 0, 1, 47,
+	0, 64, 2, 46, 63, 62, 60, 59, 3, 58,
+	57, 56, 55, 54, 53, 34, 52, 33, 0, 1,
+	51,
 }
 var yyR1 = [...]int{
 
-	0, 3, 3, 4, 4, 5, 13, 18, 18, 1,
-	15, 15, 12, 12, 12, 9, 10, 10, 10, 11,
-	14, 14, 14, 8, 8, 8, 2, 6, 17, 17,
-	16, 16, 7, 7,
+	0, 3, 3, 4, 4, 5, 15, 20, 20, 1,
+	17, 17, 14, 14, 14, 14, 14, 9, 10, 10,
+	10, 12, 13, 11, 16, 16, 16, 8, 8, 8,
+	2, 6, 19, 19, 18, 18, 7, 7,
 }
 var yyR2 = [...]int{
 
 	0, 0, 2, 1, 1, 7, 2, 0, 1, 1,
-	0, 2, 1, 1, 1, 3, 3, 4, 3, 2,
-	0, 1, 3, 2, 5, 3, 1, 8, 0, 3,
-	1, 3, 1, 2,
+	0, 2, 1, 1, 1, 1, 1, 3, 3, 4,
+	3, 2, 2, 3, 0, 1, 3, 2, 5, 3,
+	1, 8, 0, 3, 1, 3, 1, 2,
 }
 var yyChk = [...]int{
 
-	-1000, -3, -4, -5, -6, -15, 10, -12, -9, -10,
-	-11, 15, -3, -13, -18, 11, 5, -15, 7, 8,
-	9, -1, 4, 4, 4, 4, 6, 16, 4, 12,
-	21, 6, -14, -8, -13, -17, -8, 13, 17, -2,
-	20, 4, 22, 14, 14, -8, 18, -2, -16, -7,
-	4, 20, -17, 6, 14, 17, 4, 19, -16,
+	-1000, -3, -4, -5, -6, -17, 12, -14, -9, -10,
+	-12, -13, -11, 17, -3, -15, -20, 13, 5, -17,
+	7, 8, 10, 11, 9, -1, 4, 4, 4, 4,
+	6, 18, 4, 4, 14, 23, 6, -16, -8, -15,
+	-19, -8, 15, 19, -2, 22, 4, 24, 16, 16,
+	-8, 20, -2, -18, -7, 4, 22, -19, 6, 16,
+	19, 4, 21, -18,
 }
 var yyDef = [...]int{
 
 	-2, -2, -2, 3, 4, 7, 0, 10, 12, 13,
-	14, 0, 2, 0, 0, 8, 0, 11, 0, 0,
-	19, 0, 9, 6, 0, 15, 16, 0, 18, -2,
-	-2, 17, 0, 21, 0, 0, 0, 0, 7, 23,
-	0, 26, 0, -2, 5, 22, 0, 25, 0, 30,
-	32, 0, 29, 0, 27, 0, 33, 24, 31,
+	14, 15, 16, 0, 2, 0, 0, 8, 0, 11,
+	0, 0, 21, 22, 0, 0, 9, 6, 0, 17,
+	18, 0, 20, 23, -2, -2, 19, 0, 25, 0,
+	0, 0, 0, 7, 27, 0, 30, 0, -2, 5,
+	26, 0, 29, 0, 34, 36, 0, 33, 0, 31,
+	0, 37, 28, 35,
 }
 var yyTok1 = [...]int{
 
@@ -256,19 +269,20 @@ var yyTok1 = [...]int{
 	3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
 	3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
 	3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
-	12, 13, 20, 3, 17, 16, 3, 3, 3, 3,
-	3, 3, 3, 3, 3, 3, 3, 3, 3, 14,
-	3, 3, 3, 3, 15, 3, 3, 3, 3, 3,
+	14, 15, 22, 3, 19, 18, 3, 3, 3, 3,
+	3, 3, 3, 3, 3, 3, 3, 3, 3, 16,
+	3, 3, 3, 3, 17, 3, 3, 3, 3, 3,
 	3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
 	3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
-	3, 18, 3, 19, 3, 3, 3, 3, 3, 3,
+	3, 20, 3, 21, 3, 3, 3, 3, 3, 3,
 	3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
 	3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
-	3, 3, 3, 21, 3, 22,
+	3, 3, 3, 23, 3, 24,
 }
 var yyTok2 = [...]int{
 
 	2, 3, 4, 5, 6, 7, 8, 9, 10, 11,
+	12, 13,
 }
 var yyTok3 = [...]int{
 	0,
@@ -613,7 +627,7 @@ yydefault:
 
 	case 1:
 		yyDollar = yyS[yypt-0 : yypt+1]
-//line win32.y:103
+//line win32.y:107
 		{
 			yyVAL.defs = nil
 			if l, isLexerWrapper := yylex.(*LexerWrapper); isLexerWrapper {
@@ -622,7 +636,7 @@ yydefault:
 		}
 	case 2:
 		yyDollar = yyS[yypt-2 : yypt+1]
-//line win32.y:110
+//line win32.y:114
 		{
 			yyVAL.defs = append([]interface{}{yyDollar[1].def}, yyDollar[2].defs...)
 			if l, isLexerWrapper := yylex.(*LexerWrapper); isLexerWrapper {
@@ -631,7 +645,7 @@ yydefault:
 		}
 	case 5:
 		yyDollar = yyS[yypt-7 : yypt+1]
-//line win32.y:123
+//line win32.y:127
 		{
 			typespec := yyDollar[2].aElement.(*Typespec)
 			yyVAL.def = &Funcdef{
@@ -643,7 +657,7 @@ yydefault:
 		}
 	case 6:
 		yyDollar = yyS[yypt-2 : yypt+1]
-//line win32.y:135
+//line win32.y:139
 		{
 			yyVAL.aElement = &Typespec{
 				name:      yyDollar[2].token,
@@ -653,77 +667,89 @@ yydefault:
 		}
 	case 10:
 		yyDollar = yyS[yypt-0 : yypt+1]
-//line win32.y:152
+//line win32.y:156
 		{
 			yyVAL.funcquals = []*FuncQual{}
 		}
 	case 11:
 		yyDollar = yyS[yypt-2 : yypt+1]
-//line win32.y:156
+//line win32.y:160
 		{
 			funcqual := yyDollar[1].aElement.(*FuncQual)
 			yyVAL.funcquals = append([]*FuncQual{funcqual}, yyDollar[2].funcquals...)
 		}
-	case 15:
-		yyDollar = yyS[yypt-3 : yypt+1]
-//line win32.y:167
-		{
-			yyVAL.aElement = &FuncQual{QtNs, yyDollar[3].token.literal}
-		}
-	case 16:
+	case 17:
 		yyDollar = yyS[yypt-3 : yypt+1]
 //line win32.y:173
 		{
-			yyVAL.aElement = &FuncQual{QtFailRetVal, yyDollar[3].token.literal}
-		}
-	case 17:
-		yyDollar = yyS[yypt-4 : yypt+1]
-//line win32.y:177
-		{
-			yyVAL.aElement = &FuncQual{QtFailRetVal, "-" + yyDollar[4].token.literal}
+			yyVAL.aElement = &FuncQual{QtNs, yyDollar[3].token.literal}
 		}
 	case 18:
 		yyDollar = yyS[yypt-3 : yypt+1]
-//line win32.y:181
+//line win32.y:179
 		{
 			yyVAL.aElement = &FuncQual{QtFailRetVal, yyDollar[3].token.literal}
 		}
 	case 19:
+		yyDollar = yyS[yypt-4 : yypt+1]
+//line win32.y:183
+		{
+			yyVAL.aElement = &FuncQual{QtFailRetVal, "-" + yyDollar[4].token.literal}
+		}
+	case 20:
+		yyDollar = yyS[yypt-3 : yypt+1]
+//line win32.y:187
+		{
+			yyVAL.aElement = &FuncQual{QtFailRetVal, yyDollar[3].token.literal}
+		}
+	case 21:
 		yyDollar = yyS[yypt-2 : yypt+1]
-//line win32.y:186
+//line win32.y:192
 		{
 			yyVAL.aElement = &FuncQual{QtNoerr, ""}
 		}
-	case 20:
+	case 22:
+		yyDollar = yyS[yypt-2 : yypt+1]
+//line win32.y:197
+		{
+			yyVAL.aElement = &FuncQual{QtNoreturn, ""}
+		}
+	case 23:
+		yyDollar = yyS[yypt-3 : yypt+1]
+//line win32.y:202
+		{
+			yyVAL.aElement = &FuncQual{QtFuncname, yyDollar[3].token.literal}
+		}
+	case 24:
 		yyDollar = yyS[yypt-0 : yypt+1]
-//line win32.y:191
+//line win32.y:207
 		{
 			yyVAL.params = []*Param{}
 		}
-	case 21:
+	case 25:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line win32.y:195
+//line win32.y:211
 		{
 			param := yyDollar[1].aElement.(*Param)
 			yyVAL.params = []*Param{param}
 		}
-	case 22:
+	case 26:
 		yyDollar = yyS[yypt-3 : yypt+1]
-//line win32.y:200
+//line win32.y:216
 		{
 			param := yyDollar[3].aElement.(*Param)
 			yyVAL.params = append(yyDollar[1].params, param)
 		}
-	case 23:
+	case 27:
 		yyDollar = yyS[yypt-2 : yypt+1]
-//line win32.y:207
+//line win32.y:223
 		{
 			typespec := yyDollar[1].aElement.(*Typespec)
 			yyVAL.aElement = &Param{typespec, yyDollar[2].token}
 		}
-	case 24:
+	case 28:
 		yyDollar = yyS[yypt-5 : yypt+1]
-//line win32.y:212
+//line win32.y:228
 		{
 			i, err := strconv.ParseInt(yyDollar[4].token.literal, 10, 32)
 			if err != nil {
@@ -735,17 +761,17 @@ yydefault:
 
 			yyVAL.aElement = &Param{ts, yyDollar[2].token}
 		}
-	case 25:
+	case 29:
 		yyDollar = yyS[yypt-3 : yypt+1]
-//line win32.y:224
+//line win32.y:240
 		{
 			ts := yyDollar[1].aElement.(*Typespec)
 			ts.isPointer = true
 			yyVAL.aElement = &Param{ts, yyDollar[3].token}
 		}
-	case 27:
+	case 31:
 		yyDollar = yyS[yypt-8 : yypt+1]
-//line win32.y:234
+//line win32.y:250
 		{
 			yyVAL.def = &Typedef{
 				name:     yyDollar[3].token,
@@ -753,45 +779,45 @@ yydefault:
 				defnames: yyDollar[7].defnames,
 			}
 		}
-	case 28:
+	case 32:
 		yyDollar = yyS[yypt-0 : yypt+1]
-//line win32.y:244
+//line win32.y:260
 		{
 			yyVAL.members = []*Param{}
 		}
-	case 29:
+	case 33:
 		yyDollar = yyS[yypt-3 : yypt+1]
-//line win32.y:248
+//line win32.y:264
 		{
 			member := yyDollar[1].aElement.(*Param)
 			yyVAL.members = append([]*Param{member}, yyDollar[3].members...)
 		}
-	case 30:
+	case 34:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line win32.y:255
+//line win32.y:271
 		{
 			defname := yyDollar[1].aElement.(*TypedefName)
 			yyVAL.defnames = []*TypedefName{defname}
 		}
-	case 31:
+	case 35:
 		yyDollar = yyS[yypt-3 : yypt+1]
-//line win32.y:260
+//line win32.y:276
 		{
 			defname := yyDollar[1].aElement.(*TypedefName)
 			yyVAL.defnames = append([]*TypedefName{defname}, yyDollar[3].defnames...)
 		}
-	case 32:
+	case 36:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line win32.y:267
+//line win32.y:283
 		{
 			yyVAL.aElement = &TypedefName{
 				name:      yyDollar[1].token,
 				isPointer: false,
 			}
 		}
-	case 33:
+	case 37:
 		yyDollar = yyS[yypt-2 : yypt+1]
-//line win32.y:274
+//line win32.y:290
 		{
 			yyVAL.aElement = &TypedefName{
 				name:      yyDollar[2].token,

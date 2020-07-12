@@ -19,9 +19,10 @@ import (
 
 var typeMap = map[string]string{
 	"LPCWSTR": "*uint16",
-	"LPPOINT": "*Point",
+	"LPWSTR":  "*uint16",
+	"LPCTSTR": "*uint16",
 	"BOOL":    "bool",
-	"UINT":    "uint32",
+	// "UINT":    "uint32",
 }
 
 func main() {
@@ -97,8 +98,9 @@ func convType(t Typespec) (ts string) {
 }
 
 func outFuncdef(d *Funcdef, out *bytes.Buffer) {
-	var ns, fv string
+	var ns, fv, fn string
 	var noerr bool
+	var noreturn bool
 	for _, q := range d.funcQuals {
 		switch q.qt {
 		case QtNs:
@@ -107,24 +109,36 @@ func outFuncdef(d *Funcdef, out *bytes.Buffer) {
 			fv = q.val
 		case QtNoerr:
 			noerr = true
+		case QtNoreturn:
+			noreturn = true
+		case QtFuncname:
+			fn = q.val
 		default:
 			log.Panicln("T41:", q)
 		}
 	}
-	fmt.Fprintf(out, "//sys %s(", removeLastW(*&d.funcname.literal))
+	if fn == "" {
+		fmt.Fprintf(out, "//sys %s(", removeLastW(d.funcname.literal))
+	} else {
+		fmt.Fprintf(out, "//sys %s(", fn)
+	}
+
 	for i, p := range d.params {
 		if i > 0 {
 			out.WriteString(", ")
 		}
 		fmt.Fprintf(out, "%s %s", p.pname.literal, convTypeParam(*p))
 	}
-	fmt.Fprintf(out, ") (r %s", convType(*d.typespec))
-	if !noerr {
-		out.WriteString(", err error")
+	fmt.Fprintf(out, ")")
+	if !noreturn {
+		fmt.Fprintf(out, " (r %s", convType(*d.typespec))
+		if !noerr {
+			out.WriteString(", err error")
+		}
+		out.WriteString(")")
 	}
-	out.WriteString(") ")
 	if fv != "" {
-		fmt.Fprintf(out, "[failretval==%s]", fv)
+		fmt.Fprintf(out, " [failretval==%s]", fv)
 	}
 	if ns != "" {
 		fmt.Fprintf(out, " = %s.%s\n", ns, d.funcname.literal)

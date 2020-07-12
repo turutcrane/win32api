@@ -36,7 +36,10 @@ type SHORT int16
 type ProcessDpiAwareness int
 
 type UINT uint32
+type INT_PTR uintptr
 type WNDPROC uintptr
+type DLGPROC uintptr
+type LPFRHOOKPROC uintptr
 
 // type WndProc func(hWnd win32api.HWND, message win32api.UINT, wParam win32api.WPARAM, lParam win32api.LPARAM) win32api.LRESULT
 type WndProc func(hWnd HWND, message UINT, wParam WPARAM, lParam LPARAM) LRESULT
@@ -136,4 +139,14 @@ func HIWORD(w WPARAM) uintptr {
 
 func LParamToPRect(lParam LPARAM) *Rect {
 	return (*Rect)(unsafe.Pointer(lParam))
+}
+
+func DialogBoxParam(hInstance HINSTANCE, lpTemplateName *uint16, hWndParent HWND, lpDialogFunc DLGPROC, dwInitParam LPARAM) (r INT_PTR, err error) {
+	r, err = dialogBoxParamW(hInstance, lpTemplateName, hWndParent, lpDialogFunc, dwInitParam)
+
+	// If the function fails because the hWndParent parameter is invalid, the return value is zero.
+	if err != nil && r == 0 {
+		err = syscall.EINVAL
+	}
+	return r, err
 }

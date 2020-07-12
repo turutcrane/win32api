@@ -26,7 +26,9 @@ const (
 	QtUnknown qualtype = iota
 	QtNs
 	QtFailRetVal
+	QtFuncname
 	QtNoerr
+	QtNoreturn
 )
 
 type FuncQual struct {
@@ -60,10 +62,12 @@ type TypedefName struct {
 var keywords = map[string]int{
 	"struct":	STRUCT,
 	"typedef":	TYPEDEF,
-	"ns":		 NS,
-	"failretval": FAILRETVAL,
+	"ns":		NS,
+	"failretval":	FAILRETVAL,
+	"funcname":	FUNCNAME,
 	"noerr":	NOERR,
 	"const":	CONST,
+	"noreturn":     NORETURN,
 }
 
 %}
@@ -88,14 +92,14 @@ var keywords = map[string]int{
 
 %type<defs>	 defs
 %type<def>	  def funcdef typedef
-%type<aElement> defname param nsqual failretvalqual noerrqual funcqual typespec
+%type<aElement> defname param nsqual failretvalqual funcnamequal noerrqual noreturnqual funcqual typespec
 
 %type<params>   params 
 %type<funcquals>	funcquals
 %type<defnames> defnames
 %type<members>  members
 
-%token<token> IDENT STRUCT NUMBER NS FAILRETVAL NOERR TYPEDEF CONST
+%token<token> IDENT STRUCT NUMBER NS FAILRETVAL FUNCNAME NOERR NORETURN TYPEDEF CONST
 
 %%
 
@@ -162,6 +166,8 @@ funcqual
 	: nsqual
 	| failretvalqual
 	| noerrqual
+	| noreturnqual
+	| funcnamequal
 
 nsqual: '@' NS IDENT
 	{
@@ -185,6 +191,16 @@ failretvalqual
 noerrqual: '@' NOERR
 	{
 		$$ = &FuncQual{QtNoerr, ""}
+	}
+
+noreturnqual: '@' NORETURN
+	{
+		$$ = &FuncQual{QtNoreturn, ""}
+	}
+
+funcnamequal: '@' FUNCNAME IDENT
+	{
+		$$ = &FuncQual{QtFuncname, $3.literal}
 	}
 
 params:
