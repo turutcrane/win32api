@@ -216,3 +216,10 @@ DWORD CommDlgExtendedError();
 UINT RegisterWindowMessageW(
   LPCWSTR lpString
 );
+
+@ns user32
+@failretval false
+BOOL SetWindowTextW(
+  HWND    hWnd,
+  LPCWSTR lpString
+);

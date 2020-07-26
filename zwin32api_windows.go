@@ -90,6 +90,7 @@ var (
 	procFindTextW                 = modcomdlg32.NewProc("FindTextW")
 	procCommDlgExtendedError      = modcomdlg32.NewProc("CommDlgExtendedError")
 	procRegisterWindowMessageW    = moduser32.NewProc("RegisterWindowMessageW")
+	procSetWindowTextW            = moduser32.NewProc("SetWindowTextW")
 )
 
 func GetModuleHandle(m *uint16) (handle HMODULE, err error) {
@@ -540,6 +541,19 @@ func RegisterWindowMessage(lpString *uint16) (r UINT, err error) {
 	r0, _, e1 := syscall.Syscall(procRegisterWindowMessageW.Addr(), 1, uintptr(unsafe.Pointer(lpString)), 0, 0)
 	r = UINT(r0)
 	if r == 0 {
+		if e1 != 0 {
+			err = errnoErr(e1)
+		} else {
+			err = syscall.EINVAL
+		}
+	}
+	return
+}
+
+func SetWindowText(hWnd HWND, lpString *uint16) (r bool, err error) {
+	r0, _, e1 := syscall.Syscall(procSetWindowTextW.Addr(), 2, uintptr(hWnd), uintptr(unsafe.Pointer(lpString)), 0)
+	r = r0 != 0
+	if r == false {
 		if e1 != 0 {
 			err = errnoErr(e1)
 		} else {

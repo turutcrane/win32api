@@ -89,3 +89,4 @@ type Findreplace struct {
 //sys FindText(Arg1 *Findreplace) (r HWND) = comdlg32.FindTextW
 //sys CommDlgExtendedError() (r DWORD) = comdlg32.CommDlgExtendedError
 //sys RegisterWindowMessage(lpString *uint16) (r UINT, err error) = user32.RegisterWindowMessageW
+//sys SetWindowText(hWnd HWND, lpString *uint16) (r bool, err error) [failretval==false] = user32.SetWindowTextW
