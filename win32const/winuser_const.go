@@ -14,7 +14,7 @@ import "C"
 
 const (
 	False = 0
-	True = 1
+	True  = 1
 )
 
 const (
