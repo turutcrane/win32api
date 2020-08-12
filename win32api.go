@@ -16,8 +16,8 @@ type HBRUSH syscall.Handle
 type HCURSOR syscall.Handle
 type HDC syscall.Handle
 type HDWP syscall.Handle
-type HFONT uintptr
-type HGDIOBJ uintptr
+type HFONT syscall.Handle
+type HGDIOBJ syscall.Handle
 type HICON syscall.Handle
 type HINSTANCE syscall.Handle
 type HMENU syscall.Handle
