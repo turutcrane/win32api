@@ -9,4 +9,5 @@ zwin32api_windows.go: win32api.go w32api_windows.go
 
 w32api_windows.go: w32api.txt
 	$(MAKE) -C ./cmd/mkapisys vet
-	go run github.com/turutcrane/win32api/cmd/mkapisys -o w32api_windows.go -pkg win32api w32api.txt
+	go run ./cmd/mkapisys -o w32api_windows.go -pkg win32api w32api.txt
+	#go run github.com/turutcrane/win32api/cmd/mkapisys -o w32api_windows.go -pkg win32api w32api.txt
