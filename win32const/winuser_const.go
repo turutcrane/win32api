@@ -18,11 +18,12 @@ const (
 )
 
 const (
-	sizeof_RECT          = C.sizeof_RECT
-	sizeof_WNDCLASSEX    = C.sizeof_WNDCLASSEX
-	sizeof_CREATESTRUCTW = C.sizeof_CREATESTRUCTW
-	sizeof_PAINTSTRUCT   = C.sizeof_PAINTSTRUCT
-	sizeof_FINDREPLACE   = C.sizeof_FINDREPLACE
+	sizeof_RECT                  = C.sizeof_RECT
+	sizeof_WNDCLASSEX            = C.sizeof_WNDCLASSEX
+	sizeof_CREATESTRUCTW         = C.sizeof_CREATESTRUCTW
+	sizeof_PAINTSTRUCT           = C.sizeof_PAINTSTRUCT
+	sizeof_FINDREPLACE           = C.sizeof_FINDREPLACE
+	sizeof_PIXELFORMATDESCRIPTOR = C.sizeof_PIXELFORMATDESCRIPTOR
 )
 
 // index of GetDevoceCaps

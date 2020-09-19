@@ -91,6 +91,13 @@ var (
 	procCommDlgExtendedError      = modcomdlg32.NewProc("CommDlgExtendedError")
 	procRegisterWindowMessageW    = moduser32.NewProc("RegisterWindowMessageW")
 	procSetWindowTextW            = moduser32.NewProc("SetWindowTextW")
+	procIsWindow                  = moduser32.NewProc("IsWindow")
+	procClientToScreen            = moduser32.NewProc("ClientToScreen")
+	procChoosePixelFormat         = modgdi32.NewProc("ChoosePixelFormat")
+	procSetPixelFormat            = modgdi32.NewProc("SetPixelFormat")
+	procSwapBuffers               = modgdi32.NewProc("SwapBuffers")
+	procwglCreateContext          = modgdi32.NewProc("wglCreateContext")
+	procwglMakeCurrent            = modgdi32.NewProc("wglMakeCurrent")
 )
 
 func GetModuleHandle(m *uint16) (handle HMODULE, err error) {
@@ -354,10 +361,9 @@ func PtInRegion(hrgn HRGN, x int, y int) (r bool) {
 	return
 }
 
-func EndDeferWindowPos(hWinPosInfo HDWP) (r bool, err error) {
-	r0, _, e1 := syscall.Syscall(procEndDeferWindowPos.Addr(), 1, uintptr(hWinPosInfo), 0, 0)
-	r = r0 != 0
-	if r == false {
+func EndDeferWindowPos(hWinPosInfo HDWP) (err error) {
+	r1, _, e1 := syscall.Syscall(procEndDeferWindowPos.Addr(), 1, uintptr(hWinPosInfo), 0, 0)
+	if r1 == 0 {
 		if e1 != 0 {
 			err = errnoErr(e1)
 		} else {
@@ -409,10 +415,9 @@ func CreateRectRgn(x1 int, y1 int, x2 int, y2 int) (r HRGN) {
 	return
 }
 
-func DestroyWindow(hWnd HWND) (r bool, err error) {
-	r0, _, e1 := syscall.Syscall(procDestroyWindow.Addr(), 1, uintptr(hWnd), 0, 0)
-	r = r0 != 0
-	if r == false {
+func DestroyWindow(hWnd HWND) (err error) {
+	r1, _, e1 := syscall.Syscall(procDestroyWindow.Addr(), 1, uintptr(hWnd), 0, 0)
+	if r1 == 0 {
 		if e1 != 0 {
 			err = errnoErr(e1)
 		} else {
@@ -422,10 +427,9 @@ func DestroyWindow(hWnd HWND) (r bool, err error) {
 	return
 }
 
-func PostMessage(hWnd HWND, Msg UINT, wParam WPARAM, lParam LPARAM) (r bool, err error) {
-	r0, _, e1 := syscall.Syscall6(procPostMessageW.Addr(), 4, uintptr(hWnd), uintptr(Msg), uintptr(wParam), uintptr(lParam), 0, 0)
-	r = r0 != 0
-	if r == false {
+func PostMessage(hWnd HWND, Msg UINT, wParam WPARAM, lParam LPARAM) (err error) {
+	r1, _, e1 := syscall.Syscall6(procPostMessageW.Addr(), 4, uintptr(hWnd), uintptr(Msg), uintptr(wParam), uintptr(lParam), 0, 0)
+	if r1 == 0 {
 		if e1 != 0 {
 			err = errnoErr(e1)
 		} else {
@@ -441,16 +445,15 @@ func IsRectEmpty(lprc *Rect) (r bool) {
 	return
 }
 
-func AdjustWindowRectEx(lpRect *Rect, dwStyle DWORD, bMenu bool, dwExStyle DWORD) (r bool, err error) {
+func AdjustWindowRectEx(lpRect *Rect, dwStyle DWORD, bMenu bool, dwExStyle DWORD) (err error) {
 	var _p0 uint32
 	if bMenu {
 		_p0 = 1
 	} else {
 		_p0 = 0
 	}
-	r0, _, e1 := syscall.Syscall6(procAdjustWindowRectEx.Addr(), 4, uintptr(unsafe.Pointer(lpRect)), uintptr(dwStyle), uintptr(_p0), uintptr(dwExStyle), 0, 0)
-	r = r0 != 0
-	if r == false {
+	r1, _, e1 := syscall.Syscall6(procAdjustWindowRectEx.Addr(), 4, uintptr(unsafe.Pointer(lpRect)), uintptr(dwStyle), uintptr(_p0), uintptr(dwExStyle), 0, 0)
+	if r1 == 0 {
 		if e1 != 0 {
 			err = errnoErr(e1)
 		} else {
@@ -473,10 +476,9 @@ func SetParent(hWndChild HWND, hWndNewParent HWND) (r HWND, err error) {
 	return
 }
 
-func SetWindowPos(hWnd HWND, hWndInsertAfter HWND, X int, Y int, cx int, cy int, uFlags UINT) (r bool, err error) {
-	r0, _, e1 := syscall.Syscall9(procSetWindowPos.Addr(), 7, uintptr(hWnd), uintptr(hWndInsertAfter), uintptr(X), uintptr(Y), uintptr(cx), uintptr(cy), uintptr(uFlags), 0, 0)
-	r = r0 != 0
-	if r == false {
+func SetWindowPos(hWnd HWND, hWndInsertAfter HWND, X int, Y int, cx int, cy int, uFlags UINT) (err error) {
+	r1, _, e1 := syscall.Syscall9(procSetWindowPos.Addr(), 7, uintptr(hWnd), uintptr(hWndInsertAfter), uintptr(X), uintptr(Y), uintptr(cx), uintptr(cy), uintptr(uFlags), 0, 0)
+	if r1 == 0 {
 		if e1 != 0 {
 			err = errnoErr(e1)
 		} else {
@@ -499,10 +501,9 @@ func dialogBoxParamW(hInstance HINSTANCE, lpTemplateName *uint16, hWndParent HWN
 	return
 }
 
-func EndDialog(hDlg HWND, nResult INT_PTR) (r bool, err error) {
-	r0, _, e1 := syscall.Syscall(procEndDialog.Addr(), 2, uintptr(hDlg), uintptr(nResult), 0)
-	r = r0 != 0
-	if r == false {
+func EndDialog(hDlg HWND, nResult INT_PTR) (err error) {
+	r1, _, e1 := syscall.Syscall(procEndDialog.Addr(), 2, uintptr(hDlg), uintptr(nResult), 0)
+	if r1 == 0 {
 		if e1 != 0 {
 			err = errnoErr(e1)
 		} else {
@@ -550,10 +551,83 @@ func RegisterWindowMessage(lpString *uint16) (r UINT, err error) {
 	return
 }
 
-func SetWindowText(hWnd HWND, lpString *uint16) (r bool, err error) {
-	r0, _, e1 := syscall.Syscall(procSetWindowTextW.Addr(), 2, uintptr(hWnd), uintptr(unsafe.Pointer(lpString)), 0)
+func SetWindowText(hWnd HWND, lpString *uint16) (err error) {
+	r1, _, e1 := syscall.Syscall(procSetWindowTextW.Addr(), 2, uintptr(hWnd), uintptr(unsafe.Pointer(lpString)), 0)
+	if r1 == 0 {
+		if e1 != 0 {
+			err = errnoErr(e1)
+		} else {
+			err = syscall.EINVAL
+		}
+	}
+	return
+}
+
+func IsWindow(hWnd HWND) (r bool) {
+	r0, _, _ := syscall.Syscall(procIsWindow.Addr(), 1, uintptr(hWnd), 0, 0)
 	r = r0 != 0
-	if r == false {
+	return
+}
+
+func ClientToScreen(hWnd HWND, lpPoint *Point) (r bool) {
+	r0, _, _ := syscall.Syscall(procClientToScreen.Addr(), 2, uintptr(hWnd), uintptr(unsafe.Pointer(lpPoint)), 0)
+	r = r0 != 0
+	return
+}
+
+func ChoosePixelFormat(hdc HDC, ppfd *Pixelformatdescriptor) (r int, err error) {
+	r0, _, e1 := syscall.Syscall(procChoosePixelFormat.Addr(), 2, uintptr(hdc), uintptr(unsafe.Pointer(ppfd)), 0)
+	r = int(r0)
+	if r == 0 {
+		if e1 != 0 {
+			err = errnoErr(e1)
+		} else {
+			err = syscall.EINVAL
+		}
+	}
+	return
+}
+
+func SetPixelFormat(hdc HDC, format int, ppfd *Pixelformatdescriptor) (err error) {
+	r1, _, e1 := syscall.Syscall(procSetPixelFormat.Addr(), 3, uintptr(hdc), uintptr(format), uintptr(unsafe.Pointer(ppfd)))
+	if r1 == 0 {
+		if e1 != 0 {
+			err = errnoErr(e1)
+		} else {
+			err = syscall.EINVAL
+		}
+	}
+	return
+}
+
+func SwapBuffers(Arg1 HDC) (err error) {
+	r1, _, e1 := syscall.Syscall(procSwapBuffers.Addr(), 1, uintptr(Arg1), 0, 0)
+	if r1 == 0 {
+		if e1 != 0 {
+			err = errnoErr(e1)
+		} else {
+			err = syscall.EINVAL
+		}
+	}
+	return
+}
+
+func WglCreateContext(Arg1 HDC) (r HGLRC, err error) {
+	r0, _, e1 := syscall.Syscall(procwglCreateContext.Addr(), 1, uintptr(Arg1), 0, 0)
+	r = HGLRC(r0)
+	if r == 0 {
+		if e1 != 0 {
+			err = errnoErr(e1)
+		} else {
+			err = syscall.EINVAL
+		}
+	}
+	return
+}
+
+func WglMakeCurrent(arg1 HDC, arg2 HGLRC) (err error) {
+	r1, _, e1 := syscall.Syscall(procwglMakeCurrent.Addr(), 2, uintptr(arg1), uintptr(arg2), 0)
+	if r1 == 0 {
 		if e1 != 0 {
 			err = errnoErr(e1)
 		} else {

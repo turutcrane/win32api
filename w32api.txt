@@ -69,6 +69,35 @@ typedef struct tagFINDREPLACEW {
   LPCWSTR      lpTemplateName;
 } FINDREPLACEW, *LPFINDREPLACEW;
 
+typedef struct tagPIXELFORMATDESCRIPTOR {
+  WORD  nSize;
+  WORD  nVersion;
+  DWORD dwFlags;
+  BYTE  iPixelType;
+  BYTE  cColorBits;
+  BYTE  cRedBits;
+  BYTE  cRedShift;
+  BYTE  cGreenBits;
+  BYTE  cGreenShift;
+  BYTE  cBlueBits;
+  BYTE  cBlueShift;
+  BYTE  cAlphaBits;
+  BYTE  cAlphaShift;
+  BYTE  cAccumBits;
+  BYTE  cAccumRedBits;
+  BYTE  cAccumGreenBits;
+  BYTE  cAccumBlueBits;
+  BYTE  cAccumAlphaBits;
+  BYTE  cDepthBits;
+  BYTE  cStencilBits;
+  BYTE  cAuxBuffers;
+  BYTE  iLayerType;
+  BYTE  bReserved;
+  DWORD dwLayerMask;
+  DWORD dwVisibleMask;
+  DWORD dwDamageMask;
+} PIXELFORMATDESCRIPTOR, *PPIXELFORMATDESCRIPTOR, *LPPIXELFORMATDESCRIPTOR;
+
 //
 @ns user32
 @noerr
@@ -86,7 +115,6 @@ BOOL PtInRegion(
 );
 
 @ns user32
-@failretval false
 BOOL EndDeferWindowPos(
   HDWP hWinPosInfo
 );
@@ -132,13 +160,11 @@ HRGN CreateRectRgn(
 );
 
 @ns user32
-@failretval false
 BOOL DestroyWindow(
   HWND hWnd
 );
 
 @ns user32
-@failretval false
 BOOL PostMessageW(
   HWND   hWnd,
   UINT   Msg,
@@ -153,7 +179,6 @@ BOOL IsRectEmpty(
 );
 
 @ns user32
-@failretval false
 BOOL AdjustWindowRectEx(
   LPRECT lpRect,
   DWORD  dwStyle,
@@ -168,7 +193,6 @@ HWND SetParent(
 );
 
 @ns user32
-@failretval false
 BOOL SetWindowPos(
   HWND hWnd,
   HWND hWndInsertAfter,
@@ -191,7 +215,6 @@ INT_PTR DialogBoxParamW(
 );
 
 @ns user32
-@failretval false
 BOOL EndDialog(
   HWND    hDlg,
   INT_PTR nResult
@@ -218,8 +241,49 @@ UINT RegisterWindowMessageW(
 );
 
 @ns user32
-@failretval false
 BOOL SetWindowTextW(
   HWND    hWnd,
   LPCWSTR lpString
+);
+
+@ns user32
+@noerr
+BOOL IsWindow(
+  HWND hWnd
+);
+
+@ns user32
+@noerr
+BOOL ClientToScreen(
+  HWND    hWnd,
+  LPPOINT lpPoint
+);
+
+@ns gdi32
+int ChoosePixelFormat(
+  HDC                         hdc,
+  const PIXELFORMATDESCRIPTOR *ppfd
+);
+
+@ns gdi32
+BOOL SetPixelFormat(
+  HDC                         hdc,
+  int                         format,
+  const PIXELFORMATDESCRIPTOR *ppfd
+);
+
+@ns gdi32
+BOOL SwapBuffers(
+  HDC Arg1
+);
+
+@ns gdi32
+HGLRC wglCreateContext(
+  HDC Arg1
+);
+
+@ns gdi32
+BOOL wglMakeCurrent(
+  HDC   arg1,
+  HGLRC arg2
 );

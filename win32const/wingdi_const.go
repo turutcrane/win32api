@@ -97,3 +97,30 @@ const (
 	OutScreenOutlinePrecis = C.OUT_SCREEN_OUTLINE_PRECIS
 	OutPsOnlyPrecis        = C.OUT_PS_ONLY_PRECIS
 )
+
+const (
+	PfdTypeRgba             = C.PFD_TYPE_RGBA
+	PfdTypeColorindex       = C.PFD_TYPE_COLORINDEX
+	PfdMainPlane            = C.PFD_MAIN_PLANE
+	PfdOverlayPlane         = C.PFD_OVERLAY_PLANE
+	PfdUnderlayPlane        = C.PFD_UNDERLAY_PLANE
+	PfdDoublebuffer         = C.PFD_DOUBLEBUFFER
+	PfdStereo               = C.PFD_STEREO
+	PfdDrawToWindow         = C.PFD_DRAW_TO_WINDOW
+	PfdDrawToBitmap         = C.PFD_DRAW_TO_BITMAP
+	PfdSupportGdi           = C.PFD_SUPPORT_GDI
+	PfdSupportOpengl        = C.PFD_SUPPORT_OPENGL
+	PfdGenericFormat        = C.PFD_GENERIC_FORMAT
+	PfdNeedPalette          = C.PFD_NEED_PALETTE
+	PfdNeedSystemPalette    = C.PFD_NEED_SYSTEM_PALETTE
+	PfdSwapExchange         = C.PFD_SWAP_EXCHANGE
+	PfdSwapCopy             = C.PFD_SWAP_COPY
+	PfdSwapLayerBuffers     = C.PFD_SWAP_LAYER_BUFFERS
+	PfdGenericAccelerated   = C.PFD_GENERIC_ACCELERATED
+	PfdSupportDirectdraw    = C.PFD_SUPPORT_DIRECTDRAW
+	PfdDirect3dAccelerated  = C.PFD_DIRECT3D_ACCELERATED
+	PfdSupportComposition   = C.PFD_SUPPORT_COMPOSITION
+	PfdDepthDontcare        = C.PFD_DEPTH_DONTCARE
+	PfdDoublebufferDontcare = C.PFD_DOUBLEBUFFER_DONTCARE
+	PfdStereoDontcare       = C.PFD_STEREO_DONTCARE
+)

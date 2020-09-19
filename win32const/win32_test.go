@@ -24,4 +24,7 @@ func TestStructSize(t *testing.T) {
 	if unsafe.Sizeof(win32api.Findreplace{}) != sizeof_FINDREPLACE {
 		t.Error("T25: Createstruct: size dose not match!", unsafe.Sizeof(win32api.Findreplace{}), sizeof_FINDREPLACE)
 	}
+	if unsafe.Sizeof(win32api.Pixelformatdescriptor{}) != sizeof_PIXELFORMATDESCRIPTOR {
+		t.Error("T25: Createstruct: size dose not match!", unsafe.Sizeof(win32api.Pixelformatdescriptor{}), sizeof_PIXELFORMATDESCRIPTOR)
+	}
 }

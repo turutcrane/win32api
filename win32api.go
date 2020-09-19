@@ -18,6 +18,7 @@ type HDC syscall.Handle
 type HDWP syscall.Handle
 type HFONT syscall.Handle
 type HGDIOBJ syscall.Handle
+type HGLRC syscall.Handle
 type HICON syscall.Handle
 type HINSTANCE syscall.Handle
 type HMENU syscall.Handle

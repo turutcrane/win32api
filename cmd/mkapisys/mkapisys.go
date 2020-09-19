@@ -70,6 +70,14 @@ func removeLastW(name string) string {
 	return strings.TrimSuffix(name, "W")
 }
 
+func upFirst(name string) string {
+	first := []rune(name)[0]
+	if !unicode.IsUpper(first) {
+		return string(unicode.ToUpper(first)) + name[1:]
+	}
+	return name
+}
+
 func convTypeParam(p Param) string {
 	pname := p.pname.literal
 	upperIndex := strings.IndexFunc(pname, unicode.IsUpper)
@@ -118,7 +126,7 @@ func outFuncdef(d *Funcdef, out *bytes.Buffer) {
 		}
 	}
 	if fn == "" {
-		fmt.Fprintf(out, "//sys %s(", removeLastW(d.funcname.literal))
+		fmt.Fprintf(out, "//sys %s(", upFirst(removeLastW(d.funcname.literal)))
 	} else {
 		fmt.Fprintf(out, "//sys %s(", fn)
 	}
@@ -131,11 +139,15 @@ func outFuncdef(d *Funcdef, out *bytes.Buffer) {
 	}
 	fmt.Fprintf(out, ")")
 	if !noreturn {
-		fmt.Fprintf(out, " (r %s", convType(*d.typespec))
-		if !noerr {
-			out.WriteString(", err error")
+		if convType(*d.typespec) == "bool" && !noerr {
+			out.WriteString(" (err error)")
+		} else {
+			fmt.Fprintf(out, " (r %s", convType(*d.typespec))
+			if !noerr {
+				out.WriteString(", err error")
+			}
+			out.WriteString(")")	
 		}
-		out.WriteString(")")
 	}
 	if fv != "" {
 		fmt.Fprintf(out, " [failretval==%s]", fv)
@@ -176,7 +188,7 @@ func outTypedef(td *Typedef, out *bytes.Buffer) {
 // type string for struct member
 func convTypeSt(ty Typespec) (tyStr string) {
 	switch ty.name.literal {
-	case "BOOL":
+	case "BOOL":	// prevent from changing member size
 		tyStr = ty.name.literal
 	case "int":
 		tyStr = "int32"
