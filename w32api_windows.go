@@ -99,6 +99,14 @@ type Pixelformatdescriptor struct {
 	DamageMask DWORD
 }
 
+type Trackmouseevent struct {
+	Size DWORD
+	Flags DWORD
+	Track HWND
+	HoverTime DWORD
+}
+
+//sys GetModuleHandle(lpModuleName *uint16) (r HMODULE, err error) = GetModuleHandleW
 //sys ScreenToClient(hWnd HWND, lpPoint *Point) (r bool) = user32.ScreenToClient
 //sys PtInRegion(hrgn HRGN, x int, y int) (r bool) = gdi32.PtInRegion
 //sys EndDeferWindowPos(hWinPosInfo HDWP) (err error) = user32.EndDeferWindowPos
@@ -124,5 +132,43 @@ type Pixelformatdescriptor struct {
 //sys ChoosePixelFormat(hdc HDC, ppfd *Pixelformatdescriptor) (r int, err error) = gdi32.ChoosePixelFormat
 //sys SetPixelFormat(hdc HDC, format int, ppfd *Pixelformatdescriptor) (err error) = gdi32.SetPixelFormat
 //sys SwapBuffers(Arg1 HDC) (err error) = gdi32.SwapBuffers
-//sys WglCreateContext(Arg1 HDC) (r HGLRC, err error) = gdi32.wglCreateContext
-//sys WglMakeCurrent(arg1 HDC, arg2 HGLRC) (err error) = gdi32.wglMakeCurrent
+//sys WglCreateContext(Arg1 HDC) (r HGLRC, err error) = Opengl32.wglCreateContext
+//sys WglMakeCurrent(arg1 HDC, arg2 HGLRC) (err error) = Opengl32.wglMakeCurrent
+//sys GetDpiForWindow(hwnd HWND) (r UINT) = user32.GetDpiForWindow
+//sys CreateWindowEx(dwExStyle DWORD, lpClassName *uint16, lpWindowName *uint16, dwStyle DWORD, X int, Y int, nWidth int, nHeight int, hWndParent HWND, hMenu HMENU, hInstance HINSTANCE, lpParam LPVOID) (r HWND, err error) = user32.CreateWindowExW
+//sys LoadIcon(hInstance HINSTANCE, lpIconName *uint16) (r HICON, err error) = user32.LoadIconW
+//sys LoadCursor(hInstance HINSTANCE, lpCursorName *uint16) (r HCURSOR, err error) = user32.LoadCursorW
+//sys RegisterClassEx(Arg1 *Wndclassex) (r ATOM, err error) = user32.RegisterClassExW
+//sys GetClientRect(hWnd HWND, lpRect *Rect) (err error) = user32.GetClientRect
+//sys ShowWindow(hWnd HWND, nCmdShow int) (r bool) = user32.ShowWindow
+//sys UpdateWindow(hWnd HWND) (r bool) = user32.UpdateWindow
+//sys DefWindowProc(hWnd HWND, Msg UINT, wParam WPARAM, lParam LPARAM) (r LRESULT) = user32.DefWindowProcW
+//sys EnableNonClientDpiScaling(hwnd HWND) (err error) = user32.EnableNonClientDpiScaling
+//sys GetDC(hWnd HWND) (r HDC) = user32.GetDC
+//sys GetDeviceCaps(hdc HDC, index int) (r int) = gdi32.GetDeviceCaps
+//sys ReleaseDC(hWnd HWND, hDC HDC) (r int) = user32.ReleaseDC
+//sys GetProcessDpiAwareness(hprocess HANDLE, value *ProcessDpiAwareness) (r HRESULT) = Shcore.GetProcessDpiAwareness
+//sys CallWindowProc(lpPrevWndFunc WNDPROC, hWnd HWND, Msg UINT, wParam WPARAM, lParam LPARAM) (r LRESULT) = user32.CallWindowProcW
+//sys EnableWindow(hWnd HWND, bEnable bool) (r bool) = user32.EnableWindow
+//sys SendMessage(hWnd HWND, Msg UINT, wParam WPARAM, lParam LPARAM) (r LRESULT) = user32.SendMessageW
+//sys BeginPaint(hWnd HWND, lpPaint *Paintstruct) (r HDC) = user32.BeginPaint
+//sys EndPaint(hWnd HWND, lpPaint *Paintstruct) = user32.EndPaint
+//sys IsWindowEnabled(hWnd HWND) (r bool) = user32.IsWindowEnabled
+//sys IsWindowVisible(hWnd HWND) (r bool) = user32.IsWindowVisible
+//sys SetMenu(hWnd HWND, hMenu HMENU) (err error) = user32.SetMenu
+//sys BeginDeferWindowPos(nNumWindows int) (r HDWP, err error) = user32.BeginDeferWindowPos
+//sys DeferWindowPos(hWinPosInfo HDWP, hWnd HWND, hWndInsertAfter HWND, x int, y int, cx int, cy int, uFlags UINT) (r HDWP, err error) = user32.DeferWindowPos
+//sys GetMessageExtraInfo() (r LPARAM) = user32.GetMessageExtraInfo
+//sys GetMessageTime() (r LONG) = user32.GetMessageTime
+//sys GetSystemMetrics(nIndex int) (r int) = user32.GetSystemMetrics
+//sys GetDoubleClickTime() (r UINT) = user32.GetDoubleClickTime
+//sys SetCapture(hWnd HWND) (r HWND) = user32.SetCapture
+//sys GetKeyState(nVirtKey int) (r SHORT) = user32.GetKeyState
+//sys GetCapture() (r HWND) = user32.GetCapture
+//sys ReleaseCapture() (err error) = user32.ReleaseCapture
+//sys QueryPerformanceCounter(lpPerformanceCount *LARGE_INTEGER) (err error) = QueryPerformanceCounter
+//sys QueryPerformanceFrequency(lpFrequency *LARGE_INTEGER) (err error) = QueryPerformanceFrequency
+//sys TrackMouseEvent(lpEventTrack *Trackmouseevent) (err error) = user32.TrackMouseEvent
+//sys GetCursorPos(lpPoint *Point) (err error) = user32.GetCursorPos
+//sys GetKeyboardLayout(idThread DWORD) (r HKL) = user32.GetKeyboardLayout
+//sys VkKeyScanEx(ch WCHAR, dwhkl HKL) (r SHORT) = user32.VkKeyScanExW

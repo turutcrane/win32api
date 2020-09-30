@@ -23,6 +23,8 @@ var typeMap = map[string]string{
 	"LPCTSTR": "*uint16",
 	"BOOL":    "bool",
 	// "UINT":    "uint32",
+	
+	"PROCESS_DPI_AWARENESS": "ProcessDpiAwareness",
 }
 
 func main() {
@@ -109,6 +111,7 @@ func outFuncdef(d *Funcdef, out *bytes.Buffer) {
 	var ns, fv, fn string
 	var noerr bool
 	var noreturn bool
+	var errorOnly bool
 	for _, q := range d.funcQuals {
 		switch q.qt {
 		case QtNs:
@@ -119,12 +122,18 @@ func outFuncdef(d *Funcdef, out *bytes.Buffer) {
 			noerr = true
 		case QtNoreturn:
 			noreturn = true
+		case QtErrorOnly:
+			errorOnly = true
 		case QtFuncname:
 			fn = q.val
 		default:
 			log.Panicln("T41:", q)
 		}
 	}
+	if noerr && errorOnly {
+		log.Panicln("T132: can not both noerr and erroronly", d.funcQuals)
+	}
+
 	if fn == "" {
 		fmt.Fprintf(out, "//sys %s(", upFirst(removeLastW(d.funcname.literal)))
 	} else {
@@ -139,7 +148,7 @@ func outFuncdef(d *Funcdef, out *bytes.Buffer) {
 	}
 	fmt.Fprintf(out, ")")
 	if !noreturn {
-		if convType(*d.typespec) == "bool" && !noerr {
+		if errorOnly {
 			out.WriteString(" (err error)")
 		} else {
 			fmt.Fprintf(out, " (r %s", convType(*d.typespec))

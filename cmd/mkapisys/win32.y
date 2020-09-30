@@ -29,6 +29,7 @@ const (
 	QtFuncname
 	QtNoerr
 	QtNoreturn
+	QtErrorOnly
 )
 
 type FuncQual struct {
@@ -68,6 +69,7 @@ var keywords = map[string]int{
 	"noerr":	NOERR,
 	"const":	CONST,
 	"noreturn":     NORETURN,
+	"erroronly":    ERRORONLY,
 }
 
 %}
@@ -90,16 +92,16 @@ var keywords = map[string]int{
 
 %type<token> funcname pname
 
-%type<defs>	 defs
-%type<def>	  def funcdef typedef
+%type<defs>	defs
+%type<def>	def funcdef typedef
 %type<aElement> defname param nsqual failretvalqual funcnamequal noerrqual noreturnqual funcqual typespec
 
-%type<params>   params 
+%type<params>	params
 %type<funcquals>	funcquals
-%type<defnames> defnames
-%type<members>  members
+%type<defnames>	defnames
+%type<members>	members
 
-%token<token> IDENT STRUCT NUMBER NS FAILRETVAL FUNCNAME NOERR NORETURN TYPEDEF CONST
+%token<token> IDENT STRUCT NUMBER NS FAILRETVAL FUNCNAME NOERR NORETURN TYPEDEF CONST ERRORONLY
 
 %%
 
@@ -196,6 +198,11 @@ noerrqual: '@' NOERR
 noreturnqual: '@' NORETURN
 	{
 		$$ = &FuncQual{QtNoreturn, ""}
+	}
+
+noreturnqual: '@' ERRORONLY
+	{
+		$$ = &FuncQual{QtErrorOnly, ""}
 	}
 
 funcnamequal: '@' FUNCNAME IDENT

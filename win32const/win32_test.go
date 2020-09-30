@@ -25,6 +25,15 @@ func TestStructSize(t *testing.T) {
 		t.Error("T25: Createstruct: size dose not match!", unsafe.Sizeof(win32api.Findreplace{}), sizeof_FINDREPLACE)
 	}
 	if unsafe.Sizeof(win32api.Pixelformatdescriptor{}) != sizeof_PIXELFORMATDESCRIPTOR {
-		t.Error("T25: Createstruct: size dose not match!", unsafe.Sizeof(win32api.Pixelformatdescriptor{}), sizeof_PIXELFORMATDESCRIPTOR)
+		t.Error("T28: Createstruct: size dose not match!", unsafe.Sizeof(win32api.Pixelformatdescriptor{}), sizeof_PIXELFORMATDESCRIPTOR)
+	}
+
+	if unsafe.Sizeof(win32api.LARGE_INTEGER(0)) != sizeof_LONGLONG {
+		t.Error("T31: LARGE_INTEGER: size dose not match!", unsafe.Sizeof(win32api.LARGE_INTEGER(0)), sizeof_LONGLONG)
+	}
+
+	if unsafe.Sizeof(win32api.Trackmouseevent{}) != sizeof_TRACKMOUSEEVENT {
+		t.Error("T28: Trackmouseevent: size dose not match!", unsafe.Sizeof(win32api.Trackmouseevent{}), sizeof_TRACKMOUSEEVENT)
+
 	}
 }

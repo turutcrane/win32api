@@ -24,6 +24,8 @@ const (
 	sizeof_PAINTSTRUCT           = C.sizeof_PAINTSTRUCT
 	sizeof_FINDREPLACE           = C.sizeof_FINDREPLACE
 	sizeof_PIXELFORMATDESCRIPTOR = C.sizeof_PIXELFORMATDESCRIPTOR
+	sizeof_LONGLONG              = C.sizeof_LONGLONG
+	sizeof_TRACKMOUSEEVENT       = C.sizeof_TRACKMOUSEEVENT
 )
 
 // index of GetDevoceCaps
@@ -433,6 +435,15 @@ const (
 )
 
 const (
+	KfExtended = C.KF_EXTENDED
+	KfDlgmode  = C.KF_DLGMODE
+	KfMenumode = C.KF_MENUMODE
+	KfAltdown  = C.KF_ALTDOWN
+	KfRepeat   = C.KF_REPEAT
+	KfUp       = C.KF_UP
+)
+
+const (
 	WaInactive    = C.WA_INACTIVE
 	WaActive      = C.WA_ACTIVE
 	WaClickactive = C.WA_CLICKACTIVE
@@ -783,4 +794,126 @@ const (
 
 const (
 	SOk = C.S_OK
+)
+
+const (
+	SmCxscreen                    = C.SM_CXSCREEN
+	SmCyscreen                    = C.SM_CYSCREEN
+	SmCxvscroll                   = C.SM_CXVSCROLL
+	SmCyhscroll                   = C.SM_CYHSCROLL
+	SmCycaption                   = C.SM_CYCAPTION
+	SmCxborder                    = C.SM_CXBORDER
+	SmCyborder                    = C.SM_CYBORDER
+	SmCxdlgframe                  = C.SM_CXDLGFRAME
+	SmCydlgframe                  = C.SM_CYDLGFRAME
+	SmCyvthumb                    = C.SM_CYVTHUMB
+	SmCxhthumb                    = C.SM_CXHTHUMB
+	SmCxicon                      = C.SM_CXICON
+	SmCyicon                      = C.SM_CYICON
+	SmCxcursor                    = C.SM_CXCURSOR
+	SmCycursor                    = C.SM_CYCURSOR
+	SmCymenu                      = C.SM_CYMENU
+	SmCxfullscreen                = C.SM_CXFULLSCREEN
+	SmCyfullscreen                = C.SM_CYFULLSCREEN
+	SmCykanjiwindow               = C.SM_CYKANJIWINDOW
+	SmMousepresent                = C.SM_MOUSEPRESENT
+	SmCyvscroll                   = C.SM_CYVSCROLL
+	SmCxhscroll                   = C.SM_CXHSCROLL
+	SmDebug                       = C.SM_DEBUG
+	SmSwapbutton                  = C.SM_SWAPBUTTON
+	SmReserved1                   = C.SM_RESERVED1
+	SmReserved2                   = C.SM_RESERVED2
+	SmReserved3                   = C.SM_RESERVED3
+	SmReserved4                   = C.SM_RESERVED4
+	SmCxmin                       = C.SM_CXMIN
+	SmCymin                       = C.SM_CYMIN
+	SmCxsize                      = C.SM_CXSIZE
+	SmCysize                      = C.SM_CYSIZE
+	SmCxframe                     = C.SM_CXFRAME
+	SmCyframe                     = C.SM_CYFRAME
+	SmCxmintrack                  = C.SM_CXMINTRACK
+	SmCymintrack                  = C.SM_CYMINTRACK
+	SmCxdoubleclk                 = C.SM_CXDOUBLECLK
+	SmCydoubleclk                 = C.SM_CYDOUBLECLK
+	SmCxiconspacing               = C.SM_CXICONSPACING
+	SmCyiconspacing               = C.SM_CYICONSPACING
+	SmMenudropalignment           = C.SM_MENUDROPALIGNMENT
+	SmPenwindows                  = C.SM_PENWINDOWS
+	SmDbcsenabled                 = C.SM_DBCSENABLED
+	SmCmousebuttons               = C.SM_CMOUSEBUTTONS
+	SmCxfixedframe                = C.SM_CXFIXEDFRAME
+	SmCyfixedframe                = C.SM_CYFIXEDFRAME
+	SmCxsizeframe                 = C.SM_CXSIZEFRAME
+	SmCysizeframe                 = C.SM_CYSIZEFRAME
+	SmSecure                      = C.SM_SECURE
+	SmCxedge                      = C.SM_CXEDGE
+	SmCyedge                      = C.SM_CYEDGE
+	SmCxminspacing                = C.SM_CXMINSPACING
+	SmCyminspacing                = C.SM_CYMINSPACING
+	SmCxsmicon                    = C.SM_CXSMICON
+	SmCysmicon                    = C.SM_CYSMICON
+	SmCysmcaption                 = C.SM_CYSMCAPTION
+	SmCxsmsize                    = C.SM_CXSMSIZE
+	SmCysmsize                    = C.SM_CYSMSIZE
+	SmCxmenusize                  = C.SM_CXMENUSIZE
+	SmCymenusize                  = C.SM_CYMENUSIZE
+	SmArrange                     = C.SM_ARRANGE
+	SmCxminimized                 = C.SM_CXMINIMIZED
+	SmCyminimized                 = C.SM_CYMINIMIZED
+	SmCxmaxtrack                  = C.SM_CXMAXTRACK
+	SmCymaxtrack                  = C.SM_CYMAXTRACK
+	SmCxmaximized                 = C.SM_CXMAXIMIZED
+	SmCymaximized                 = C.SM_CYMAXIMIZED
+	SmNetwork                     = C.SM_NETWORK
+	SmCleanboot                   = C.SM_CLEANBOOT
+	SmCxdrag                      = C.SM_CXDRAG
+	SmCydrag                      = C.SM_CYDRAG
+	SmShowsounds                  = C.SM_SHOWSOUNDS
+	SmCxmenucheck                 = C.SM_CXMENUCHECK
+	SmCymenucheck                 = C.SM_CYMENUCHECK
+	SmSlowmachine                 = C.SM_SLOWMACHINE
+	SmMideastenabled              = C.SM_MIDEASTENABLED
+	SmMousewheelpresent           = C.SM_MOUSEWHEELPRESENT
+	SmXvirtualscreen              = C.SM_XVIRTUALSCREEN
+	SmYvirtualscreen              = C.SM_YVIRTUALSCREEN
+	SmCxvirtualscreen             = C.SM_CXVIRTUALSCREEN
+	SmCyvirtualscreen             = C.SM_CYVIRTUALSCREEN
+	SmCmonitors                   = C.SM_CMONITORS
+	SmSamedisplayformat           = C.SM_SAMEDISPLAYFORMAT
+	SmImmenabled                  = C.SM_IMMENABLED
+	SmCxfocusborder               = C.SM_CXFOCUSBORDER
+	SmCyfocusborder               = C.SM_CYFOCUSBORDER
+	SmTabletpc                    = C.SM_TABLETPC
+	SmMediacenter                 = C.SM_MEDIACENTER
+	SmStarter                     = C.SM_STARTER
+	SmServerr2                    = C.SM_SERVERR2
+	SmMousehorizontalwheelpresent = C.SM_MOUSEHORIZONTALWHEELPRESENT
+	SmCxpaddedborder              = C.SM_CXPADDEDBORDER
+	SmDigitizer                   = C.SM_DIGITIZER
+	SmMaximumtouches              = C.SM_MAXIMUMTOUCHES
+	SmCmetrics                    = C.SM_CMETRICS
+	SmRemotesession               = C.SM_REMOTESESSION
+	SmShuttingdown                = C.SM_SHUTTINGDOWN
+	SmRemotecontrol               = C.SM_REMOTECONTROL
+	SmCaretblinkingenabled        = C.SM_CARETBLINKINGENABLED
+	// SmConvertibleslatemode = C.SM_CONVERTIBLESLATEMODE  // WINVER >= 0x0602
+	// SmSystemdocked = C.SM_SYSTEMDOCKED // WINVER >= 0x0602
+)
+
+const (
+	MkLbutton  = C.MK_LBUTTON
+	MkRbutton  = C.MK_RBUTTON
+	MkShift    = C.MK_SHIFT
+	MkControl  = C.MK_CONTROL
+	MkMbutton  = C.MK_MBUTTON
+	MkXbutton1 = C.MK_XBUTTON1
+	MkXbutton2 = C.MK_XBUTTON2
+)
+
+const (
+	TmeHover     = C.TME_HOVER
+	TmeLeave     = C.TME_LEAVE
+	TmeNonclient = C.TME_NONCLIENT
+	TmeQuery     = C.TME_QUERY
+	TmeCancel    = C.TME_CANCEL
 )

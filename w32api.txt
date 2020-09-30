@@ -98,6 +98,18 @@ typedef struct tagPIXELFORMATDESCRIPTOR {
   DWORD dwDamageMask;
 } PIXELFORMATDESCRIPTOR, *PPIXELFORMATDESCRIPTOR, *LPPIXELFORMATDESCRIPTOR;
 
+typedef struct tagTRACKMOUSEEVENT {
+  DWORD cbSize;
+  DWORD dwFlags;
+  HWND  hwndTrack;
+  DWORD dwHoverTime;
+} TRACKMOUSEEVENT, *LPTRACKMOUSEEVENT;
+
+//
+HMODULE GetModuleHandleW(
+  LPCWSTR lpModuleName
+);
+
 //
 @ns user32
 @noerr
@@ -115,6 +127,7 @@ BOOL PtInRegion(
 );
 
 @ns user32
+@erroronly
 BOOL EndDeferWindowPos(
   HDWP hWinPosInfo
 );
@@ -160,11 +173,13 @@ HRGN CreateRectRgn(
 );
 
 @ns user32
+@erroronly
 BOOL DestroyWindow(
   HWND hWnd
 );
 
 @ns user32
+@erroronly
 BOOL PostMessageW(
   HWND   hWnd,
   UINT   Msg,
@@ -179,6 +194,7 @@ BOOL IsRectEmpty(
 );
 
 @ns user32
+@erroronly
 BOOL AdjustWindowRectEx(
   LPRECT lpRect,
   DWORD  dwStyle,
@@ -193,6 +209,7 @@ HWND SetParent(
 );
 
 @ns user32
+@erroronly
 BOOL SetWindowPos(
   HWND hWnd,
   HWND hWndInsertAfter,
@@ -215,6 +232,7 @@ INT_PTR DialogBoxParamW(
 );
 
 @ns user32
+@erroronly
 BOOL EndDialog(
   HWND    hDlg,
   INT_PTR nResult
@@ -241,6 +259,7 @@ UINT RegisterWindowMessageW(
 );
 
 @ns user32
+@erroronly
 BOOL SetWindowTextW(
   HWND    hWnd,
   LPCWSTR lpString
@@ -266,6 +285,7 @@ int ChoosePixelFormat(
 );
 
 @ns gdi32
+@erroronly
 BOOL SetPixelFormat(
   HDC                         hdc,
   int                         format,
@@ -273,17 +293,269 @@ BOOL SetPixelFormat(
 );
 
 @ns gdi32
+@erroronly
 BOOL SwapBuffers(
   HDC Arg1
 );
 
-@ns gdi32
+@ns Opengl32
 HGLRC wglCreateContext(
   HDC Arg1
 );
 
-@ns gdi32
+@ns Opengl32
+@erroronly
 BOOL wglMakeCurrent(
   HDC   arg1,
   HGLRC arg2
+);
+
+@ns user32
+@noerr
+UINT GetDpiForWindow(
+  HWND hwnd
+);
+
+@ns user32
+HWND CreateWindowExW(
+  DWORD     dwExStyle,
+  LPCWSTR   lpClassName,
+  LPCWSTR   lpWindowName,
+  DWORD     dwStyle,
+  int       X,
+  int       Y,
+  int       nWidth,
+  int       nHeight,
+  HWND      hWndParent,
+  HMENU     hMenu,
+  HINSTANCE hInstance,
+  LPVOID    lpParam
+);
+
+@ns user32
+HICON LoadIconW(
+  HINSTANCE hInstance,
+  LPCWSTR   lpIconName
+);
+
+@ns user32
+HCURSOR LoadCursorW(
+  HINSTANCE hInstance,
+  LPCWSTR   lpCursorName
+);
+
+@ns user32
+ATOM RegisterClassExW(
+  const WNDCLASSEXW *Arg1
+);
+
+@ns user32
+@erroronly
+BOOL GetClientRect(
+  HWND   hWnd,
+  LPRECT lpRect
+);
+
+@ns user32
+@noerr
+BOOL ShowWindow(
+  HWND hWnd,
+  int  nCmdShow
+);
+
+@ns user32
+@noerr
+BOOL UpdateWindow(
+  HWND hWnd
+);
+
+@ns user32
+@noerr
+LRESULT DefWindowProcW(
+  HWND   hWnd,
+  UINT   Msg,
+  WPARAM wParam,
+  LPARAM lParam
+);
+
+@ns user32
+@erroronly
+BOOL EnableNonClientDpiScaling(
+  HWND hwnd
+);
+
+@ns user32
+@noerr
+HDC GetDC(
+  HWND hWnd
+);
+
+@ns gdi32
+@noerr
+int GetDeviceCaps(
+  HDC hdc,
+  int index
+);
+
+@ns user32
+@noerr
+int ReleaseDC(
+  HWND hWnd,
+  HDC  hDC
+);
+
+@ns Shcore
+@noerr
+HRESULT GetProcessDpiAwareness(
+  HANDLE                hprocess,
+  PROCESS_DPI_AWARENESS *value
+);
+
+@ns user32
+@noerr
+LRESULT CallWindowProcW(
+  WNDPROC lpPrevWndFunc,
+  HWND    hWnd,
+  UINT    Msg,
+  WPARAM  wParam,
+  LPARAM  lParam
+);
+
+@ns user32
+@noerr
+BOOL EnableWindow(
+  HWND hWnd,
+  BOOL bEnable
+);
+
+@ns user32
+@noerr
+LRESULT SendMessageW(
+  HWND   hWnd,
+  UINT   Msg,
+  WPARAM wParam,
+  LPARAM lParam
+);
+
+@ns user32
+@noerr
+HDC BeginPaint(
+  HWND          hWnd,
+  LPPAINTSTRUCT lpPaint
+);
+
+@ns user32
+@noreturn
+BOOL EndPaint(
+  HWND              hWnd,
+  const PAINTSTRUCT *lpPaint
+);
+
+@ns user32
+@noerr
+BOOL IsWindowEnabled(
+  HWND hWnd
+);
+
+@ns user32
+@noerr
+BOOL IsWindowVisible(
+  HWND hWnd
+);
+
+@ns user32
+@erroronly
+BOOL SetMenu(
+  HWND  hWnd,
+  HMENU hMenu
+);
+
+@ns user32
+HDWP BeginDeferWindowPos(
+  int nNumWindows
+);
+
+@ns user32
+HDWP DeferWindowPos(
+  HDWP hWinPosInfo,
+  HWND hWnd,
+  HWND hWndInsertAfter,
+  int  x,
+  int  y,
+  int  cx,
+  int  cy,
+  UINT uFlags
+);
+
+@ns user32
+@noerr
+LPARAM GetMessageExtraInfo();
+
+@ns user32
+@noerr
+LONG GetMessageTime();
+
+@ns user32
+@noerr
+int GetSystemMetrics(
+  int nIndex
+);
+
+@ns user32
+@noerr
+UINT GetDoubleClickTime();
+
+@ns user32
+@noerr
+HWND SetCapture(
+  HWND hWnd
+);
+
+@ns user32
+@noerr
+SHORT GetKeyState(
+  int nVirtKey
+);
+
+@ns user32
+@noerr
+HWND GetCapture();
+
+@ns user32
+@erroronly
+BOOL ReleaseCapture();
+
+@erroronly
+BOOL QueryPerformanceCounter(
+  LARGE_INTEGER *lpPerformanceCount
+);
+
+@erroronly
+BOOL QueryPerformanceFrequency(
+  LARGE_INTEGER *lpFrequency
+);
+
+@ns user32
+@erroronly
+BOOL TrackMouseEvent(
+  LPTRACKMOUSEEVENT lpEventTrack
+);
+
+@ns user32
+@erroronly
+BOOL GetCursorPos(
+  LPPOINT lpPoint
+);
+
+@ns user32
+@noerr
+HKL GetKeyboardLayout(
+  DWORD idThread
+);
+
+@ns user32
+@noerr
+SHORT VkKeyScanExW(
+  WCHAR ch,
+  HKL   dwhkl
 );

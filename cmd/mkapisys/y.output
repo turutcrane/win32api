@@ -4,10 +4,10 @@ state 0
 	defs: .    (1)
 	funcquals: .    (10)
 
-	$end  reduce 1 (src line 106)
+	$end  reduce 1 (src line 108)
 	TYPEDEF  shift 6
 	'@'  shift 13
-	.  reduce 10 (src line 154)
+	.  reduce 10 (src line 156)
 
 	defs  goto 1
 	def  goto 2
@@ -33,10 +33,10 @@ state 2
 	defs: .    (1)
 	funcquals: .    (10)
 
-	$end  reduce 1 (src line 106)
+	$end  reduce 1 (src line 108)
 	TYPEDEF  shift 6
 	'@'  shift 13
-	.  reduce 10 (src line 154)
+	.  reduce 10 (src line 156)
 
 	defs  goto 14
 	def  goto 2
@@ -53,13 +53,13 @@ state 2
 state 3
 	def:  funcdef.    (3)
 
-	.  reduce 3 (src line 121)
+	.  reduce 3 (src line 123)
 
 
 state 4
 	def:  typedef.    (4)
 
-	.  reduce 4 (src line 123)
+	.  reduce 4 (src line 125)
 
 
 state 5
@@ -67,7 +67,7 @@ state 5
 	constqual: .    (7)
 
 	CONST  shift 17
-	.  reduce 7 (src line 147)
+	.  reduce 7 (src line 149)
 
 	typespec  goto 15
 	constqual  goto 16
@@ -84,7 +84,7 @@ state 7
 	funcquals: .    (10)
 
 	'@'  shift 13
-	.  reduce 10 (src line 154)
+	.  reduce 10 (src line 156)
 
 	nsqual  goto 8
 	failretvalqual  goto 9
@@ -97,31 +97,31 @@ state 7
 state 8
 	funcqual:  nsqual.    (12)
 
-	.  reduce 12 (src line 165)
+	.  reduce 12 (src line 167)
 
 
 state 9
 	funcqual:  failretvalqual.    (13)
 
-	.  reduce 13 (src line 167)
+	.  reduce 13 (src line 169)
 
 
 state 10
 	funcqual:  noerrqual.    (14)
 
-	.  reduce 14 (src line 168)
+	.  reduce 14 (src line 170)
 
 
 state 11
 	funcqual:  noreturnqual.    (15)
 
-	.  reduce 15 (src line 169)
+	.  reduce 15 (src line 171)
 
 
 state 12
 	funcqual:  funcnamequal.    (16)
 
-	.  reduce 16 (src line 170)
+	.  reduce 16 (src line 172)
 
 
 state 13
@@ -131,60 +131,62 @@ state 13
 	failretvalqual:  '@'.FAILRETVAL IDENT 
 	noerrqual:  '@'.NOERR 
 	noreturnqual:  '@'.NORETURN 
+	noreturnqual:  '@'.ERRORONLY 
 	funcnamequal:  '@'.FUNCNAME IDENT 
 
 	NS  shift 20
 	FAILRETVAL  shift 21
-	FUNCNAME  shift 24
+	FUNCNAME  shift 25
 	NOERR  shift 22
 	NORETURN  shift 23
+	ERRORONLY  shift 24
 	.  error
 
 
 state 14
 	defs:  def defs.    (2)
 
-	.  reduce 2 (src line 113)
+	.  reduce 2 (src line 115)
 
 
 state 15
 	funcdef:  funcquals typespec.funcname '(' params ')' ';' 
 
-	IDENT  shift 26
+	IDENT  shift 27
 	.  error
 
-	funcname  goto 25
+	funcname  goto 26
 
 state 16
 	typespec:  constqual.IDENT 
 
-	IDENT  shift 27
+	IDENT  shift 28
 	.  error
 
 
 state 17
 	constqual:  CONST.    (8)
 
-	.  reduce 8 (src line 149)
+	.  reduce 8 (src line 151)
 
 
 state 18
 	typedef:  TYPEDEF STRUCT.IDENT '{' members '}' defnames ';' 
 
-	IDENT  shift 28
+	IDENT  shift 29
 	.  error
 
 
 state 19
 	funcquals:  funcqual funcquals.    (11)
 
-	.  reduce 11 (src line 159)
+	.  reduce 11 (src line 161)
 
 
 state 20
 	nsqual:  '@' NS.IDENT 
 
-	IDENT  shift 29
+	IDENT  shift 30
 	.  error
 
 
@@ -193,335 +195,341 @@ state 21
 	failretvalqual:  '@' FAILRETVAL.'-' NUMBER 
 	failretvalqual:  '@' FAILRETVAL.IDENT 
 
-	IDENT  shift 32
-	NUMBER  shift 30
-	'-'  shift 31
+	IDENT  shift 33
+	NUMBER  shift 31
+	'-'  shift 32
 	.  error
 
 
 state 22
 	noerrqual:  '@' NOERR.    (21)
 
-	.  reduce 21 (src line 191)
+	.  reduce 21 (src line 193)
 
 
 state 23
 	noreturnqual:  '@' NORETURN.    (22)
 
-	.  reduce 22 (src line 196)
+	.  reduce 22 (src line 198)
 
 
 state 24
-	funcnamequal:  '@' FUNCNAME.IDENT 
+	noreturnqual:  '@' ERRORONLY.    (23)
 
-	IDENT  shift 33
-	.  error
+	.  reduce 23 (src line 203)
 
 
 state 25
-	funcdef:  funcquals typespec funcname.'(' params ')' ';' 
+	funcnamequal:  '@' FUNCNAME.IDENT 
 
-	'('  shift 34
+	IDENT  shift 34
 	.  error
 
 
 state 26
-	funcname:  IDENT.    (9)
+	funcdef:  funcquals typespec funcname.'(' params ')' ';' 
 
-	.  reduce 9 (src line 151)
+	'('  shift 35
+	.  error
 
 
 state 27
-	typespec:  constqual IDENT.    (6)
+	funcname:  IDENT.    (9)
 
-	.  reduce 6 (src line 137)
+	.  reduce 9 (src line 153)
 
 
 state 28
-	typedef:  TYPEDEF STRUCT IDENT.'{' members '}' defnames ';' 
+	typespec:  constqual IDENT.    (6)
 
-	'{'  shift 35
-	.  error
+	.  reduce 6 (src line 139)
 
 
 state 29
-	nsqual:  '@' NS IDENT.    (17)
+	typedef:  TYPEDEF STRUCT IDENT.'{' members '}' defnames ';' 
 
-	.  reduce 17 (src line 172)
+	'{'  shift 36
+	.  error
 
 
 state 30
-	failretvalqual:  '@' FAILRETVAL NUMBER.    (18)
+	nsqual:  '@' NS IDENT.    (17)
 
-	.  reduce 18 (src line 177)
+	.  reduce 17 (src line 174)
 
 
 state 31
-	failretvalqual:  '@' FAILRETVAL '-'.NUMBER 
+	failretvalqual:  '@' FAILRETVAL NUMBER.    (18)
 
-	NUMBER  shift 36
-	.  error
+	.  reduce 18 (src line 179)
 
 
 state 32
-	failretvalqual:  '@' FAILRETVAL IDENT.    (20)
+	failretvalqual:  '@' FAILRETVAL '-'.NUMBER 
 
-	.  reduce 20 (src line 186)
-
-
-state 33
-	funcnamequal:  '@' FUNCNAME IDENT.    (23)
-
-	.  reduce 23 (src line 201)
-
-
-state 34
-	funcdef:  funcquals typespec funcname '('.params ')' ';' 
-	params: .    (24)
-	constqual: .    (7)
-
-	IDENT  reduce 7 (src line 147)
-	CONST  shift 17
-	.  reduce 24 (src line 206)
-
-	param  goto 38
-	typespec  goto 39
-	params  goto 37
-	constqual  goto 16
-
-state 35
-	typedef:  TYPEDEF STRUCT IDENT '{'.members '}' defnames ';' 
-	members: .    (32)
-	constqual: .    (7)
-
-	CONST  shift 17
-	'}'  reduce 32 (src line 258)
-	.  reduce 7 (src line 147)
-
-	param  goto 41
-	typespec  goto 39
-	members  goto 40
-	constqual  goto 16
-
-state 36
-	failretvalqual:  '@' FAILRETVAL '-' NUMBER.    (19)
-
-	.  reduce 19 (src line 182)
-
-
-state 37
-	funcdef:  funcquals typespec funcname '(' params.')' ';' 
-	params:  params.',' param 
-
-	')'  shift 42
-	','  shift 43
+	NUMBER  shift 37
 	.  error
 
 
-state 38
-	params:  param.    (25)
+state 33
+	failretvalqual:  '@' FAILRETVAL IDENT.    (20)
 
-	.  reduce 25 (src line 210)
+	.  reduce 20 (src line 188)
+
+
+state 34
+	funcnamequal:  '@' FUNCNAME IDENT.    (24)
+
+	.  reduce 24 (src line 208)
+
+
+state 35
+	funcdef:  funcquals typespec funcname '('.params ')' ';' 
+	params: .    (25)
+	constqual: .    (7)
+
+	IDENT  reduce 7 (src line 149)
+	CONST  shift 17
+	.  reduce 25 (src line 213)
+
+	param  goto 39
+	typespec  goto 40
+	params  goto 38
+	constqual  goto 16
+
+state 36
+	typedef:  TYPEDEF STRUCT IDENT '{'.members '}' defnames ';' 
+	members: .    (33)
+	constqual: .    (7)
+
+	CONST  shift 17
+	'}'  reduce 33 (src line 265)
+	.  reduce 7 (src line 149)
+
+	param  goto 42
+	typespec  goto 40
+	members  goto 41
+	constqual  goto 16
+
+state 37
+	failretvalqual:  '@' FAILRETVAL '-' NUMBER.    (19)
+
+	.  reduce 19 (src line 184)
+
+
+state 38
+	funcdef:  funcquals typespec funcname '(' params.')' ';' 
+	params:  params.',' param 
+
+	')'  shift 43
+	','  shift 44
+	.  error
 
 
 state 39
+	params:  param.    (26)
+
+	.  reduce 26 (src line 217)
+
+
+state 40
 	param:  typespec.pname 
 	param:  typespec.pname '[' NUMBER ']' 
 	param:  typespec.'*' pname 
 
-	IDENT  shift 46
-	'*'  shift 45
+	IDENT  shift 47
+	'*'  shift 46
 	.  error
 
-	pname  goto 44
-
-state 40
-	typedef:  TYPEDEF STRUCT IDENT '{' members.'}' defnames ';' 
-
-	'}'  shift 47
-	.  error
-
+	pname  goto 45
 
 state 41
-	members:  param.';' members 
+	typedef:  TYPEDEF STRUCT IDENT '{' members.'}' defnames ';' 
 
-	';'  shift 48
+	'}'  shift 48
 	.  error
 
 
 state 42
-	funcdef:  funcquals typespec funcname '(' params ')'.';' 
+	members:  param.';' members 
 
 	';'  shift 49
 	.  error
 
 
 state 43
+	funcdef:  funcquals typespec funcname '(' params ')'.';' 
+
+	';'  shift 50
+	.  error
+
+
+state 44
 	params:  params ','.param 
 	constqual: .    (7)
 
 	CONST  shift 17
-	.  reduce 7 (src line 147)
+	.  reduce 7 (src line 149)
 
-	param  goto 50
-	typespec  goto 39
+	param  goto 51
+	typespec  goto 40
 	constqual  goto 16
 
-state 44
-	param:  typespec pname.    (27)
+state 45
+	param:  typespec pname.    (28)
 	param:  typespec pname.'[' NUMBER ']' 
 
-	'['  shift 51
-	.  reduce 27 (src line 221)
+	'['  shift 52
+	.  reduce 28 (src line 228)
 
-
-state 45
-	param:  typespec '*'.pname 
-
-	IDENT  shift 46
-	.  error
-
-	pname  goto 52
 
 state 46
-	pname:  IDENT.    (30)
+	param:  typespec '*'.pname 
+
+	IDENT  shift 47
+	.  error
+
+	pname  goto 53
+
+state 47
+	pname:  IDENT.    (31)
+
+	.  reduce 31 (src line 253)
+
+
+state 48
+	typedef:  TYPEDEF STRUCT IDENT '{' members '}'.defnames ';' 
+
+	IDENT  shift 56
+	'*'  shift 57
+	.  error
+
+	defname  goto 55
+	defnames  goto 54
+
+state 49
+	members:  param ';'.members 
+	members: .    (33)
+	constqual: .    (7)
+
+	CONST  shift 17
+	'}'  reduce 33 (src line 265)
+	.  reduce 7 (src line 149)
+
+	param  goto 42
+	typespec  goto 40
+	members  goto 58
+	constqual  goto 16
+
+state 50
+	funcdef:  funcquals typespec funcname '(' params ')' ';'.    (5)
+
+	.  reduce 5 (src line 127)
+
+
+state 51
+	params:  params ',' param.    (27)
+
+	.  reduce 27 (src line 222)
+
+
+state 52
+	param:  typespec pname '['.NUMBER ']' 
+
+	NUMBER  shift 59
+	.  error
+
+
+state 53
+	param:  typespec '*' pname.    (30)
 
 	.  reduce 30 (src line 246)
 
 
-state 47
-	typedef:  TYPEDEF STRUCT IDENT '{' members '}'.defnames ';' 
-
-	IDENT  shift 55
-	'*'  shift 56
-	.  error
-
-	defname  goto 54
-	defnames  goto 53
-
-state 48
-	members:  param ';'.members 
-	members: .    (32)
-	constqual: .    (7)
-
-	CONST  shift 17
-	'}'  reduce 32 (src line 258)
-	.  reduce 7 (src line 147)
-
-	param  goto 41
-	typespec  goto 39
-	members  goto 57
-	constqual  goto 16
-
-state 49
-	funcdef:  funcquals typespec funcname '(' params ')' ';'.    (5)
-
-	.  reduce 5 (src line 125)
-
-
-state 50
-	params:  params ',' param.    (26)
-
-	.  reduce 26 (src line 215)
-
-
-state 51
-	param:  typespec pname '['.NUMBER ']' 
-
-	NUMBER  shift 58
-	.  error
-
-
-state 52
-	param:  typespec '*' pname.    (29)
-
-	.  reduce 29 (src line 239)
-
-
-state 53
+state 54
 	typedef:  TYPEDEF STRUCT IDENT '{' members '}' defnames.';' 
 
-	';'  shift 59
+	';'  shift 60
 	.  error
-
-
-state 54
-	defnames:  defname.    (34)
-	defnames:  defname.',' defnames 
-
-	','  shift 60
-	.  reduce 34 (src line 269)
 
 
 state 55
-	defname:  IDENT.    (36)
+	defnames:  defname.    (35)
+	defnames:  defname.',' defnames 
 
-	.  reduce 36 (src line 281)
+	','  shift 61
+	.  reduce 35 (src line 276)
 
 
 state 56
-	defname:  '*'.IDENT 
+	defname:  IDENT.    (37)
 
-	IDENT  shift 61
-	.  error
+	.  reduce 37 (src line 288)
 
 
 state 57
-	members:  param ';' members.    (33)
+	defname:  '*'.IDENT 
 
-	.  reduce 33 (src line 263)
+	IDENT  shift 62
+	.  error
 
 
 state 58
-	param:  typespec pname '[' NUMBER.']' 
+	members:  param ';' members.    (34)
 
-	']'  shift 62
-	.  error
+	.  reduce 34 (src line 270)
 
 
 state 59
-	typedef:  TYPEDEF STRUCT IDENT '{' members '}' defnames ';'.    (31)
+	param:  typespec pname '[' NUMBER.']' 
 
-	.  reduce 31 (src line 248)
+	']'  shift 63
+	.  error
 
 
 state 60
-	defnames:  defname ','.defnames 
+	typedef:  TYPEDEF STRUCT IDENT '{' members '}' defnames ';'.    (32)
 
-	IDENT  shift 55
-	'*'  shift 56
-	.  error
+	.  reduce 32 (src line 255)
 
-	defname  goto 54
-	defnames  goto 63
 
 state 61
-	defname:  '*' IDENT.    (37)
+	defnames:  defname ','.defnames 
 
-	.  reduce 37 (src line 289)
+	IDENT  shift 56
+	'*'  shift 57
+	.  error
 
+	defname  goto 55
+	defnames  goto 64
 
 state 62
-	param:  typespec pname '[' NUMBER ']'.    (28)
+	defname:  '*' IDENT.    (38)
 
-	.  reduce 28 (src line 227)
+	.  reduce 38 (src line 296)
 
 
 state 63
-	defnames:  defname ',' defnames.    (35)
+	param:  typespec pname '[' NUMBER ']'.    (29)
 
-	.  reduce 35 (src line 275)
+	.  reduce 29 (src line 234)
 
 
-24 terminals, 21 nonterminals
-38 grammar rules, 64/8000 states
+state 64
+	defnames:  defname ',' defnames.    (36)
+
+	.  reduce 36 (src line 282)
+
+
+25 terminals, 21 nonterminals
+39 grammar rules, 65/8000 states
 0 shift/reduce, 0 reduce/reduce conflicts reported
 70 working sets used
 memory: parser 57/120000
 2 extra closures
-45 shift entries, 6 exceptions
+46 shift entries, 6 exceptions
 28 goto entries
 25 entries saved by goto default
-Optimizer space used: output 65/120000
-65 table entries, 0 zero
-maximum spread: 24, maximum offset: 60
+Optimizer space used: output 66/120000
+66 table entries, 0 zero
+maximum spread: 25, maximum offset: 61

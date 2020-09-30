@@ -12,6 +12,7 @@ type BOOL int32
 type BYTE byte
 type COLORREF DWORD
 type DWORD uint32
+type HANDLE syscall.Handle
 type HBRUSH syscall.Handle
 type HCURSOR syscall.Handle
 type HDC syscall.Handle
@@ -21,6 +22,7 @@ type HGDIOBJ syscall.Handle
 type HGLRC syscall.Handle
 type HICON syscall.Handle
 type HINSTANCE syscall.Handle
+type HKL syscall.Handle
 type HMENU syscall.Handle
 type HMODULE syscall.Handle
 type HWND syscall.Handle
@@ -33,6 +35,8 @@ type WPARAM uintptr // UINT_PTR
 type LPARAM uintptr // LONG_PTR
 type WORD int16
 type SHORT int16
+type LARGE_INTEGER int64
+type WCHAR uint16
 
 type ProcessDpiAwareness int
 
@@ -67,7 +71,6 @@ func Makepoints(lParam LPARAM) (points Points) {
 	return points
 }
 
-//sys GetModuleHandle(m *uint16) (handle HMODULE, err error) = GetModuleHandleW
 //sys SetLastError(dwErrCode DWORD) = SetLastError
 
 // GetWindowLongPtr does not return syscall.EINVAL
@@ -91,31 +94,6 @@ func SetWindowLongPtr(hWnd HWND, nIndex int, dwNewLong uintptr) (longPtr uintptr
 	return
 }
 
-//sys GetDpiForWindow(hwnd HWND) (dpi UINT) = user32.GetDpiForWindow
-//sys CreateWindowEx (dwExStyle DWORD, lpClassName *uint16, lpWindowName *uint16, dwStyle DWORD, x int, y int, nWidth int, nHeight int, hWndParent HWND, hMenu HMENU, hInstance HINSTANCE, lpParam LPVOID) (hwnd HWND, err error) = user32.CreateWindowExW
-//sys LoadIcon(hInstance HINSTANCE, lpIconName *uint16) (icon HICON, err error) = user32.LoadIconW
-//sys LoadCursor(hInstance HINSTANCE, lpCursorName *uint16) (cursor HCURSOR, err error) = user32.LoadCursorW
-//sys RegisterClassEx(Arg1 *Wndclassex) (atm ATOM) = user32.RegisterClassExW
-//sys GetClientRect(hWnd HWND, lpRect *Rect) (b bool, err error) [failretval==false] = user32.GetClientRect
-//sys ShowWindow(hWnd HWND, nCmdShow int) (b bool)= user32.ShowWindow
-//sys UpdateWindow(hWnd HWND) (b bool) = user32.UpdateWindow
-//sys DefWindowProc(hWnd HWND, Msg UINT, wParam WPARAM, lParam LPARAM) (result LRESULT) = user32.DefWindowProcW
-//sys EnableNonClientDpiScaling(hwnd HWND) (b bool, err error) [failretval==false] = user32.EnableNonClientDpiScaling
-//sys GetDC(hwnd HWND) (hdc HDC) = user32.GetDC
-//sys GetDeviceCaps(hdc HDC, index int) (i int) = user32.GetDeviceCaps
-//sys ReleaseDC(hWnd HWND, hDC HDC) (b bool) = user32.ReleaseDC
-//sys GetProcessDpiAwareness(hprocess syscall.Handle , value *ProcessDpiAwareness) (result HRESULT) = shcore.GetProcessDpiAwareness
-//sys CallWindowProc(lpPrevWndFunc WNDPROC, hWnd HWND, Msg UINT, wParam WPARAM, lParam LPARAM) (result LRESULT) = user32.CallWindowProcW
-//sys EnableWindow(hWnd HWND, bEnable bool) (b bool) = user32.EnableWindow
-//sys SendMessage(hWnd HWND, Msg UINT, wParam WPARAM, lParam LPARAM) (resust LRESULT)= user32.SendMessageW
-//sys BeginPaint(hWnd HWND, lpPaint *Paintstruct) (hdc HDC) = user32.BeginPaint
-//sys EndPaint(hWnd HWND, lpPaint *Paintstruct) = user32.EndPaint
-//sys IsWindowEnabled(hWnd HWND) (b bool) = user32.IsWindowEnabled
-//sys IsWindowVisible(hWnd HWND) (b bool) = user32.IsWindowVisible
-//sys SetMenu(hWnd HWND, hMenu HMENU) (b bool, err error) [failretval==false] = user32.SetMenu
-//sys BeginDeferWindowPos(nNumWindows int) (hdwp HDWP, err error) = user32.BeginDeferWindowPos
-//sys DeferWindowPos(hWinPosInfo HDWP, hWnd HWND, hWndInsertAfter HWND, x int, y int, cx int, cy int, uFlags UINT) (hdwp HDWP, err error) = user32.DeferWindowPos
-
 func BoolToBOOL(b bool) BOOL {
 	if b {
 		return 1
@@ -138,6 +116,39 @@ func HIWORD(w WPARAM) uintptr {
 	return uintptr((w >> 16) & 0xffff)
 }
 
+func GET_X_LPARAM(lParam LPARAM) int {
+	low := lParam & 0xffff
+	var x int
+	if low & 0x8000 != 0 {
+		x = int(low) - 0x10000
+	} else {
+		x = int(low)
+	}
+	return x
+}
+
+func GET_Y_LPARAM(lParam LPARAM) int {
+	high := (lParam >> 16) & 0xffff
+	var y int
+	if high & 0x8000 != 0 {
+		y = int(high) - 0x10000
+	} else {
+		y = int(high)
+	}
+	return y
+}
+
+func GET_WHEEL_DELTA_WPARAM(wParam WPARAM) int {
+	high := (wParam >> 16) & 0xffff
+	var delta int
+	if high & 0x8000 != 0 {
+		delta = int(high) - 0x10000
+	} else {
+		delta = int(high)
+	}
+	return delta
+}
+
 func LParamToPRect(lParam LPARAM) *Rect {
 	return (*Rect)(unsafe.Pointer(lParam))
 }
@@ -150,4 +161,15 @@ func DialogBoxParam(hInstance HINSTANCE, lpTemplateName *uint16, hWndParent HWND
 		err = syscall.EINVAL
 	}
 	return r, err
+}
+
+//sys windowFromPoint(point uintptr) (r HWND) = user32.WindowFromPoint
+func WindowFromPoint(point Point) (r HWND) {
+	var xy uintptr
+	x := uintptr(point.X)
+	y := uintptr(point.Y)
+	mask32 := (^uintptr(0) >> (64 - 32))
+	xy = (x & mask32) | (y << 32)
+
+	return windowFromPoint(xy)
 }

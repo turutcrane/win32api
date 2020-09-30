@@ -39,38 +39,16 @@ func errnoErr(e syscall.Errno) error {
 var (
 	modkernel32 = windows.NewLazySystemDLL("kernel32.dll")
 	moduser32   = windows.NewLazySystemDLL("user32.dll")
-	modshcore   = windows.NewLazySystemDLL("shcore.dll")
 	modgdi32    = windows.NewLazySystemDLL("gdi32.dll")
 	modcomdlg32 = windows.NewLazySystemDLL("comdlg32.dll")
+	modOpengl32 = windows.NewLazySystemDLL("Opengl32.dll")
+	modShcore   = windows.NewLazySystemDLL("Shcore.dll")
 
-	procGetModuleHandleW          = modkernel32.NewProc("GetModuleHandleW")
 	procSetLastError              = modkernel32.NewProc("SetLastError")
 	procGetWindowLongPtrW         = moduser32.NewProc("GetWindowLongPtrW")
 	procSetWindowLongPtrW         = moduser32.NewProc("SetWindowLongPtrW")
-	procGetDpiForWindow           = moduser32.NewProc("GetDpiForWindow")
-	procCreateWindowExW           = moduser32.NewProc("CreateWindowExW")
-	procLoadIconW                 = moduser32.NewProc("LoadIconW")
-	procLoadCursorW               = moduser32.NewProc("LoadCursorW")
-	procRegisterClassExW          = moduser32.NewProc("RegisterClassExW")
-	procGetClientRect             = moduser32.NewProc("GetClientRect")
-	procShowWindow                = moduser32.NewProc("ShowWindow")
-	procUpdateWindow              = moduser32.NewProc("UpdateWindow")
-	procDefWindowProcW            = moduser32.NewProc("DefWindowProcW")
-	procEnableNonClientDpiScaling = moduser32.NewProc("EnableNonClientDpiScaling")
-	procGetDC                     = moduser32.NewProc("GetDC")
-	procGetDeviceCaps             = moduser32.NewProc("GetDeviceCaps")
-	procReleaseDC                 = moduser32.NewProc("ReleaseDC")
-	procGetProcessDpiAwareness    = modshcore.NewProc("GetProcessDpiAwareness")
-	procCallWindowProcW           = moduser32.NewProc("CallWindowProcW")
-	procEnableWindow              = moduser32.NewProc("EnableWindow")
-	procSendMessageW              = moduser32.NewProc("SendMessageW")
-	procBeginPaint                = moduser32.NewProc("BeginPaint")
-	procEndPaint                  = moduser32.NewProc("EndPaint")
-	procIsWindowEnabled           = moduser32.NewProc("IsWindowEnabled")
-	procIsWindowVisible           = moduser32.NewProc("IsWindowVisible")
-	procSetMenu                   = moduser32.NewProc("SetMenu")
-	procBeginDeferWindowPos       = moduser32.NewProc("BeginDeferWindowPos")
-	procDeferWindowPos            = moduser32.NewProc("DeferWindowPos")
+	procWindowFromPoint           = moduser32.NewProc("WindowFromPoint")
+	procGetModuleHandleW          = modkernel32.NewProc("GetModuleHandleW")
 	procScreenToClient            = moduser32.NewProc("ScreenToClient")
 	procPtInRegion                = modgdi32.NewProc("PtInRegion")
 	procEndDeferWindowPos         = moduser32.NewProc("EndDeferWindowPos")
@@ -96,22 +74,47 @@ var (
 	procChoosePixelFormat         = modgdi32.NewProc("ChoosePixelFormat")
 	procSetPixelFormat            = modgdi32.NewProc("SetPixelFormat")
 	procSwapBuffers               = modgdi32.NewProc("SwapBuffers")
-	procwglCreateContext          = modgdi32.NewProc("wglCreateContext")
-	procwglMakeCurrent            = modgdi32.NewProc("wglMakeCurrent")
+	procwglCreateContext          = modOpengl32.NewProc("wglCreateContext")
+	procwglMakeCurrent            = modOpengl32.NewProc("wglMakeCurrent")
+	procGetDpiForWindow           = moduser32.NewProc("GetDpiForWindow")
+	procCreateWindowExW           = moduser32.NewProc("CreateWindowExW")
+	procLoadIconW                 = moduser32.NewProc("LoadIconW")
+	procLoadCursorW               = moduser32.NewProc("LoadCursorW")
+	procRegisterClassExW          = moduser32.NewProc("RegisterClassExW")
+	procGetClientRect             = moduser32.NewProc("GetClientRect")
+	procShowWindow                = moduser32.NewProc("ShowWindow")
+	procUpdateWindow              = moduser32.NewProc("UpdateWindow")
+	procDefWindowProcW            = moduser32.NewProc("DefWindowProcW")
+	procEnableNonClientDpiScaling = moduser32.NewProc("EnableNonClientDpiScaling")
+	procGetDC                     = moduser32.NewProc("GetDC")
+	procGetDeviceCaps             = modgdi32.NewProc("GetDeviceCaps")
+	procReleaseDC                 = moduser32.NewProc("ReleaseDC")
+	procGetProcessDpiAwareness    = modShcore.NewProc("GetProcessDpiAwareness")
+	procCallWindowProcW           = moduser32.NewProc("CallWindowProcW")
+	procEnableWindow              = moduser32.NewProc("EnableWindow")
+	procSendMessageW              = moduser32.NewProc("SendMessageW")
+	procBeginPaint                = moduser32.NewProc("BeginPaint")
+	procEndPaint                  = moduser32.NewProc("EndPaint")
+	procIsWindowEnabled           = moduser32.NewProc("IsWindowEnabled")
+	procIsWindowVisible           = moduser32.NewProc("IsWindowVisible")
+	procSetMenu                   = moduser32.NewProc("SetMenu")
+	procBeginDeferWindowPos       = moduser32.NewProc("BeginDeferWindowPos")
+	procDeferWindowPos            = moduser32.NewProc("DeferWindowPos")
+	procGetMessageExtraInfo       = moduser32.NewProc("GetMessageExtraInfo")
+	procGetMessageTime            = moduser32.NewProc("GetMessageTime")
+	procGetSystemMetrics          = moduser32.NewProc("GetSystemMetrics")
+	procGetDoubleClickTime        = moduser32.NewProc("GetDoubleClickTime")
+	procSetCapture                = moduser32.NewProc("SetCapture")
+	procGetKeyState               = moduser32.NewProc("GetKeyState")
+	procGetCapture                = moduser32.NewProc("GetCapture")
+	procReleaseCapture            = moduser32.NewProc("ReleaseCapture")
+	procQueryPerformanceCounter   = modkernel32.NewProc("QueryPerformanceCounter")
+	procQueryPerformanceFrequency = modkernel32.NewProc("QueryPerformanceFrequency")
+	procTrackMouseEvent           = moduser32.NewProc("TrackMouseEvent")
+	procGetCursorPos              = moduser32.NewProc("GetCursorPos")
+	procGetKeyboardLayout         = moduser32.NewProc("GetKeyboardLayout")
+	procVkKeyScanExW              = moduser32.NewProc("VkKeyScanExW")
 )
-
-func GetModuleHandle(m *uint16) (handle HMODULE, err error) {
-	r0, _, e1 := syscall.Syscall(procGetModuleHandleW.Addr(), 1, uintptr(unsafe.Pointer(m)), 0, 0)
-	handle = HMODULE(r0)
-	if handle == 0 {
-		if e1 != 0 {
-			err = errnoErr(e1)
-		} else {
-			err = syscall.EINVAL
-		}
-	}
-	return
-}
 
 func SetLastError(dwErrCode DWORD) {
 	syscall.Syscall(procSetLastError.Addr(), 1, uintptr(dwErrCode), 0, 0)
@@ -144,202 +147,16 @@ func setWindowLongPtr(hWnd HWND, nIndex int, dwNewLong uintptr) (longPtr uintptr
 	return
 }
 
-func GetDpiForWindow(hwnd HWND) (dpi UINT) {
-	r0, _, _ := syscall.Syscall(procGetDpiForWindow.Addr(), 1, uintptr(hwnd), 0, 0)
-	dpi = UINT(r0)
+func windowFromPoint(point uintptr) (r HWND) {
+	r0, _, _ := syscall.Syscall(procWindowFromPoint.Addr(), 1, uintptr(point), 0, 0)
+	r = HWND(r0)
 	return
 }
 
-func CreateWindowEx(dwExStyle DWORD, lpClassName *uint16, lpWindowName *uint16, dwStyle DWORD, x int, y int, nWidth int, nHeight int, hWndParent HWND, hMenu HMENU, hInstance HINSTANCE, lpParam LPVOID) (hwnd HWND, err error) {
-	r0, _, e1 := syscall.Syscall12(procCreateWindowExW.Addr(), 12, uintptr(dwExStyle), uintptr(unsafe.Pointer(lpClassName)), uintptr(unsafe.Pointer(lpWindowName)), uintptr(dwStyle), uintptr(x), uintptr(y), uintptr(nWidth), uintptr(nHeight), uintptr(hWndParent), uintptr(hMenu), uintptr(hInstance), uintptr(lpParam))
-	hwnd = HWND(r0)
-	if hwnd == 0 {
-		if e1 != 0 {
-			err = errnoErr(e1)
-		} else {
-			err = syscall.EINVAL
-		}
-	}
-	return
-}
-
-func LoadIcon(hInstance HINSTANCE, lpIconName *uint16) (icon HICON, err error) {
-	r0, _, e1 := syscall.Syscall(procLoadIconW.Addr(), 2, uintptr(hInstance), uintptr(unsafe.Pointer(lpIconName)), 0)
-	icon = HICON(r0)
-	if icon == 0 {
-		if e1 != 0 {
-			err = errnoErr(e1)
-		} else {
-			err = syscall.EINVAL
-		}
-	}
-	return
-}
-
-func LoadCursor(hInstance HINSTANCE, lpCursorName *uint16) (cursor HCURSOR, err error) {
-	r0, _, e1 := syscall.Syscall(procLoadCursorW.Addr(), 2, uintptr(hInstance), uintptr(unsafe.Pointer(lpCursorName)), 0)
-	cursor = HCURSOR(r0)
-	if cursor == 0 {
-		if e1 != 0 {
-			err = errnoErr(e1)
-		} else {
-			err = syscall.EINVAL
-		}
-	}
-	return
-}
-
-func RegisterClassEx(Arg1 *Wndclassex) (atm ATOM) {
-	r0, _, _ := syscall.Syscall(procRegisterClassExW.Addr(), 1, uintptr(unsafe.Pointer(Arg1)), 0, 0)
-	atm = ATOM(r0)
-	return
-}
-
-func GetClientRect(hWnd HWND, lpRect *Rect) (b bool, err error) {
-	r0, _, e1 := syscall.Syscall(procGetClientRect.Addr(), 2, uintptr(hWnd), uintptr(unsafe.Pointer(lpRect)), 0)
-	b = r0 != 0
-	if b == false {
-		if e1 != 0 {
-			err = errnoErr(e1)
-		} else {
-			err = syscall.EINVAL
-		}
-	}
-	return
-}
-
-func ShowWindow(hWnd HWND, nCmdShow int) (b bool) {
-	r0, _, _ := syscall.Syscall(procShowWindow.Addr(), 2, uintptr(hWnd), uintptr(nCmdShow), 0)
-	b = r0 != 0
-	return
-}
-
-func UpdateWindow(hWnd HWND) (b bool) {
-	r0, _, _ := syscall.Syscall(procUpdateWindow.Addr(), 1, uintptr(hWnd), 0, 0)
-	b = r0 != 0
-	return
-}
-
-func DefWindowProc(hWnd HWND, Msg UINT, wParam WPARAM, lParam LPARAM) (result LRESULT) {
-	r0, _, _ := syscall.Syscall6(procDefWindowProcW.Addr(), 4, uintptr(hWnd), uintptr(Msg), uintptr(wParam), uintptr(lParam), 0, 0)
-	result = LRESULT(r0)
-	return
-}
-
-func EnableNonClientDpiScaling(hwnd HWND) (b bool, err error) {
-	r0, _, e1 := syscall.Syscall(procEnableNonClientDpiScaling.Addr(), 1, uintptr(hwnd), 0, 0)
-	b = r0 != 0
-	if b == false {
-		if e1 != 0 {
-			err = errnoErr(e1)
-		} else {
-			err = syscall.EINVAL
-		}
-	}
-	return
-}
-
-func GetDC(hwnd HWND) (hdc HDC) {
-	r0, _, _ := syscall.Syscall(procGetDC.Addr(), 1, uintptr(hwnd), 0, 0)
-	hdc = HDC(r0)
-	return
-}
-
-func GetDeviceCaps(hdc HDC, index int) (i int) {
-	r0, _, _ := syscall.Syscall(procGetDeviceCaps.Addr(), 2, uintptr(hdc), uintptr(index), 0)
-	i = int(r0)
-	return
-}
-
-func ReleaseDC(hWnd HWND, hDC HDC) (b bool) {
-	r0, _, _ := syscall.Syscall(procReleaseDC.Addr(), 2, uintptr(hWnd), uintptr(hDC), 0)
-	b = r0 != 0
-	return
-}
-
-func GetProcessDpiAwareness(hprocess syscall.Handle, value *ProcessDpiAwareness) (result HRESULT) {
-	r0, _, _ := syscall.Syscall(procGetProcessDpiAwareness.Addr(), 2, uintptr(hprocess), uintptr(unsafe.Pointer(value)), 0)
-	result = HRESULT(r0)
-	return
-}
-
-func CallWindowProc(lpPrevWndFunc WNDPROC, hWnd HWND, Msg UINT, wParam WPARAM, lParam LPARAM) (result LRESULT) {
-	r0, _, _ := syscall.Syscall6(procCallWindowProcW.Addr(), 5, uintptr(lpPrevWndFunc), uintptr(hWnd), uintptr(Msg), uintptr(wParam), uintptr(lParam), 0)
-	result = LRESULT(r0)
-	return
-}
-
-func EnableWindow(hWnd HWND, bEnable bool) (b bool) {
-	var _p0 uint32
-	if bEnable {
-		_p0 = 1
-	} else {
-		_p0 = 0
-	}
-	r0, _, _ := syscall.Syscall(procEnableWindow.Addr(), 2, uintptr(hWnd), uintptr(_p0), 0)
-	b = r0 != 0
-	return
-}
-
-func SendMessage(hWnd HWND, Msg UINT, wParam WPARAM, lParam LPARAM) (resust LRESULT) {
-	r0, _, _ := syscall.Syscall6(procSendMessageW.Addr(), 4, uintptr(hWnd), uintptr(Msg), uintptr(wParam), uintptr(lParam), 0, 0)
-	resust = LRESULT(r0)
-	return
-}
-
-func BeginPaint(hWnd HWND, lpPaint *Paintstruct) (hdc HDC) {
-	r0, _, _ := syscall.Syscall(procBeginPaint.Addr(), 2, uintptr(hWnd), uintptr(unsafe.Pointer(lpPaint)), 0)
-	hdc = HDC(r0)
-	return
-}
-
-func EndPaint(hWnd HWND, lpPaint *Paintstruct) {
-	syscall.Syscall(procEndPaint.Addr(), 2, uintptr(hWnd), uintptr(unsafe.Pointer(lpPaint)), 0)
-	return
-}
-
-func IsWindowEnabled(hWnd HWND) (b bool) {
-	r0, _, _ := syscall.Syscall(procIsWindowEnabled.Addr(), 1, uintptr(hWnd), 0, 0)
-	b = r0 != 0
-	return
-}
-
-func IsWindowVisible(hWnd HWND) (b bool) {
-	r0, _, _ := syscall.Syscall(procIsWindowVisible.Addr(), 1, uintptr(hWnd), 0, 0)
-	b = r0 != 0
-	return
-}
-
-func SetMenu(hWnd HWND, hMenu HMENU) (b bool, err error) {
-	r0, _, e1 := syscall.Syscall(procSetMenu.Addr(), 2, uintptr(hWnd), uintptr(hMenu), 0)
-	b = r0 != 0
-	if b == false {
-		if e1 != 0 {
-			err = errnoErr(e1)
-		} else {
-			err = syscall.EINVAL
-		}
-	}
-	return
-}
-
-func BeginDeferWindowPos(nNumWindows int) (hdwp HDWP, err error) {
-	r0, _, e1 := syscall.Syscall(procBeginDeferWindowPos.Addr(), 1, uintptr(nNumWindows), 0, 0)
-	hdwp = HDWP(r0)
-	if hdwp == 0 {
-		if e1 != 0 {
-			err = errnoErr(e1)
-		} else {
-			err = syscall.EINVAL
-		}
-	}
-	return
-}
-
-func DeferWindowPos(hWinPosInfo HDWP, hWnd HWND, hWndInsertAfter HWND, x int, y int, cx int, cy int, uFlags UINT) (hdwp HDWP, err error) {
-	r0, _, e1 := syscall.Syscall9(procDeferWindowPos.Addr(), 8, uintptr(hWinPosInfo), uintptr(hWnd), uintptr(hWndInsertAfter), uintptr(x), uintptr(y), uintptr(cx), uintptr(cy), uintptr(uFlags), 0)
-	hdwp = HDWP(r0)
-	if hdwp == 0 {
+func GetModuleHandle(lpModuleName *uint16) (r HMODULE, err error) {
+	r0, _, e1 := syscall.Syscall(procGetModuleHandleW.Addr(), 1, uintptr(unsafe.Pointer(lpModuleName)), 0, 0)
+	r = HMODULE(r0)
+	if r == 0 {
 		if e1 != 0 {
 			err = errnoErr(e1)
 		} else {
@@ -634,5 +451,328 @@ func WglMakeCurrent(arg1 HDC, arg2 HGLRC) (err error) {
 			err = syscall.EINVAL
 		}
 	}
+	return
+}
+
+func GetDpiForWindow(hwnd HWND) (r UINT) {
+	r0, _, _ := syscall.Syscall(procGetDpiForWindow.Addr(), 1, uintptr(hwnd), 0, 0)
+	r = UINT(r0)
+	return
+}
+
+func CreateWindowEx(dwExStyle DWORD, lpClassName *uint16, lpWindowName *uint16, dwStyle DWORD, X int, Y int, nWidth int, nHeight int, hWndParent HWND, hMenu HMENU, hInstance HINSTANCE, lpParam LPVOID) (r HWND, err error) {
+	r0, _, e1 := syscall.Syscall12(procCreateWindowExW.Addr(), 12, uintptr(dwExStyle), uintptr(unsafe.Pointer(lpClassName)), uintptr(unsafe.Pointer(lpWindowName)), uintptr(dwStyle), uintptr(X), uintptr(Y), uintptr(nWidth), uintptr(nHeight), uintptr(hWndParent), uintptr(hMenu), uintptr(hInstance), uintptr(lpParam))
+	r = HWND(r0)
+	if r == 0 {
+		if e1 != 0 {
+			err = errnoErr(e1)
+		} else {
+			err = syscall.EINVAL
+		}
+	}
+	return
+}
+
+func LoadIcon(hInstance HINSTANCE, lpIconName *uint16) (r HICON, err error) {
+	r0, _, e1 := syscall.Syscall(procLoadIconW.Addr(), 2, uintptr(hInstance), uintptr(unsafe.Pointer(lpIconName)), 0)
+	r = HICON(r0)
+	if r == 0 {
+		if e1 != 0 {
+			err = errnoErr(e1)
+		} else {
+			err = syscall.EINVAL
+		}
+	}
+	return
+}
+
+func LoadCursor(hInstance HINSTANCE, lpCursorName *uint16) (r HCURSOR, err error) {
+	r0, _, e1 := syscall.Syscall(procLoadCursorW.Addr(), 2, uintptr(hInstance), uintptr(unsafe.Pointer(lpCursorName)), 0)
+	r = HCURSOR(r0)
+	if r == 0 {
+		if e1 != 0 {
+			err = errnoErr(e1)
+		} else {
+			err = syscall.EINVAL
+		}
+	}
+	return
+}
+
+func RegisterClassEx(Arg1 *Wndclassex) (r ATOM, err error) {
+	r0, _, e1 := syscall.Syscall(procRegisterClassExW.Addr(), 1, uintptr(unsafe.Pointer(Arg1)), 0, 0)
+	r = ATOM(r0)
+	if r == 0 {
+		if e1 != 0 {
+			err = errnoErr(e1)
+		} else {
+			err = syscall.EINVAL
+		}
+	}
+	return
+}
+
+func GetClientRect(hWnd HWND, lpRect *Rect) (err error) {
+	r1, _, e1 := syscall.Syscall(procGetClientRect.Addr(), 2, uintptr(hWnd), uintptr(unsafe.Pointer(lpRect)), 0)
+	if r1 == 0 {
+		if e1 != 0 {
+			err = errnoErr(e1)
+		} else {
+			err = syscall.EINVAL
+		}
+	}
+	return
+}
+
+func ShowWindow(hWnd HWND, nCmdShow int) (r bool) {
+	r0, _, _ := syscall.Syscall(procShowWindow.Addr(), 2, uintptr(hWnd), uintptr(nCmdShow), 0)
+	r = r0 != 0
+	return
+}
+
+func UpdateWindow(hWnd HWND) (r bool) {
+	r0, _, _ := syscall.Syscall(procUpdateWindow.Addr(), 1, uintptr(hWnd), 0, 0)
+	r = r0 != 0
+	return
+}
+
+func DefWindowProc(hWnd HWND, Msg UINT, wParam WPARAM, lParam LPARAM) (r LRESULT) {
+	r0, _, _ := syscall.Syscall6(procDefWindowProcW.Addr(), 4, uintptr(hWnd), uintptr(Msg), uintptr(wParam), uintptr(lParam), 0, 0)
+	r = LRESULT(r0)
+	return
+}
+
+func EnableNonClientDpiScaling(hwnd HWND) (err error) {
+	r1, _, e1 := syscall.Syscall(procEnableNonClientDpiScaling.Addr(), 1, uintptr(hwnd), 0, 0)
+	if r1 == 0 {
+		if e1 != 0 {
+			err = errnoErr(e1)
+		} else {
+			err = syscall.EINVAL
+		}
+	}
+	return
+}
+
+func GetDC(hWnd HWND) (r HDC) {
+	r0, _, _ := syscall.Syscall(procGetDC.Addr(), 1, uintptr(hWnd), 0, 0)
+	r = HDC(r0)
+	return
+}
+
+func GetDeviceCaps(hdc HDC, index int) (r int) {
+	r0, _, _ := syscall.Syscall(procGetDeviceCaps.Addr(), 2, uintptr(hdc), uintptr(index), 0)
+	r = int(r0)
+	return
+}
+
+func ReleaseDC(hWnd HWND, hDC HDC) (r int) {
+	r0, _, _ := syscall.Syscall(procReleaseDC.Addr(), 2, uintptr(hWnd), uintptr(hDC), 0)
+	r = int(r0)
+	return
+}
+
+func GetProcessDpiAwareness(hprocess HANDLE, value *ProcessDpiAwareness) (r HRESULT) {
+	r0, _, _ := syscall.Syscall(procGetProcessDpiAwareness.Addr(), 2, uintptr(hprocess), uintptr(unsafe.Pointer(value)), 0)
+	r = HRESULT(r0)
+	return
+}
+
+func CallWindowProc(lpPrevWndFunc WNDPROC, hWnd HWND, Msg UINT, wParam WPARAM, lParam LPARAM) (r LRESULT) {
+	r0, _, _ := syscall.Syscall6(procCallWindowProcW.Addr(), 5, uintptr(lpPrevWndFunc), uintptr(hWnd), uintptr(Msg), uintptr(wParam), uintptr(lParam), 0)
+	r = LRESULT(r0)
+	return
+}
+
+func EnableWindow(hWnd HWND, bEnable bool) (r bool) {
+	var _p0 uint32
+	if bEnable {
+		_p0 = 1
+	} else {
+		_p0 = 0
+	}
+	r0, _, _ := syscall.Syscall(procEnableWindow.Addr(), 2, uintptr(hWnd), uintptr(_p0), 0)
+	r = r0 != 0
+	return
+}
+
+func SendMessage(hWnd HWND, Msg UINT, wParam WPARAM, lParam LPARAM) (r LRESULT) {
+	r0, _, _ := syscall.Syscall6(procSendMessageW.Addr(), 4, uintptr(hWnd), uintptr(Msg), uintptr(wParam), uintptr(lParam), 0, 0)
+	r = LRESULT(r0)
+	return
+}
+
+func BeginPaint(hWnd HWND, lpPaint *Paintstruct) (r HDC) {
+	r0, _, _ := syscall.Syscall(procBeginPaint.Addr(), 2, uintptr(hWnd), uintptr(unsafe.Pointer(lpPaint)), 0)
+	r = HDC(r0)
+	return
+}
+
+func EndPaint(hWnd HWND, lpPaint *Paintstruct) {
+	syscall.Syscall(procEndPaint.Addr(), 2, uintptr(hWnd), uintptr(unsafe.Pointer(lpPaint)), 0)
+	return
+}
+
+func IsWindowEnabled(hWnd HWND) (r bool) {
+	r0, _, _ := syscall.Syscall(procIsWindowEnabled.Addr(), 1, uintptr(hWnd), 0, 0)
+	r = r0 != 0
+	return
+}
+
+func IsWindowVisible(hWnd HWND) (r bool) {
+	r0, _, _ := syscall.Syscall(procIsWindowVisible.Addr(), 1, uintptr(hWnd), 0, 0)
+	r = r0 != 0
+	return
+}
+
+func SetMenu(hWnd HWND, hMenu HMENU) (err error) {
+	r1, _, e1 := syscall.Syscall(procSetMenu.Addr(), 2, uintptr(hWnd), uintptr(hMenu), 0)
+	if r1 == 0 {
+		if e1 != 0 {
+			err = errnoErr(e1)
+		} else {
+			err = syscall.EINVAL
+		}
+	}
+	return
+}
+
+func BeginDeferWindowPos(nNumWindows int) (r HDWP, err error) {
+	r0, _, e1 := syscall.Syscall(procBeginDeferWindowPos.Addr(), 1, uintptr(nNumWindows), 0, 0)
+	r = HDWP(r0)
+	if r == 0 {
+		if e1 != 0 {
+			err = errnoErr(e1)
+		} else {
+			err = syscall.EINVAL
+		}
+	}
+	return
+}
+
+func DeferWindowPos(hWinPosInfo HDWP, hWnd HWND, hWndInsertAfter HWND, x int, y int, cx int, cy int, uFlags UINT) (r HDWP, err error) {
+	r0, _, e1 := syscall.Syscall9(procDeferWindowPos.Addr(), 8, uintptr(hWinPosInfo), uintptr(hWnd), uintptr(hWndInsertAfter), uintptr(x), uintptr(y), uintptr(cx), uintptr(cy), uintptr(uFlags), 0)
+	r = HDWP(r0)
+	if r == 0 {
+		if e1 != 0 {
+			err = errnoErr(e1)
+		} else {
+			err = syscall.EINVAL
+		}
+	}
+	return
+}
+
+func GetMessageExtraInfo() (r LPARAM) {
+	r0, _, _ := syscall.Syscall(procGetMessageExtraInfo.Addr(), 0, 0, 0, 0)
+	r = LPARAM(r0)
+	return
+}
+
+func GetMessageTime() (r LONG) {
+	r0, _, _ := syscall.Syscall(procGetMessageTime.Addr(), 0, 0, 0, 0)
+	r = LONG(r0)
+	return
+}
+
+func GetSystemMetrics(nIndex int) (r int) {
+	r0, _, _ := syscall.Syscall(procGetSystemMetrics.Addr(), 1, uintptr(nIndex), 0, 0)
+	r = int(r0)
+	return
+}
+
+func GetDoubleClickTime() (r UINT) {
+	r0, _, _ := syscall.Syscall(procGetDoubleClickTime.Addr(), 0, 0, 0, 0)
+	r = UINT(r0)
+	return
+}
+
+func SetCapture(hWnd HWND) (r HWND) {
+	r0, _, _ := syscall.Syscall(procSetCapture.Addr(), 1, uintptr(hWnd), 0, 0)
+	r = HWND(r0)
+	return
+}
+
+func GetKeyState(nVirtKey int) (r SHORT) {
+	r0, _, _ := syscall.Syscall(procGetKeyState.Addr(), 1, uintptr(nVirtKey), 0, 0)
+	r = SHORT(r0)
+	return
+}
+
+func GetCapture() (r HWND) {
+	r0, _, _ := syscall.Syscall(procGetCapture.Addr(), 0, 0, 0, 0)
+	r = HWND(r0)
+	return
+}
+
+func ReleaseCapture() (err error) {
+	r1, _, e1 := syscall.Syscall(procReleaseCapture.Addr(), 0, 0, 0, 0)
+	if r1 == 0 {
+		if e1 != 0 {
+			err = errnoErr(e1)
+		} else {
+			err = syscall.EINVAL
+		}
+	}
+	return
+}
+
+func QueryPerformanceCounter(lpPerformanceCount *LARGE_INTEGER) (err error) {
+	r1, _, e1 := syscall.Syscall(procQueryPerformanceCounter.Addr(), 1, uintptr(unsafe.Pointer(lpPerformanceCount)), 0, 0)
+	if r1 == 0 {
+		if e1 != 0 {
+			err = errnoErr(e1)
+		} else {
+			err = syscall.EINVAL
+		}
+	}
+	return
+}
+
+func QueryPerformanceFrequency(lpFrequency *LARGE_INTEGER) (err error) {
+	r1, _, e1 := syscall.Syscall(procQueryPerformanceFrequency.Addr(), 1, uintptr(unsafe.Pointer(lpFrequency)), 0, 0)
+	if r1 == 0 {
+		if e1 != 0 {
+			err = errnoErr(e1)
+		} else {
+			err = syscall.EINVAL
+		}
+	}
+	return
+}
+
+func TrackMouseEvent(lpEventTrack *Trackmouseevent) (err error) {
+	r1, _, e1 := syscall.Syscall(procTrackMouseEvent.Addr(), 1, uintptr(unsafe.Pointer(lpEventTrack)), 0, 0)
+	if r1 == 0 {
+		if e1 != 0 {
+			err = errnoErr(e1)
+		} else {
+			err = syscall.EINVAL
+		}
+	}
+	return
+}
+
+func GetCursorPos(lpPoint *Point) (err error) {
+	r1, _, e1 := syscall.Syscall(procGetCursorPos.Addr(), 1, uintptr(unsafe.Pointer(lpPoint)), 0, 0)
+	if r1 == 0 {
+		if e1 != 0 {
+			err = errnoErr(e1)
+		} else {
+			err = syscall.EINVAL
+		}
+	}
+	return
+}
+
+func GetKeyboardLayout(idThread DWORD) (r HKL) {
+	r0, _, _ := syscall.Syscall(procGetKeyboardLayout.Addr(), 1, uintptr(idThread), 0, 0)
+	r = HKL(r0)
+	return
+}
+
+func VkKeyScanEx(ch WCHAR, dwhkl HKL) (r SHORT) {
+	r0, _, _ := syscall.Syscall(procVkKeyScanExW.Addr(), 2, uintptr(ch), uintptr(dwhkl), 0)
+	r = SHORT(r0)
 	return
 }
