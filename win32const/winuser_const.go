@@ -917,3 +917,34 @@ const (
 	TmeQuery     = C.TME_QUERY
 	TmeCancel    = C.TME_CANCEL
 )
+
+const (
+	MfInsert          = C.MF_INSERT
+	MfChange          = C.MF_CHANGE
+	MfAppend          = C.MF_APPEND
+	MfDelete          = C.MF_DELETE
+	MfRemove          = C.MF_REMOVE
+	MfBycommand       = C.MF_BYCOMMAND
+	MfByposition      = C.MF_BYPOSITION
+	MfSeparator       = C.MF_SEPARATOR
+	MfEnabled         = C.MF_ENABLED
+	MfGrayed          = C.MF_GRAYED
+	MfDisabled        = C.MF_DISABLED
+	MfUnchecked       = C.MF_UNCHECKED
+	MfChecked         = C.MF_CHECKED
+	MfUsecheckbitmaps = C.MF_USECHECKBITMAPS
+	MfString          = C.MF_STRING
+	MfBitmap          = C.MF_BITMAP
+	MfOwnerdraw       = C.MF_OWNERDRAW
+	MfPopup           = C.MF_POPUP
+	MfMenubarbreak    = C.MF_MENUBARBREAK
+	MfMenubreak       = C.MF_MENUBREAK
+	MfUnhilite        = C.MF_UNHILITE
+	MfHilite          = C.MF_HILITE
+	MfDefault         = C.MF_DEFAULT
+	MfSysmenu         = C.MF_SYSMENU
+	MfHelp            = C.MF_HELP
+	MfRightjustify    = C.MF_RIGHTJUSTIFY
+	MfMouseselect     = C.MF_MOUSESELECT
+	MfEnd             = C.MF_END
+)

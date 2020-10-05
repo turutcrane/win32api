@@ -559,3 +559,24 @@ SHORT VkKeyScanExW(
   WCHAR ch,
   HKL   dwhkl
 );
+
+@ns user32
+@noerr
+HMENU GetMenu(
+  HWND hWnd
+);
+
+@ns user32
+@noerr
+HMENU GetSubMenu(
+  HMENU hMenu,
+  int   nPos
+);
+
+@ns user32
+@erroronly
+BOOL RemoveMenu(
+  HMENU hMenu,
+  UINT  uPosition,
+  UINT  uFlags
+);

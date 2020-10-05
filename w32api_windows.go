@@ -172,3 +172,6 @@ type Trackmouseevent struct {
 //sys GetCursorPos(lpPoint *Point) (err error) = user32.GetCursorPos
 //sys GetKeyboardLayout(idThread DWORD) (r HKL) = user32.GetKeyboardLayout
 //sys VkKeyScanEx(ch WCHAR, dwhkl HKL) (r SHORT) = user32.VkKeyScanExW
+//sys GetMenu(hWnd HWND) (r HMENU) = user32.GetMenu
+//sys GetSubMenu(hMenu HMENU, nPos int) (r HMENU) = user32.GetSubMenu
+//sys RemoveMenu(hMenu HMENU, uPosition UINT, uFlags UINT) (err error) = user32.RemoveMenu

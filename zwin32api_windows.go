@@ -114,6 +114,9 @@ var (
 	procGetCursorPos              = moduser32.NewProc("GetCursorPos")
 	procGetKeyboardLayout         = moduser32.NewProc("GetKeyboardLayout")
 	procVkKeyScanExW              = moduser32.NewProc("VkKeyScanExW")
+	procGetMenu                   = moduser32.NewProc("GetMenu")
+	procGetSubMenu                = moduser32.NewProc("GetSubMenu")
+	procRemoveMenu                = moduser32.NewProc("RemoveMenu")
 )
 
 func SetLastError(dwErrCode DWORD) {
@@ -774,5 +777,29 @@ func GetKeyboardLayout(idThread DWORD) (r HKL) {
 func VkKeyScanEx(ch WCHAR, dwhkl HKL) (r SHORT) {
 	r0, _, _ := syscall.Syscall(procVkKeyScanExW.Addr(), 2, uintptr(ch), uintptr(dwhkl), 0)
 	r = SHORT(r0)
+	return
+}
+
+func GetMenu(hWnd HWND) (r HMENU) {
+	r0, _, _ := syscall.Syscall(procGetMenu.Addr(), 1, uintptr(hWnd), 0, 0)
+	r = HMENU(r0)
+	return
+}
+
+func GetSubMenu(hMenu HMENU, nPos int) (r HMENU) {
+	r0, _, _ := syscall.Syscall(procGetSubMenu.Addr(), 2, uintptr(hMenu), uintptr(nPos), 0)
+	r = HMENU(r0)
+	return
+}
+
+func RemoveMenu(hMenu HMENU, uPosition UINT, uFlags UINT) (err error) {
+	r1, _, e1 := syscall.Syscall(procRemoveMenu.Addr(), 3, uintptr(hMenu), uintptr(uPosition), uintptr(uFlags))
+	if r1 == 0 {
+		if e1 != 0 {
+			err = errnoErr(e1)
+		} else {
+			err = syscall.EINVAL
+		}
+	}
 	return
 }
