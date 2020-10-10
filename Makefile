@@ -2,6 +2,7 @@
 
 .PHONY: vet
 vet: w32api_windows.go zwin32api_windows.go
+	$(MAKE) -C ./win32const
 	go vet -unsafeptr=false
 
 zwin32api_windows.go: win32api.go w32api_windows.go
