@@ -580,3 +580,6 @@ BOOL RemoveMenu(
   UINT  uPosition,
   UINT  uFlags
 );
+
+@noerr
+LPWSTR GetCommandLineW();

@@ -117,6 +117,7 @@ var (
 	procGetMenu                   = moduser32.NewProc("GetMenu")
 	procGetSubMenu                = moduser32.NewProc("GetSubMenu")
 	procRemoveMenu                = moduser32.NewProc("RemoveMenu")
+	procGetCommandLineW           = modkernel32.NewProc("GetCommandLineW")
 )
 
 func SetLastError(dwErrCode DWORD) {
@@ -801,5 +802,11 @@ func RemoveMenu(hMenu HMENU, uPosition UINT, uFlags UINT) (err error) {
 			err = syscall.EINVAL
 		}
 	}
+	return
+}
+
+func GetCommandLine() (r *uint16) {
+	r0, _, _ := syscall.Syscall(procGetCommandLineW.Addr(), 0, 0, 0, 0)
+	r = (*uint16)(unsafe.Pointer(r0))
 	return
 }

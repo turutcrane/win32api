@@ -175,3 +175,4 @@ type Trackmouseevent struct {
 //sys GetMenu(hWnd HWND) (r HMENU) = user32.GetMenu
 //sys GetSubMenu(hMenu HMENU, nPos int) (r HMENU) = user32.GetSubMenu
 //sys RemoveMenu(hMenu HMENU, uPosition UINT, uFlags UINT) (err error) = user32.RemoveMenu
+//sys GetCommandLine() (r *uint16) = GetCommandLineW
