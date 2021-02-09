@@ -1,8 +1,6 @@
 package win32const
 
 import (
-	"unsafe"
-
 	"github.com/turutcrane/win32api"
 )
 
@@ -26,6 +24,7 @@ const (
 	sizeof_PIXELFORMATDESCRIPTOR = C.sizeof_PIXELFORMATDESCRIPTOR
 	sizeof_LONGLONG              = C.sizeof_LONGLONG
 	sizeof_TRACKMOUSEEVENT       = C.sizeof_TRACKMOUSEEVENT
+	sizeof_GUID                  = C.sizeof_GUID
 )
 
 // index of GetDevoceCaps
@@ -194,7 +193,7 @@ const (
 	Hthelp        = C.HTHELP
 )
 
-var (
+const (
 	Idok       = C.IDOK
 	Idcancel   = C.IDCANCEL
 	Idabort    = C.IDABORT
@@ -210,22 +209,44 @@ var (
 )
 
 var (
-	IdcArrow       = (*uint16)(unsafe.Pointer(C.IDC_ARROW))
-	IdcIbeam       = (*uint16)(unsafe.Pointer(C.IDC_IBEAM))
-	IdcWait        = (*uint16)(unsafe.Pointer(C.IDC_WAIT))
-	IdcCross       = (*uint16)(unsafe.Pointer(C.IDC_CROSS))
-	IdcUparrow     = (*uint16)(unsafe.Pointer(C.IDC_UPARROW))
-	IdcSize        = (*uint16)(unsafe.Pointer(C.IDC_SIZE))
-	IdcIcon        = (*uint16)(unsafe.Pointer(C.IDC_ICON))
-	IdcSizenwse    = (*uint16)(unsafe.Pointer(C.IDC_SIZENWSE))
-	IdcSizenesw    = (*uint16)(unsafe.Pointer(C.IDC_SIZENESW))
-	IdcSizewe      = (*uint16)(unsafe.Pointer(C.IDC_SIZEWE))
-	IdcSizens      = (*uint16)(unsafe.Pointer(C.IDC_SIZENS))
-	IdcSizeall     = (*uint16)(unsafe.Pointer(C.IDC_SIZEALL))
-	IdcNo          = (*uint16)(unsafe.Pointer(C.IDC_NO))
-	IdcHand        = (*uint16)(unsafe.Pointer(C.IDC_HAND))
-	IdcAppstarting = (*uint16)(unsafe.Pointer(C.IDC_APPSTARTING))
-	IdcHelp        = (*uint16)(unsafe.Pointer(C.IDC_HELP))
+	IDC_ARROW       = C.IDC_ARROW
+	IDC_IBEAM       = C.IDC_IBEAM
+	IDC_WAIT        = C.IDC_WAIT
+	IDC_CROSS       = C.IDC_CROSS
+	IDC_UPARROW     = C.IDC_UPARROW
+	IDC_SIZE        = C.IDC_SIZE
+	IDC_ICON        = C.IDC_ICON
+	IDC_SIZENWSE    = C.IDC_SIZENWSE
+	IDC_SIZENESW    = C.IDC_SIZENESW
+	IDC_SIZEWE      = C.IDC_SIZEWE
+	IDC_SIZENS      = C.IDC_SIZENS
+	IDC_SIZEALL     = C.IDC_SIZEALL
+	IDC_NO          = C.IDC_NO
+	IDC_HAND        = C.IDC_HAND
+	IDC_APPSTARTING = C.IDC_APPSTARTING
+	IDC_HELP        = C.IDC_HELP
+)
+
+const (
+	IdcArrow   = 32512 + iota // C.IDC_ARROW
+	IdcIbeam                  // C.IDC_IBEAM
+	IdcWait                   // C.IDC_WAIT
+	IdcCross                  // C.IDC_CROSS
+	IdcUparrow                // C.IDC_UPARROW
+)
+const (
+	IdcSize         = 32640 + iota // C.IDC_SIZE
+	IdcIcon                        // C.IDC_ICON
+	IdcSizenwse                    // C.IDC_SIZENWSE
+	IdcSizenesw                    // C.IDC_SIZENESW
+	IdcSizewe                      // C.IDC_SIZEWE
+	IdcSizens                      // C.IDC_SIZENS
+	IdcSizeall                     // C.IDC_SIZEALL
+	IdcMissing32647                // missing value 32647
+	IdcNo                          // C.IDC_NO
+	IdcHand                        // C.IDC_HAND
+	IdcAppstarting                 // C.IDC_APPSTARTING
+	IdcHelp                        // C.IDC_HELP
 )
 
 const (
@@ -450,256 +471,256 @@ const (
 )
 
 const (
-	WmNull                   MessageId = C.WM_NULL
-	WmCreate                 MessageId = C.WM_CREATE
-	WmDestroy                MessageId = C.WM_DESTROY
-	WmMove                   MessageId = C.WM_MOVE
-	WmSize                   MessageId = C.WM_SIZE
-	WmActivate               MessageId = C.WM_ACTIVATE
-	WmSetfocus               MessageId = C.WM_SETFOCUS
-	WmKillfocus              MessageId = C.WM_KILLFOCUS
-	WmEnable                 MessageId = C.WM_ENABLE
-	WmSetredraw              MessageId = C.WM_SETREDRAW
-	WmSettext                MessageId = C.WM_SETTEXT
-	WmGettext                MessageId = C.WM_GETTEXT
-	WmGettextlength          MessageId = C.WM_GETTEXTLENGTH
-	WmPaint                  MessageId = C.WM_PAINT
-	WmClose                  MessageId = C.WM_CLOSE
-	WmQueryendsession        MessageId = C.WM_QUERYENDSESSION
-	WmQueryopen              MessageId = C.WM_QUERYOPEN
-	WmEndsession             MessageId = C.WM_ENDSESSION
-	WmQuit                   MessageId = C.WM_QUIT
-	WmErasebkgnd             MessageId = C.WM_ERASEBKGND
-	WmSyscolorchange         MessageId = C.WM_SYSCOLORCHANGE
-	WmShowwindow             MessageId = C.WM_SHOWWINDOW
-	WmWininichange           MessageId = C.WM_WININICHANGE
-	WmSettingchange          MessageId = C.WM_SETTINGCHANGE
-	WmDevmodechange          MessageId = C.WM_DEVMODECHANGE
-	WmActivateapp            MessageId = C.WM_ACTIVATEAPP
-	WmFontchange             MessageId = C.WM_FONTCHANGE
-	WmTimechange             MessageId = C.WM_TIMECHANGE
-	WmCancelmode             MessageId = C.WM_CANCELMODE
-	WmSetcursor              MessageId = C.WM_SETCURSOR
-	WmMouseactivate          MessageId = C.WM_MOUSEACTIVATE
-	WmChildactivate          MessageId = C.WM_CHILDACTIVATE
-	WmQueuesync              MessageId = C.WM_QUEUESYNC
-	WmGetminmaxinfo          MessageId = C.WM_GETMINMAXINFO
-	WmPainticon              MessageId = C.WM_PAINTICON
-	WmIconerasebkgnd         MessageId = C.WM_ICONERASEBKGND
-	WmNextdlgctl             MessageId = C.WM_NEXTDLGCTL
-	WmSpoolerstatus          MessageId = C.WM_SPOOLERSTATUS
-	WmDrawitem               MessageId = C.WM_DRAWITEM
-	WmMeasureitem            MessageId = C.WM_MEASUREITEM
-	WmDeleteitem             MessageId = C.WM_DELETEITEM
-	WmVkeytoitem             MessageId = C.WM_VKEYTOITEM
-	WmChartoitem             MessageId = C.WM_CHARTOITEM
-	WmSetfont                MessageId = C.WM_SETFONT
-	WmGetfont                MessageId = C.WM_GETFONT
-	WmSethotkey              MessageId = C.WM_SETHOTKEY
-	WmGethotkey              MessageId = C.WM_GETHOTKEY
-	WmQuerydragicon          MessageId = C.WM_QUERYDRAGICON
-	WmCompareitem            MessageId = C.WM_COMPAREITEM
-	WmGetobject              MessageId = C.WM_GETOBJECT
-	WmCompacting             MessageId = C.WM_COMPACTING
-	WmCommnotify             MessageId = C.WM_COMMNOTIFY
-	WmWindowposchanging      MessageId = C.WM_WINDOWPOSCHANGING
-	WmWindowposchanged       MessageId = C.WM_WINDOWPOSCHANGED
-	WmPower                  MessageId = C.WM_POWER
-	WmCopydata               MessageId = C.WM_COPYDATA
-	WmCanceljournal          MessageId = C.WM_CANCELJOURNAL
-	WmNotify                 MessageId = C.WM_NOTIFY
-	WmInputlangchangerequest MessageId = C.WM_INPUTLANGCHANGEREQUEST
-	WmInputlangchange        MessageId = C.WM_INPUTLANGCHANGE
-	WmTcard                  MessageId = C.WM_TCARD
-	WmHelp                   MessageId = C.WM_HELP
-	WmUserchanged            MessageId = C.WM_USERCHANGED
-	WmNotifyformat           MessageId = C.WM_NOTIFYFORMAT
-	WmContextmenu            MessageId = C.WM_CONTEXTMENU
-	WmStylechanging          MessageId = C.WM_STYLECHANGING
-	WmStylechanged           MessageId = C.WM_STYLECHANGED
-	WmDisplaychange          MessageId = C.WM_DISPLAYCHANGE
-	WmGeticon                MessageId = C.WM_GETICON
-	WmSeticon                MessageId = C.WM_SETICON
-	WmNccreate               MessageId = C.WM_NCCREATE
-	WmNcdestroy              MessageId = C.WM_NCDESTROY
-	WmNccalcsize             MessageId = C.WM_NCCALCSIZE
-	WmNchittest              MessageId = C.WM_NCHITTEST
-	WmNcpaint                MessageId = C.WM_NCPAINT
-	WmNcactivate             MessageId = C.WM_NCACTIVATE
-	WmGetdlgcode             MessageId = C.WM_GETDLGCODE
-	WmSyncpaint              MessageId = C.WM_SYNCPAINT
-	WmNcmousemove            MessageId = C.WM_NCMOUSEMOVE
-	WmNclbuttondown          MessageId = C.WM_NCLBUTTONDOWN
-	WmNclbuttonup            MessageId = C.WM_NCLBUTTONUP
-	WmNclbuttondblclk        MessageId = C.WM_NCLBUTTONDBLCLK
-	WmNcrbuttondown          MessageId = C.WM_NCRBUTTONDOWN
-	WmNcrbuttonup            MessageId = C.WM_NCRBUTTONUP
-	WmNcrbuttondblclk        MessageId = C.WM_NCRBUTTONDBLCLK
-	WmNcmbuttondown          MessageId = C.WM_NCMBUTTONDOWN
-	WmNcmbuttonup            MessageId = C.WM_NCMBUTTONUP
-	WmNcmbuttondblclk        MessageId = C.WM_NCMBUTTONDBLCLK
-	WmNcxbuttondown          MessageId = C.WM_NCXBUTTONDOWN
-	WmNcxbuttonup            MessageId = C.WM_NCXBUTTONUP
-	WmNcxbuttondblclk        MessageId = C.WM_NCXBUTTONDBLCLK
-	WmInputDeviceChange      MessageId = C.WM_INPUT_DEVICE_CHANGE
-	WmInput                  MessageId = C.WM_INPUT
-	WmKeyfirst               MessageId = C.WM_KEYFIRST
-	WmKeydown                MessageId = C.WM_KEYDOWN
-	WmKeyup                  MessageId = C.WM_KEYUP
-	WmChar                   MessageId = C.WM_CHAR
-	WmDeadchar               MessageId = C.WM_DEADCHAR
-	WmSyskeydown             MessageId = C.WM_SYSKEYDOWN
-	WmSyskeyup               MessageId = C.WM_SYSKEYUP
-	WmSyschar                MessageId = C.WM_SYSCHAR
-	WmSysdeadchar            MessageId = C.WM_SYSDEADCHAR
-	WmUnichar                MessageId = C.WM_UNICHAR
-	WmKeylast                MessageId = C.WM_KEYLAST
-	WmImeStartcomposition    MessageId = C.WM_IME_STARTCOMPOSITION
-	WmImeEndcomposition      MessageId = C.WM_IME_ENDCOMPOSITION
-	WmImeComposition         MessageId = C.WM_IME_COMPOSITION
-	WmImeKeylast             MessageId = C.WM_IME_KEYLAST
-	WmInitdialog             MessageId = C.WM_INITDIALOG
-	WmCommand                MessageId = C.WM_COMMAND
-	WmSyscommand             MessageId = C.WM_SYSCOMMAND
-	WmTimer                  MessageId = C.WM_TIMER
-	WmHscroll                MessageId = C.WM_HSCROLL
-	WmVscroll                MessageId = C.WM_VSCROLL
-	WmInitmenu               MessageId = C.WM_INITMENU
-	WmInitmenupopup          MessageId = C.WM_INITMENUPOPUP
-	WmMenuselect             MessageId = C.WM_MENUSELECT
-	WmGesture                MessageId = C.WM_GESTURE
-	WmGesturenotify          MessageId = C.WM_GESTURENOTIFY
-	WmMenuchar               MessageId = C.WM_MENUCHAR
-	WmEnteridle              MessageId = C.WM_ENTERIDLE
-	WmMenurbuttonup          MessageId = C.WM_MENURBUTTONUP
-	WmMenudrag               MessageId = C.WM_MENUDRAG
-	WmMenugetobject          MessageId = C.WM_MENUGETOBJECT
-	WmUninitmenupopup        MessageId = C.WM_UNINITMENUPOPUP
-	WmMenucommand            MessageId = C.WM_MENUCOMMAND
-	WmChangeuistate          MessageId = C.WM_CHANGEUISTATE
-	WmUpdateuistate          MessageId = C.WM_UPDATEUISTATE
-	WmQueryuistate           MessageId = C.WM_QUERYUISTATE
-	WmCtlcolormsgbox         MessageId = C.WM_CTLCOLORMSGBOX
-	WmCtlcoloredit           MessageId = C.WM_CTLCOLOREDIT
-	WmCtlcolorlistbox        MessageId = C.WM_CTLCOLORLISTBOX
-	WmCtlcolorbtn            MessageId = C.WM_CTLCOLORBTN
-	WmCtlcolordlg            MessageId = C.WM_CTLCOLORDLG
-	WmCtlcolorscrollbar      MessageId = C.WM_CTLCOLORSCROLLBAR
-	WmCtlcolorstatic         MessageId = C.WM_CTLCOLORSTATIC
-	WmMousefirst             MessageId = C.WM_MOUSEFIRST
-	WmMousemove              MessageId = C.WM_MOUSEMOVE
-	WmLbuttondown            MessageId = C.WM_LBUTTONDOWN
-	WmLbuttonup              MessageId = C.WM_LBUTTONUP
-	WmLbuttondblclk          MessageId = C.WM_LBUTTONDBLCLK
-	WmRbuttondown            MessageId = C.WM_RBUTTONDOWN
-	WmRbuttonup              MessageId = C.WM_RBUTTONUP
-	WmRbuttondblclk          MessageId = C.WM_RBUTTONDBLCLK
-	WmMbuttondown            MessageId = C.WM_MBUTTONDOWN
-	WmMbuttonup              MessageId = C.WM_MBUTTONUP
-	WmMbuttondblclk          MessageId = C.WM_MBUTTONDBLCLK
-	WmMousewheel             MessageId = C.WM_MOUSEWHEEL
-	WmXbuttondown            MessageId = C.WM_XBUTTONDOWN
-	WmXbuttonup              MessageId = C.WM_XBUTTONUP
-	WmXbuttondblclk          MessageId = C.WM_XBUTTONDBLCLK
-	WmMousehwheel            MessageId = C.WM_MOUSEHWHEEL
-	WmMouselast              MessageId = C.WM_MOUSELAST
-	WmParentnotify           MessageId = C.WM_PARENTNOTIFY
-	WmEntermenuloop          MessageId = C.WM_ENTERMENULOOP
-	WmExitmenuloop           MessageId = C.WM_EXITMENULOOP
-	WmNextmenu               MessageId = C.WM_NEXTMENU
-	WmSizing                 MessageId = C.WM_SIZING
-	WmCapturechanged         MessageId = C.WM_CAPTURECHANGED
-	WmMoving                 MessageId = C.WM_MOVING
-	WmPowerbroadcast         MessageId = C.WM_POWERBROADCAST
-	WmDevicechange           MessageId = C.WM_DEVICECHANGE
-	WmMdicreate              MessageId = C.WM_MDICREATE
-	WmMdidestroy             MessageId = C.WM_MDIDESTROY
-	WmMdiactivate            MessageId = C.WM_MDIACTIVATE
-	WmMdirestore             MessageId = C.WM_MDIRESTORE
-	WmMdinext                MessageId = C.WM_MDINEXT
-	WmMdimaximize            MessageId = C.WM_MDIMAXIMIZE
-	WmMditile                MessageId = C.WM_MDITILE
-	WmMdicascade             MessageId = C.WM_MDICASCADE
-	WmMdiiconarrange         MessageId = C.WM_MDIICONARRANGE
-	WmMdigetactive           MessageId = C.WM_MDIGETACTIVE
-	WmMdisetmenu             MessageId = C.WM_MDISETMENU
-	WmEntersizemove          MessageId = C.WM_ENTERSIZEMOVE
-	WmExitsizemove           MessageId = C.WM_EXITSIZEMOVE
-	WmDropfiles              MessageId = C.WM_DROPFILES
-	WmMdirefreshmenu         MessageId = C.WM_MDIREFRESHMENU
-	// WmPointerdevicechange MessageId = C.WM_POINTERDEVICECHANGE // #if WINVER >= 0x0602
-	// WmPointerdeviceinrange MessageId = C.WM_POINTERDEVICEINRANGE
-	// WmPointerdeviceoutofrange MessageId = C.WM_POINTERDEVICEOUTOFRANGE
-	WmTouch MessageId = C.WM_TOUCH
-	// WmNcpointerupdate MessageId = C.WM_NCPOINTERUPDATE  	// #if WINVER >= 0x0602
-	// WmNcpointerdown MessageId = C.WM_NCPOINTERDOWN
-	// WmNcpointerup MessageId = C.WM_NCPOINTERUP
-	// WmPointerupdate MessageId = C.WM_POINTERUPDATE
-	// WmPointerdown MessageId = C.WM_POINTERDOWN
-	// WmPointerup MessageId = C.WM_POINTERUP
-	// WmPointerenter MessageId = C.WM_POINTERENTER
-	// WmPointerleave MessageId = C.WM_POINTERLEAVE
-	// WmPointeractivate MessageId = C.WM_POINTERACTIVATE
-	// WmPointercapturechanged MessageId = C.WM_POINTERCAPTURECHANGED
-	// WmTouchhittesting MessageId = C.WM_TOUCHHITTESTING
-	// WmPointerwheel MessageId = C.WM_POINTERWHEEL
-	// WmPointerhwheel MessageId = C.WM_POINTERHWHEEL
-	WmImeSetcontext                  MessageId = C.WM_IME_SETCONTEXT
-	WmImeNotify                      MessageId = C.WM_IME_NOTIFY
-	WmImeControl                     MessageId = C.WM_IME_CONTROL
-	WmImeCompositionfull             MessageId = C.WM_IME_COMPOSITIONFULL
-	WmImeSelect                      MessageId = C.WM_IME_SELECT
-	WmImeChar                        MessageId = C.WM_IME_CHAR
-	WmImeRequest                     MessageId = C.WM_IME_REQUEST
-	WmImeKeydown                     MessageId = C.WM_IME_KEYDOWN
-	WmImeKeyup                       MessageId = C.WM_IME_KEYUP
-	WmMousehover                     MessageId = C.WM_MOUSEHOVER
-	WmMouseleave                     MessageId = C.WM_MOUSELEAVE
-	WmNcmousehover                   MessageId = C.WM_NCMOUSEHOVER
-	WmNcmouseleave                   MessageId = C.WM_NCMOUSELEAVE
-	WmWtssessionChange               MessageId = C.WM_WTSSESSION_CHANGE
-	WmTabletFirst                    MessageId = C.WM_TABLET_FIRST
-	WmTabletLast                     MessageId = C.WM_TABLET_LAST
-	WmDpichanged                     MessageId = C.WM_DPICHANGED
-	WmCut                            MessageId = C.WM_CUT
-	WmCopy                           MessageId = C.WM_COPY
-	WmPaste                          MessageId = C.WM_PASTE
-	WmClear                          MessageId = C.WM_CLEAR
-	WmUndo                           MessageId = C.WM_UNDO
-	WmRenderformat                   MessageId = C.WM_RENDERFORMAT
-	WmRenderallformats               MessageId = C.WM_RENDERALLFORMATS
-	WmDestroyclipboard               MessageId = C.WM_DESTROYCLIPBOARD
-	WmDrawclipboard                  MessageId = C.WM_DRAWCLIPBOARD
-	WmPaintclipboard                 MessageId = C.WM_PAINTCLIPBOARD
-	WmVscrollclipboard               MessageId = C.WM_VSCROLLCLIPBOARD
-	WmSizeclipboard                  MessageId = C.WM_SIZECLIPBOARD
-	WmAskcbformatname                MessageId = C.WM_ASKCBFORMATNAME
-	WmChangecbchain                  MessageId = C.WM_CHANGECBCHAIN
-	WmHscrollclipboard               MessageId = C.WM_HSCROLLCLIPBOARD
-	WmQuerynewpalette                MessageId = C.WM_QUERYNEWPALETTE
-	WmPaletteischanging              MessageId = C.WM_PALETTEISCHANGING
-	WmPalettechanged                 MessageId = C.WM_PALETTECHANGED
-	WmHotkey                         MessageId = C.WM_HOTKEY
-	WmPrint                          MessageId = C.WM_PRINT
-	WmPrintclient                    MessageId = C.WM_PRINTCLIENT
-	WmAppcommand                     MessageId = C.WM_APPCOMMAND
-	WmThemechanged                   MessageId = C.WM_THEMECHANGED
-	WmClipboardupdate                MessageId = C.WM_CLIPBOARDUPDATE
-	WmDwmcompositionchanged          MessageId = C.WM_DWMCOMPOSITIONCHANGED
-	WmDwmncrenderingchanged          MessageId = C.WM_DWMNCRENDERINGCHANGED
-	WmDwmcolorizationcolorchanged    MessageId = C.WM_DWMCOLORIZATIONCOLORCHANGED
-	WmDwmwindowmaximizedchange       MessageId = C.WM_DWMWINDOWMAXIMIZEDCHANGE
-	WmDwmsendiconicthumbnail         MessageId = C.WM_DWMSENDICONICTHUMBNAIL
-	WmDwmsendiconiclivepreviewbitmap MessageId = C.WM_DWMSENDICONICLIVEPREVIEWBITMAP
-	WmGettitlebarinfoex              MessageId = C.WM_GETTITLEBARINFOEX
-	WmHandheldfirst                  MessageId = C.WM_HANDHELDFIRST
-	WmHandheldlast                   MessageId = C.WM_HANDHELDLAST
-	WmAfxfirst                       MessageId = C.WM_AFXFIRST
-	WmAfxlast                        MessageId = C.WM_AFXLAST
-	WmPenwinfirst                    MessageId = C.WM_PENWINFIRST
-	WmPenwinlast                     MessageId = C.WM_PENWINLAST
-	WmApp                            MessageId = C.WM_APP
-	WmUser                           MessageId = C.WM_USER
+	WmNull                   win32api.MessageId = C.WM_NULL
+	WmCreate                 win32api.MessageId = C.WM_CREATE
+	WmDestroy                win32api.MessageId = C.WM_DESTROY
+	WmMove                   win32api.MessageId = C.WM_MOVE
+	WmSize                   win32api.MessageId = C.WM_SIZE
+	WmActivate               win32api.MessageId = C.WM_ACTIVATE
+	WmSetfocus               win32api.MessageId = C.WM_SETFOCUS
+	WmKillfocus              win32api.MessageId = C.WM_KILLFOCUS
+	WmEnable                 win32api.MessageId = C.WM_ENABLE
+	WmSetredraw              win32api.MessageId = C.WM_SETREDRAW
+	WmSettext                win32api.MessageId = C.WM_SETTEXT
+	WmGettext                win32api.MessageId = C.WM_GETTEXT
+	WmGettextlength          win32api.MessageId = C.WM_GETTEXTLENGTH
+	WmPaint                  win32api.MessageId = C.WM_PAINT
+	WmClose                  win32api.MessageId = C.WM_CLOSE
+	WmQueryendsession        win32api.MessageId = C.WM_QUERYENDSESSION
+	WmQueryopen              win32api.MessageId = C.WM_QUERYOPEN
+	WmEndsession             win32api.MessageId = C.WM_ENDSESSION
+	WmQuit                   win32api.MessageId = C.WM_QUIT
+	WmErasebkgnd             win32api.MessageId = C.WM_ERASEBKGND
+	WmSyscolorchange         win32api.MessageId = C.WM_SYSCOLORCHANGE
+	WmShowwindow             win32api.MessageId = C.WM_SHOWWINDOW
+	WmWininichange           win32api.MessageId = C.WM_WININICHANGE
+	WmSettingchange          win32api.MessageId = C.WM_SETTINGCHANGE
+	WmDevmodechange          win32api.MessageId = C.WM_DEVMODECHANGE
+	WmActivateapp            win32api.MessageId = C.WM_ACTIVATEAPP
+	WmFontchange             win32api.MessageId = C.WM_FONTCHANGE
+	WmTimechange             win32api.MessageId = C.WM_TIMECHANGE
+	WmCancelmode             win32api.MessageId = C.WM_CANCELMODE
+	WmSetcursor              win32api.MessageId = C.WM_SETCURSOR
+	WmMouseactivate          win32api.MessageId = C.WM_MOUSEACTIVATE
+	WmChildactivate          win32api.MessageId = C.WM_CHILDACTIVATE
+	WmQueuesync              win32api.MessageId = C.WM_QUEUESYNC
+	WmGetminmaxinfo          win32api.MessageId = C.WM_GETMINMAXINFO
+	WmPainticon              win32api.MessageId = C.WM_PAINTICON
+	WmIconerasebkgnd         win32api.MessageId = C.WM_ICONERASEBKGND
+	WmNextdlgctl             win32api.MessageId = C.WM_NEXTDLGCTL
+	WmSpoolerstatus          win32api.MessageId = C.WM_SPOOLERSTATUS
+	WmDrawitem               win32api.MessageId = C.WM_DRAWITEM
+	WmMeasureitem            win32api.MessageId = C.WM_MEASUREITEM
+	WmDeleteitem             win32api.MessageId = C.WM_DELETEITEM
+	WmVkeytoitem             win32api.MessageId = C.WM_VKEYTOITEM
+	WmChartoitem             win32api.MessageId = C.WM_CHARTOITEM
+	WmSetfont                win32api.MessageId = C.WM_SETFONT
+	WmGetfont                win32api.MessageId = C.WM_GETFONT
+	WmSethotkey              win32api.MessageId = C.WM_SETHOTKEY
+	WmGethotkey              win32api.MessageId = C.WM_GETHOTKEY
+	WmQuerydragicon          win32api.MessageId = C.WM_QUERYDRAGICON
+	WmCompareitem            win32api.MessageId = C.WM_COMPAREITEM
+	WmGetobject              win32api.MessageId = C.WM_GETOBJECT
+	WmCompacting             win32api.MessageId = C.WM_COMPACTING
+	WmCommnotify             win32api.MessageId = C.WM_COMMNOTIFY
+	WmWindowposchanging      win32api.MessageId = C.WM_WINDOWPOSCHANGING
+	WmWindowposchanged       win32api.MessageId = C.WM_WINDOWPOSCHANGED
+	WmPower                  win32api.MessageId = C.WM_POWER
+	WmCopydata               win32api.MessageId = C.WM_COPYDATA
+	WmCanceljournal          win32api.MessageId = C.WM_CANCELJOURNAL
+	WmNotify                 win32api.MessageId = C.WM_NOTIFY
+	WmInputlangchangerequest win32api.MessageId = C.WM_INPUTLANGCHANGEREQUEST
+	WmInputlangchange        win32api.MessageId = C.WM_INPUTLANGCHANGE
+	WmTcard                  win32api.MessageId = C.WM_TCARD
+	WmHelp                   win32api.MessageId = C.WM_HELP
+	WmUserchanged            win32api.MessageId = C.WM_USERCHANGED
+	WmNotifyformat           win32api.MessageId = C.WM_NOTIFYFORMAT
+	WmContextmenu            win32api.MessageId = C.WM_CONTEXTMENU
+	WmStylechanging          win32api.MessageId = C.WM_STYLECHANGING
+	WmStylechanged           win32api.MessageId = C.WM_STYLECHANGED
+	WmDisplaychange          win32api.MessageId = C.WM_DISPLAYCHANGE
+	WmGeticon                win32api.MessageId = C.WM_GETICON
+	WmSeticon                win32api.MessageId = C.WM_SETICON
+	WmNccreate               win32api.MessageId = C.WM_NCCREATE
+	WmNcdestroy              win32api.MessageId = C.WM_NCDESTROY
+	WmNccalcsize             win32api.MessageId = C.WM_NCCALCSIZE
+	WmNchittest              win32api.MessageId = C.WM_NCHITTEST
+	WmNcpaint                win32api.MessageId = C.WM_NCPAINT
+	WmNcactivate             win32api.MessageId = C.WM_NCACTIVATE
+	WmGetdlgcode             win32api.MessageId = C.WM_GETDLGCODE
+	WmSyncpaint              win32api.MessageId = C.WM_SYNCPAINT
+	WmNcmousemove            win32api.MessageId = C.WM_NCMOUSEMOVE
+	WmNclbuttondown          win32api.MessageId = C.WM_NCLBUTTONDOWN
+	WmNclbuttonup            win32api.MessageId = C.WM_NCLBUTTONUP
+	WmNclbuttondblclk        win32api.MessageId = C.WM_NCLBUTTONDBLCLK
+	WmNcrbuttondown          win32api.MessageId = C.WM_NCRBUTTONDOWN
+	WmNcrbuttonup            win32api.MessageId = C.WM_NCRBUTTONUP
+	WmNcrbuttondblclk        win32api.MessageId = C.WM_NCRBUTTONDBLCLK
+	WmNcmbuttondown          win32api.MessageId = C.WM_NCMBUTTONDOWN
+	WmNcmbuttonup            win32api.MessageId = C.WM_NCMBUTTONUP
+	WmNcmbuttondblclk        win32api.MessageId = C.WM_NCMBUTTONDBLCLK
+	WmNcxbuttondown          win32api.MessageId = C.WM_NCXBUTTONDOWN
+	WmNcxbuttonup            win32api.MessageId = C.WM_NCXBUTTONUP
+	WmNcxbuttondblclk        win32api.MessageId = C.WM_NCXBUTTONDBLCLK
+	WmInputDeviceChange      win32api.MessageId = C.WM_INPUT_DEVICE_CHANGE
+	WmInput                  win32api.MessageId = C.WM_INPUT
+	WmKeyfirst               win32api.MessageId = C.WM_KEYFIRST
+	WmKeydown                win32api.MessageId = C.WM_KEYDOWN
+	WmKeyup                  win32api.MessageId = C.WM_KEYUP
+	WmChar                   win32api.MessageId = C.WM_CHAR
+	WmDeadchar               win32api.MessageId = C.WM_DEADCHAR
+	WmSyskeydown             win32api.MessageId = C.WM_SYSKEYDOWN
+	WmSyskeyup               win32api.MessageId = C.WM_SYSKEYUP
+	WmSyschar                win32api.MessageId = C.WM_SYSCHAR
+	WmSysdeadchar            win32api.MessageId = C.WM_SYSDEADCHAR
+	WmUnichar                win32api.MessageId = C.WM_UNICHAR
+	WmKeylast                win32api.MessageId = C.WM_KEYLAST
+	WmImeStartcomposition    win32api.MessageId = C.WM_IME_STARTCOMPOSITION
+	WmImeEndcomposition      win32api.MessageId = C.WM_IME_ENDCOMPOSITION
+	WmImeComposition         win32api.MessageId = C.WM_IME_COMPOSITION
+	WmImeKeylast             win32api.MessageId = C.WM_IME_KEYLAST
+	WmInitdialog             win32api.MessageId = C.WM_INITDIALOG
+	WmCommand                win32api.MessageId = C.WM_COMMAND
+	WmSyscommand             win32api.MessageId = C.WM_SYSCOMMAND
+	WmTimer                  win32api.MessageId = C.WM_TIMER
+	WmHscroll                win32api.MessageId = C.WM_HSCROLL
+	WmVscroll                win32api.MessageId = C.WM_VSCROLL
+	WmInitmenu               win32api.MessageId = C.WM_INITMENU
+	WmInitmenupopup          win32api.MessageId = C.WM_INITMENUPOPUP
+	WmMenuselect             win32api.MessageId = C.WM_MENUSELECT
+	WmGesture                win32api.MessageId = C.WM_GESTURE
+	WmGesturenotify          win32api.MessageId = C.WM_GESTURENOTIFY
+	WmMenuchar               win32api.MessageId = C.WM_MENUCHAR
+	WmEnteridle              win32api.MessageId = C.WM_ENTERIDLE
+	WmMenurbuttonup          win32api.MessageId = C.WM_MENURBUTTONUP
+	WmMenudrag               win32api.MessageId = C.WM_MENUDRAG
+	WmMenugetobject          win32api.MessageId = C.WM_MENUGETOBJECT
+	WmUninitmenupopup        win32api.MessageId = C.WM_UNINITMENUPOPUP
+	WmMenucommand            win32api.MessageId = C.WM_MENUCOMMAND
+	WmChangeuistate          win32api.MessageId = C.WM_CHANGEUISTATE
+	WmUpdateuistate          win32api.MessageId = C.WM_UPDATEUISTATE
+	WmQueryuistate           win32api.MessageId = C.WM_QUERYUISTATE
+	WmCtlcolormsgbox         win32api.MessageId = C.WM_CTLCOLORMSGBOX
+	WmCtlcoloredit           win32api.MessageId = C.WM_CTLCOLOREDIT
+	WmCtlcolorlistbox        win32api.MessageId = C.WM_CTLCOLORLISTBOX
+	WmCtlcolorbtn            win32api.MessageId = C.WM_CTLCOLORBTN
+	WmCtlcolordlg            win32api.MessageId = C.WM_CTLCOLORDLG
+	WmCtlcolorscrollbar      win32api.MessageId = C.WM_CTLCOLORSCROLLBAR
+	WmCtlcolorstatic         win32api.MessageId = C.WM_CTLCOLORSTATIC
+	WmMousefirst             win32api.MessageId = C.WM_MOUSEFIRST
+	WmMousemove              win32api.MessageId = C.WM_MOUSEMOVE
+	WmLbuttondown            win32api.MessageId = C.WM_LBUTTONDOWN
+	WmLbuttonup              win32api.MessageId = C.WM_LBUTTONUP
+	WmLbuttondblclk          win32api.MessageId = C.WM_LBUTTONDBLCLK
+	WmRbuttondown            win32api.MessageId = C.WM_RBUTTONDOWN
+	WmRbuttonup              win32api.MessageId = C.WM_RBUTTONUP
+	WmRbuttondblclk          win32api.MessageId = C.WM_RBUTTONDBLCLK
+	WmMbuttondown            win32api.MessageId = C.WM_MBUTTONDOWN
+	WmMbuttonup              win32api.MessageId = C.WM_MBUTTONUP
+	WmMbuttondblclk          win32api.MessageId = C.WM_MBUTTONDBLCLK
+	WmMousewheel             win32api.MessageId = C.WM_MOUSEWHEEL
+	WmXbuttondown            win32api.MessageId = C.WM_XBUTTONDOWN
+	WmXbuttonup              win32api.MessageId = C.WM_XBUTTONUP
+	WmXbuttondblclk          win32api.MessageId = C.WM_XBUTTONDBLCLK
+	WmMousehwheel            win32api.MessageId = C.WM_MOUSEHWHEEL
+	WmMouselast              win32api.MessageId = C.WM_MOUSELAST
+	WmParentnotify           win32api.MessageId = C.WM_PARENTNOTIFY
+	WmEntermenuloop          win32api.MessageId = C.WM_ENTERMENULOOP
+	WmExitmenuloop           win32api.MessageId = C.WM_EXITMENULOOP
+	WmNextmenu               win32api.MessageId = C.WM_NEXTMENU
+	WmSizing                 win32api.MessageId = C.WM_SIZING
+	WmCapturechanged         win32api.MessageId = C.WM_CAPTURECHANGED
+	WmMoving                 win32api.MessageId = C.WM_MOVING
+	WmPowerbroadcast         win32api.MessageId = C.WM_POWERBROADCAST
+	WmDevicechange           win32api.MessageId = C.WM_DEVICECHANGE
+	WmMdicreate              win32api.MessageId = C.WM_MDICREATE
+	WmMdidestroy             win32api.MessageId = C.WM_MDIDESTROY
+	WmMdiactivate            win32api.MessageId = C.WM_MDIACTIVATE
+	WmMdirestore             win32api.MessageId = C.WM_MDIRESTORE
+	WmMdinext                win32api.MessageId = C.WM_MDINEXT
+	WmMdimaximize            win32api.MessageId = C.WM_MDIMAXIMIZE
+	WmMditile                win32api.MessageId = C.WM_MDITILE
+	WmMdicascade             win32api.MessageId = C.WM_MDICASCADE
+	WmMdiiconarrange         win32api.MessageId = C.WM_MDIICONARRANGE
+	WmMdigetactive           win32api.MessageId = C.WM_MDIGETACTIVE
+	WmMdisetmenu             win32api.MessageId = C.WM_MDISETMENU
+	WmEntersizemove          win32api.MessageId = C.WM_ENTERSIZEMOVE
+	WmExitsizemove           win32api.MessageId = C.WM_EXITSIZEMOVE
+	WmDropfiles              win32api.MessageId = C.WM_DROPFILES
+	WmMdirefreshmenu         win32api.MessageId = C.WM_MDIREFRESHMENU
+	// WmPointerdevicechange win32api.MessageId = C.WM_POINTERDEVICECHANGE // #if WINVER >= 0x0602
+	// WmPointerdeviceinrange win32api.MessageId = C.WM_POINTERDEVICEINRANGE
+	// WmPointerdeviceoutofrange win32api.MessageId = C.WM_POINTERDEVICEOUTOFRANGE
+	WmTouch win32api.MessageId = C.WM_TOUCH
+	// WmNcpointerupdate win32api.MessageId = C.WM_NCPOINTERUPDATE  	// #if WINVER >= 0x0602
+	// WmNcpointerdown win32api.MessageId = C.WM_NCPOINTERDOWN
+	// WmNcpointerup win32api.MessageId = C.WM_NCPOINTERUP
+	// WmPointerupdate win32api.MessageId = C.WM_POINTERUPDATE
+	// WmPointerdown win32api.MessageId = C.WM_POINTERDOWN
+	// WmPointerup win32api.MessageId = C.WM_POINTERUP
+	// WmPointerenter win32api.MessageId = C.WM_POINTERENTER
+	// WmPointerleave win32api.MessageId = C.WM_POINTERLEAVE
+	// WmPointeractivate win32api.MessageId = C.WM_POINTERACTIVATE
+	// WmPointercapturechanged win32api.MessageId = C.WM_POINTERCAPTURECHANGED
+	// WmTouchhittesting win32api.MessageId = C.WM_TOUCHHITTESTING
+	// WmPointerwheel win32api.MessageId = C.WM_POINTERWHEEL
+	// WmPointerhwheel win32api.MessageId = C.WM_POINTERHWHEEL
+	WmImeSetcontext                  win32api.MessageId = C.WM_IME_SETCONTEXT
+	WmImeNotify                      win32api.MessageId = C.WM_IME_NOTIFY
+	WmImeControl                     win32api.MessageId = C.WM_IME_CONTROL
+	WmImeCompositionfull             win32api.MessageId = C.WM_IME_COMPOSITIONFULL
+	WmImeSelect                      win32api.MessageId = C.WM_IME_SELECT
+	WmImeChar                        win32api.MessageId = C.WM_IME_CHAR
+	WmImeRequest                     win32api.MessageId = C.WM_IME_REQUEST
+	WmImeKeydown                     win32api.MessageId = C.WM_IME_KEYDOWN
+	WmImeKeyup                       win32api.MessageId = C.WM_IME_KEYUP
+	WmMousehover                     win32api.MessageId = C.WM_MOUSEHOVER
+	WmMouseleave                     win32api.MessageId = C.WM_MOUSELEAVE
+	WmNcmousehover                   win32api.MessageId = C.WM_NCMOUSEHOVER
+	WmNcmouseleave                   win32api.MessageId = C.WM_NCMOUSELEAVE
+	WmWtssessionChange               win32api.MessageId = C.WM_WTSSESSION_CHANGE
+	WmTabletFirst                    win32api.MessageId = C.WM_TABLET_FIRST
+	WmTabletLast                     win32api.MessageId = C.WM_TABLET_LAST
+	WmDpichanged                     win32api.MessageId = C.WM_DPICHANGED
+	WmCut                            win32api.MessageId = C.WM_CUT
+	WmCopy                           win32api.MessageId = C.WM_COPY
+	WmPaste                          win32api.MessageId = C.WM_PASTE
+	WmClear                          win32api.MessageId = C.WM_CLEAR
+	WmUndo                           win32api.MessageId = C.WM_UNDO
+	WmRenderformat                   win32api.MessageId = C.WM_RENDERFORMAT
+	WmRenderallformats               win32api.MessageId = C.WM_RENDERALLFORMATS
+	WmDestroyclipboard               win32api.MessageId = C.WM_DESTROYCLIPBOARD
+	WmDrawclipboard                  win32api.MessageId = C.WM_DRAWCLIPBOARD
+	WmPaintclipboard                 win32api.MessageId = C.WM_PAINTCLIPBOARD
+	WmVscrollclipboard               win32api.MessageId = C.WM_VSCROLLCLIPBOARD
+	WmSizeclipboard                  win32api.MessageId = C.WM_SIZECLIPBOARD
+	WmAskcbformatname                win32api.MessageId = C.WM_ASKCBFORMATNAME
+	WmChangecbchain                  win32api.MessageId = C.WM_CHANGECBCHAIN
+	WmHscrollclipboard               win32api.MessageId = C.WM_HSCROLLCLIPBOARD
+	WmQuerynewpalette                win32api.MessageId = C.WM_QUERYNEWPALETTE
+	WmPaletteischanging              win32api.MessageId = C.WM_PALETTEISCHANGING
+	WmPalettechanged                 win32api.MessageId = C.WM_PALETTECHANGED
+	WmHotkey                         win32api.MessageId = C.WM_HOTKEY
+	WmPrint                          win32api.MessageId = C.WM_PRINT
+	WmPrintclient                    win32api.MessageId = C.WM_PRINTCLIENT
+	WmAppcommand                     win32api.MessageId = C.WM_APPCOMMAND
+	WmThemechanged                   win32api.MessageId = C.WM_THEMECHANGED
+	WmClipboardupdate                win32api.MessageId = C.WM_CLIPBOARDUPDATE
+	WmDwmcompositionchanged          win32api.MessageId = C.WM_DWMCOMPOSITIONCHANGED
+	WmDwmncrenderingchanged          win32api.MessageId = C.WM_DWMNCRENDERINGCHANGED
+	WmDwmcolorizationcolorchanged    win32api.MessageId = C.WM_DWMCOLORIZATIONCOLORCHANGED
+	WmDwmwindowmaximizedchange       win32api.MessageId = C.WM_DWMWINDOWMAXIMIZEDCHANGE
+	WmDwmsendiconicthumbnail         win32api.MessageId = C.WM_DWMSENDICONICTHUMBNAIL
+	WmDwmsendiconiclivepreviewbitmap win32api.MessageId = C.WM_DWMSENDICONICLIVEPREVIEWBITMAP
+	WmGettitlebarinfoex              win32api.MessageId = C.WM_GETTITLEBARINFOEX
+	WmHandheldfirst                  win32api.MessageId = C.WM_HANDHELDFIRST
+	WmHandheldlast                   win32api.MessageId = C.WM_HANDHELDLAST
+	WmAfxfirst                       win32api.MessageId = C.WM_AFXFIRST
+	WmAfxlast                        win32api.MessageId = C.WM_AFXLAST
+	WmPenwinfirst                    win32api.MessageId = C.WM_PENWINFIRST
+	WmPenwinlast                     win32api.MessageId = C.WM_PENWINLAST
+	WmApp                            win32api.MessageId = C.WM_APP
+	WmUser                           win32api.MessageId = C.WM_USER
 )
 
 const (
@@ -793,7 +814,8 @@ const (
 )
 
 const (
-	SOk = C.S_OK
+	SOk    = C.S_OK
+	SFalse = C.S_FALSE
 )
 
 const (

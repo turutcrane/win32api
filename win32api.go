@@ -1,6 +1,7 @@
 package win32api
 
 import (
+	"github.com/turutcrane/win32api/internal/alloc"
 	"syscall"
 	"unsafe"
 )
@@ -37,8 +38,13 @@ type WORD int16
 type SHORT int16
 type LARGE_INTEGER int64
 type WCHAR uint16
+type USHORT uint16
+type ULONG uint32
+type PWSTR *uint16
 
 type ProcessDpiAwareness int
+type MessageId UINT
+type KnownFolderFlag UINT
 
 type UINT uint32
 type INT_PTR uintptr
@@ -51,6 +57,16 @@ type WndProc func(hWnd HWND, message UINT, wParam WPARAM, lParam LPARAM) LRESULT
 
 //type LPCWSTR *uint16
 //type LONG_PTR uintptr
+
+type GUID struct {
+	Data1 ULONG
+	Data2 USHORT
+	Data3 USHORT
+	Data4 [8]BYTE
+}
+
+type KNOWNFOLDERID GUID
+type REFKNOWNFOLDERID uintptr
 
 func MakeIntResource(id uint16) *uint16 {
 	return (*uint16)(unsafe.Pointer(uintptr(id)))
@@ -119,7 +135,7 @@ func HIWORD(w WPARAM) uintptr {
 func GET_X_LPARAM(lParam LPARAM) int {
 	low := lParam & 0xffff
 	var x int
-	if low & 0x8000 != 0 {
+	if low&0x8000 != 0 {
 		x = int(low) - 0x10000
 	} else {
 		x = int(low)
@@ -130,7 +146,7 @@ func GET_X_LPARAM(lParam LPARAM) int {
 func GET_Y_LPARAM(lParam LPARAM) int {
 	high := (lParam >> 16) & 0xffff
 	var y int
-	if high & 0x8000 != 0 {
+	if high&0x8000 != 0 {
 		y = int(high) - 0x10000
 	} else {
 		y = int(high)
@@ -141,7 +157,7 @@ func GET_Y_LPARAM(lParam LPARAM) int {
 func GET_WHEEL_DELTA_WPARAM(wParam WPARAM) int {
 	high := (wParam >> 16) & 0xffff
 	var delta int
-	if high & 0x8000 != 0 {
+	if high&0x8000 != 0 {
 		delta = int(high) - 0x10000
 	} else {
 		delta = int(high)
@@ -172,4 +188,22 @@ func WindowFromPoint(point Point) (r HWND) {
 	xy = (x & mask32) | (y << 32)
 
 	return windowFromPoint(xy)
+}
+
+func SHGetFolderPath(hwnd HWND, csidl int, hToken HANDLE, dwFlags DWORD) (r HRESULT, path string) {
+	ptr := alloc.Malloc(alloc.MaxPath * alloc.SizeofTCHAR)
+	r0, _, _ := syscall.Syscall6(procSHGetFolderPathW.Addr(), 5, uintptr(hwnd), uintptr(csidl), uintptr(hToken), uintptr(dwFlags), ptr, 0)
+	r = HRESULT(r0)
+	slice := (*[1 << 30]uint16)(unsafe.Pointer(ptr))[:]
+	path = syscall.UTF16ToString(slice)
+	return r, path
+}
+
+func SHGetKnownFolderPath(rfid REFKNOWNFOLDERID, dwFlags DWORD, hToken HANDLE) (r HRESULT, path string) {
+	ptr := alloc.Malloc(alloc.MaxPath * alloc.SizeofWCHAR)
+	r0, _, _ := syscall.Syscall6(procSHGetKnownFolderPath.Addr(), 4, uintptr(rfid), uintptr(dwFlags), uintptr(hToken), uintptr(unsafe.Pointer(ptr)), 0, 0)
+	r = HRESULT(r0)
+	slice := (*[1 << 30]uint16)(unsafe.Pointer(ptr))[:]
+	path = syscall.UTF16ToString(slice)
+	return r, path
 }

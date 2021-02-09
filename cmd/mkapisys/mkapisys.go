@@ -25,6 +25,7 @@ var typeMap = map[string]string{
 	// "UINT":    "uint32",
 	
 	"PROCESS_DPI_AWARENESS": "ProcessDpiAwareness",
+	"SHFOLDERAPI": "HRESULT",
 }
 
 func main() {

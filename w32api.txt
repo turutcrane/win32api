@@ -583,3 +583,24 @@ BOOL RemoveMenu(
 
 @noerr
 LPWSTR GetCommandLineW();
+
+@ns shell32
+@noerr
+@funcname   sHGetFolderPath
+SHFOLDERAPI SHGetFolderPathW(
+  HWND   hwnd,
+  int    csidl,
+  HANDLE hToken,
+  DWORD  dwFlags,
+  LPWSTR pszPath
+);
+
+@ns Shell32
+@noerr
+@funcname sHGetKnownFolderPath   
+HRESULT SHGetKnownFolderPath(
+  REFKNOWNFOLDERID rfid,
+  DWORD            dwFlags,
+  HANDLE           hToken,
+  PWSTR            *ppszPath
+);

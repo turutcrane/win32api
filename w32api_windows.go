@@ -176,3 +176,5 @@ type Trackmouseevent struct {
 //sys GetSubMenu(hMenu HMENU, nPos int) (r HMENU) = user32.GetSubMenu
 //sys RemoveMenu(hMenu HMENU, uPosition UINT, uFlags UINT) (err error) = user32.RemoveMenu
 //sys GetCommandLine() (r *uint16) = GetCommandLineW
+//sys sHGetFolderPath(hwnd HWND, csidl int, hToken HANDLE, dwFlags DWORD, pszPath *uint16) (r HRESULT) = shell32.SHGetFolderPathW
+//sys sHGetKnownFolderPath(rfid REFKNOWNFOLDERID, dwFlags DWORD, hToken HANDLE, ppszPath *PWSTR) (r HRESULT) = Shell32.SHGetKnownFolderPath

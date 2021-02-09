@@ -43,6 +43,8 @@ var (
 	modcomdlg32 = windows.NewLazySystemDLL("comdlg32.dll")
 	modOpengl32 = windows.NewLazySystemDLL("Opengl32.dll")
 	modShcore   = windows.NewLazySystemDLL("Shcore.dll")
+	modshell32  = windows.NewLazySystemDLL("shell32.dll")
+	modShell32  = windows.NewLazySystemDLL("Shell32.dll")
 
 	procSetLastError              = modkernel32.NewProc("SetLastError")
 	procGetWindowLongPtrW         = moduser32.NewProc("GetWindowLongPtrW")
@@ -118,6 +120,8 @@ var (
 	procGetSubMenu                = moduser32.NewProc("GetSubMenu")
 	procRemoveMenu                = moduser32.NewProc("RemoveMenu")
 	procGetCommandLineW           = modkernel32.NewProc("GetCommandLineW")
+	procSHGetFolderPathW          = modshell32.NewProc("SHGetFolderPathW")
+	procSHGetKnownFolderPath      = modShell32.NewProc("SHGetKnownFolderPath")
 )
 
 func SetLastError(dwErrCode DWORD) {
@@ -808,5 +812,17 @@ func RemoveMenu(hMenu HMENU, uPosition UINT, uFlags UINT) (err error) {
 func GetCommandLine() (r *uint16) {
 	r0, _, _ := syscall.Syscall(procGetCommandLineW.Addr(), 0, 0, 0, 0)
 	r = (*uint16)(unsafe.Pointer(r0))
+	return
+}
+
+func sHGetFolderPath(hwnd HWND, csidl int, hToken HANDLE, dwFlags DWORD, pszPath *uint16) (r HRESULT) {
+	r0, _, _ := syscall.Syscall6(procSHGetFolderPathW.Addr(), 5, uintptr(hwnd), uintptr(csidl), uintptr(hToken), uintptr(dwFlags), uintptr(unsafe.Pointer(pszPath)), 0)
+	r = HRESULT(r0)
+	return
+}
+
+func sHGetKnownFolderPath(rfid REFKNOWNFOLDERID, dwFlags DWORD, hToken HANDLE, ppszPath *PWSTR) (r HRESULT) {
+	r0, _, _ := syscall.Syscall6(procSHGetKnownFolderPath.Addr(), 4, uintptr(rfid), uintptr(dwFlags), uintptr(hToken), uintptr(unsafe.Pointer(ppszPath)), 0, 0)
+	r = HRESULT(r0)
 	return
 }
