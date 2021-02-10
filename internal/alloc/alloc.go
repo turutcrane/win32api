@@ -9,6 +9,7 @@ const (
 	MaxPath = C.MAX_PATH
 	SizeofTCHAR = C.sizeof_TCHAR
 	SizeofWCHAR = C.sizeof_WCHAR
+	SizeofPWSTR = C.sizeof_PWSTR
 )
 
 func Malloc(length int) uintptr {

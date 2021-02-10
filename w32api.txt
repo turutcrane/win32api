@@ -604,3 +604,10 @@ HRESULT SHGetKnownFolderPath(
   HANDLE           hToken,
   PWSTR            *ppszPath
 );
+
+@ns Ole32
+@noerr
+@noreturn
+void CoTaskMemFree(
+  LPVOID pv
+);

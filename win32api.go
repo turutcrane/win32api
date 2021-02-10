@@ -200,10 +200,16 @@ func SHGetFolderPath(hwnd HWND, csidl int, hToken HANDLE, dwFlags DWORD) (r HRES
 }
 
 func SHGetKnownFolderPath(rfid REFKNOWNFOLDERID, dwFlags DWORD, hToken HANDLE) (r HRESULT, path string) {
-	ptr := alloc.Malloc(alloc.MaxPath * alloc.SizeofWCHAR)
+	ptr := alloc.Malloc(alloc.SizeofPWSTR)
+	defer alloc.Free(ptr)
+
 	r0, _, _ := syscall.Syscall6(procSHGetKnownFolderPath.Addr(), 4, uintptr(rfid), uintptr(dwFlags), uintptr(hToken), uintptr(unsafe.Pointer(ptr)), 0, 0)
 	r = HRESULT(r0)
-	slice := (*[1 << 30]uint16)(unsafe.Pointer(ptr))[:]
+	pptr := (**uint16)(unsafe.Pointer(ptr))
+	defer CoTaskMemFree(LPVOID(unsafe.Pointer(*pptr)))
+
+	slice := (*[1 << 30]uint16)(unsafe.Pointer(*pptr))[:]
 	path = syscall.UTF16ToString(slice)
+
 	return r, path
 }

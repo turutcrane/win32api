@@ -45,6 +45,7 @@ var (
 	modShcore   = windows.NewLazySystemDLL("Shcore.dll")
 	modshell32  = windows.NewLazySystemDLL("shell32.dll")
 	modShell32  = windows.NewLazySystemDLL("Shell32.dll")
+	modOle32    = windows.NewLazySystemDLL("Ole32.dll")
 
 	procSetLastError              = modkernel32.NewProc("SetLastError")
 	procGetWindowLongPtrW         = moduser32.NewProc("GetWindowLongPtrW")
@@ -122,6 +123,7 @@ var (
 	procGetCommandLineW           = modkernel32.NewProc("GetCommandLineW")
 	procSHGetFolderPathW          = modshell32.NewProc("SHGetFolderPathW")
 	procSHGetKnownFolderPath      = modShell32.NewProc("SHGetKnownFolderPath")
+	procCoTaskMemFree             = modOle32.NewProc("CoTaskMemFree")
 )
 
 func SetLastError(dwErrCode DWORD) {
@@ -824,5 +826,10 @@ func sHGetFolderPath(hwnd HWND, csidl int, hToken HANDLE, dwFlags DWORD, pszPath
 func sHGetKnownFolderPath(rfid REFKNOWNFOLDERID, dwFlags DWORD, hToken HANDLE, ppszPath *PWSTR) (r HRESULT) {
 	r0, _, _ := syscall.Syscall6(procSHGetKnownFolderPath.Addr(), 4, uintptr(rfid), uintptr(dwFlags), uintptr(hToken), uintptr(unsafe.Pointer(ppszPath)), 0, 0)
 	r = HRESULT(r0)
+	return
+}
+
+func CoTaskMemFree(pv LPVOID) {
+	syscall.Syscall(procCoTaskMemFree.Addr(), 1, uintptr(pv), 0, 0)
 	return
 }
