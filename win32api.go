@@ -21,6 +21,7 @@ type HDWP syscall.Handle
 type HFONT syscall.Handle
 type HGDIOBJ syscall.Handle
 type HGLRC syscall.Handle
+type HGLOBAL syscall.Handle
 type HICON syscall.Handle
 type HINSTANCE syscall.Handle
 type HKL syscall.Handle
@@ -29,6 +30,7 @@ type HMODULE syscall.Handle
 type HWND syscall.Handle
 type HRESULT LONG
 type HRGN syscall.Handle
+type HRSRC syscall.Handle
 type LONG int32
 type LPVOID uintptr
 type LRESULT uintptr

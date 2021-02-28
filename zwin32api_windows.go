@@ -124,6 +124,10 @@ var (
 	procSHGetFolderPathW          = modshell32.NewProc("SHGetFolderPathW")
 	procSHGetKnownFolderPath      = modShell32.NewProc("SHGetKnownFolderPath")
 	procCoTaskMemFree             = modOle32.NewProc("CoTaskMemFree")
+	procFindResourceW             = modkernel32.NewProc("FindResourceW")
+	procLoadResource              = modkernel32.NewProc("LoadResource")
+	procSizeofResource            = modkernel32.NewProc("SizeofResource")
+	procLockResource              = modkernel32.NewProc("LockResource")
 )
 
 func SetLastError(dwErrCode DWORD) {
@@ -831,5 +835,57 @@ func sHGetKnownFolderPath(rfid REFKNOWNFOLDERID, dwFlags DWORD, hToken HANDLE, p
 
 func CoTaskMemFree(pv LPVOID) {
 	syscall.Syscall(procCoTaskMemFree.Addr(), 1, uintptr(pv), 0, 0)
+	return
+}
+
+func FindResource(hModule HMODULE, lpName *uint16, lpType *uint16) (r HRSRC, err error) {
+	r0, _, e1 := syscall.Syscall(procFindResourceW.Addr(), 3, uintptr(hModule), uintptr(unsafe.Pointer(lpName)), uintptr(unsafe.Pointer(lpType)))
+	r = HRSRC(r0)
+	if r == 0 {
+		if e1 != 0 {
+			err = errnoErr(e1)
+		} else {
+			err = syscall.EINVAL
+		}
+	}
+	return
+}
+
+func LoadResource(hModule HMODULE, hResInfo HRSRC) (r HGLOBAL, err error) {
+	r0, _, e1 := syscall.Syscall(procLoadResource.Addr(), 2, uintptr(hModule), uintptr(hResInfo), 0)
+	r = HGLOBAL(r0)
+	if r == 0 {
+		if e1 != 0 {
+			err = errnoErr(e1)
+		} else {
+			err = syscall.EINVAL
+		}
+	}
+	return
+}
+
+func SizeofResource(hModule HMODULE, hResInfo HRSRC) (r DWORD, err error) {
+	r0, _, e1 := syscall.Syscall(procSizeofResource.Addr(), 2, uintptr(hModule), uintptr(hResInfo), 0)
+	r = DWORD(r0)
+	if r == 0 {
+		if e1 != 0 {
+			err = errnoErr(e1)
+		} else {
+			err = syscall.EINVAL
+		}
+	}
+	return
+}
+
+func LockResource(hResData HGLOBAL) (r LPVOID, err error) {
+	r0, _, e1 := syscall.Syscall(procLockResource.Addr(), 1, uintptr(hResData), 0, 0)
+	r = LPVOID(r0)
+	if r == 0 {
+		if e1 != 0 {
+			err = errnoErr(e1)
+		} else {
+			err = syscall.EINVAL
+		}
+	}
 	return
 }

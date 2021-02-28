@@ -611,3 +611,23 @@ HRESULT SHGetKnownFolderPath(
 void CoTaskMemFree(
   LPVOID pv
 );
+
+HRSRC FindResourceW(
+  HMODULE hModule,
+  LPCWSTR  lpName,
+  LPCWSTR  lpType
+);
+
+HGLOBAL LoadResource(
+  HMODULE hModule,
+  HRSRC   hResInfo
+);
+
+DWORD SizeofResource(
+  HMODULE hModule,
+  HRSRC   hResInfo
+);
+
+LPVOID LockResource(
+  HGLOBAL hResData
+);

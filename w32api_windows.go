@@ -179,3 +179,7 @@ type Trackmouseevent struct {
 //sys sHGetFolderPath(hwnd HWND, csidl int, hToken HANDLE, dwFlags DWORD, pszPath *uint16) (r HRESULT) = shell32.SHGetFolderPathW
 //sys sHGetKnownFolderPath(rfid REFKNOWNFOLDERID, dwFlags DWORD, hToken HANDLE, ppszPath *PWSTR) (r HRESULT) = Shell32.SHGetKnownFolderPath
 //sys CoTaskMemFree(pv LPVOID) = Ole32.CoTaskMemFree
+//sys FindResource(hModule HMODULE, lpName *uint16, lpType *uint16) (r HRSRC, err error) = FindResourceW
+//sys LoadResource(hModule HMODULE, hResInfo HRSRC) (r HGLOBAL, err error) = LoadResource
+//sys SizeofResource(hModule HMODULE, hResInfo HRSRC) (r DWORD, err error) = SizeofResource
+//sys LockResource(hResData HGLOBAL) (r LPVOID, err error) = LockResource
