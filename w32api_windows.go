@@ -106,6 +106,20 @@ type Trackmouseevent struct {
 	HoverTime DWORD
 }
 
+type Bitmapinfoheader struct {
+	Size DWORD
+	Width LONG
+	Height LONG
+	Planes WORD
+	BitCount WORD
+	Compression DWORD
+	SizeImage DWORD
+	XPelsPerMeter LONG
+	YPelsPerMeter LONG
+	ClrUsed DWORD
+	ClrImportant DWORD
+}
+
 //sys GetModuleHandle(lpModuleName *uint16) (r HMODULE, err error) = GetModuleHandleW
 //sys ScreenToClient(hWnd HWND, lpPoint *Point) (r bool) = user32.ScreenToClient
 //sys PtInRegion(hrgn HRGN, x int, y int) (r bool) = gdi32.PtInRegion
@@ -183,3 +197,4 @@ type Trackmouseevent struct {
 //sys LoadResource(hModule HMODULE, hResInfo HRSRC) (r HGLOBAL, err error) = LoadResource
 //sys SizeofResource(hModule HMODULE, hResInfo HRSRC) (r DWORD, err error) = SizeofResource
 //sys LockResource(hResData HGLOBAL) (r LPVOID, err error) = LockResource
+//sys CreateIcon(hInstance HINSTANCE, nWidth int, nHeight int, cPlanes BYTE, cBitsPixel BYTE, lpbANDbits *BYTE, lpbXORbits *BYTE) (r HICON, err error) = user32.CreateIcon

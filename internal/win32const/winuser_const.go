@@ -25,12 +25,7 @@ const (
 	sizeof_LONGLONG              = C.sizeof_LONGLONG
 	sizeof_TRACKMOUSEEVENT       = C.sizeof_TRACKMOUSEEVENT
 	sizeof_GUID                  = C.sizeof_GUID
-)
-
-// index of GetDevoceCaps
-const (
-	Logpixelsx = C.LOGPIXELSX
-	Logpixelsy = C.LOGPIXELSY
+	sizeof_BITMAPINFOHEADER      = C.sizeof_BITMAPINFOHEADER
 )
 
 const (

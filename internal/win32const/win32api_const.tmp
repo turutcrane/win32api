@@ -7,6 +7,13 @@ const (
 	AntialiasedQuality                                   = 4                     // constant.int64Val
 	ArabicCharset                                        = 178                   // constant.int64Val
 	BalticCharset                                        = 186                   // constant.int64Val
+	BiBitfields                                          = 3                     // constant.int64Val
+	BiJpeg                                               = 4                     // constant.int64Val
+	BiPng                                                = 5                     // constant.int64Val
+	BiRgb                                                = 0                     // constant.int64Val
+	BiRle4                                               = 2                     // constant.int64Val
+	BiRle8                                               = 1                     // constant.int64Val
+	Bitspixel                                            = 12                    // constant.int64Val
 	Bs3state                                             = 5                     // constant.int64Val
 	BsAuto3state                                         = 6                     // constant.int64Val
 	BsAutocheckbox                                       = 3                     // constant.int64Val
@@ -243,6 +250,8 @@ const (
 	HangulCharset                                        = 129                   // constant.int64Val
 	HebrewCharset                                        = 177                   // constant.int64Val
 	Helpmsgstring                                        = "commdlg_help"        // *constant.stringVal
+	Horzres                                              = 8                     // constant.int64Val
+	Horzsize                                             = 4                     // constant.int64Val
 	Htborder                                             = 18                    // constant.int64Val
 	Htbottom                                             = 15                    // constant.int64Val
 	Htbottomleft                                         = 16                    // constant.int64Val
@@ -409,6 +418,7 @@ const (
 	PfdTypeColorindex                                    = 1                            // constant.int64Val
 	PfdTypeRgba                                          = 0                            // constant.int64Val
 	PfdUnderlayPlane                                     = -1                           // constant.int64Val
+	Planes                                               = 14                           // constant.int64Val
 	ProcessDpiUnaware                ProcessDpiAwareness = 0
 	ProcessPerMonitorDpiAware        ProcessDpiAwareness = 2
 	ProcessSystemDpiAware            ProcessDpiAwareness = 1
@@ -562,6 +572,7 @@ const (
 	SwpNozorder                                          = 4                        // constant.int64Val
 	SwpShowwindow                                        = 64                       // constant.int64Val
 	SymbolCharset                                        = 2                        // constant.int64Val
+	Technology                                           = 2                        // constant.int64Val
 	ThaiCharset                                          = 222                      // constant.int64Val
 	TmeCancel                                            = 2147483648               // constant.int64Val
 	TmeHover                                             = 1                        // constant.int64Val
@@ -571,6 +582,8 @@ const (
 	True                                                 = 1                        // constant.int64Val
 	TurkishCharset                                       = 162                      // constant.int64Val
 	VariablePitch                                        = 2                        // constant.int64Val
+	Vertres                                              = 10                       // constant.int64Val
+	Vertsize                                             = 6                        // constant.int64Val
 	VietnameseCharset                                    = 163                      // constant.int64Val
 	VkAccept                                             = 30                       // constant.int64Val
 	VkAdd                                                = 107                      // constant.int64Val

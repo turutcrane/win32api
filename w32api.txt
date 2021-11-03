@@ -105,6 +105,20 @@ typedef struct tagTRACKMOUSEEVENT {
   DWORD dwHoverTime;
 } TRACKMOUSEEVENT, *LPTRACKMOUSEEVENT;
 
+typedef struct tagBITMAPINFOHEADER {
+  DWORD biSize;
+  LONG  biWidth;
+  LONG  biHeight;
+  WORD  biPlanes;
+  WORD  biBitCount;
+  DWORD biCompression;
+  DWORD biSizeImage;
+  LONG  biXPelsPerMeter;
+  LONG  biYPelsPerMeter;
+  DWORD biClrUsed;
+  DWORD biClrImportant;
+} BITMAPINFOHEADER, *LPBITMAPINFOHEADER, *PBITMAPINFOHEADER;
+
 //
 HMODULE GetModuleHandleW(
   LPCWSTR lpModuleName
@@ -630,4 +644,15 @@ DWORD SizeofResource(
 
 LPVOID LockResource(
   HGLOBAL hResData
+);
+
+@ns user32
+HICON CreateIcon(
+  HINSTANCE  hInstance,
+  int        nWidth,
+  int        nHeight,
+  BYTE       cPlanes,
+  BYTE       cBitsPixel,
+  const BYTE *lpbANDbits,
+  const BYTE *lpbXORbits
 );

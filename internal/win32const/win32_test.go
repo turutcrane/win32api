@@ -39,6 +39,11 @@ func TestStructSize(t *testing.T) {
 	if unsafe.Sizeof(win32api.GUID{}) != sizeof_GUID {
 		t.Error("T28: GUID: size dose not match!", unsafe.Sizeof(win32api.GUID{}), sizeof_GUID)
 	}
+
+	if unsafe.Sizeof(win32api.Bitmapinfoheader{}) != sizeof_BITMAPINFOHEADER {
+		t.Error("T44: BITMAPINFOHEADER: size dose not match!", unsafe.Sizeof(win32api.Bitmapinfoheader{}), sizeof_GUID)
+
+	}
 }
 
 func TestIdc(t *testing.T) {

@@ -128,6 +128,7 @@ var (
 	procLoadResource              = modkernel32.NewProc("LoadResource")
 	procSizeofResource            = modkernel32.NewProc("SizeofResource")
 	procLockResource              = modkernel32.NewProc("LockResource")
+	procCreateIcon                = moduser32.NewProc("CreateIcon")
 )
 
 func SetLastError(dwErrCode DWORD) {
@@ -880,6 +881,19 @@ func SizeofResource(hModule HMODULE, hResInfo HRSRC) (r DWORD, err error) {
 func LockResource(hResData HGLOBAL) (r LPVOID, err error) {
 	r0, _, e1 := syscall.Syscall(procLockResource.Addr(), 1, uintptr(hResData), 0, 0)
 	r = LPVOID(r0)
+	if r == 0 {
+		if e1 != 0 {
+			err = errnoErr(e1)
+		} else {
+			err = syscall.EINVAL
+		}
+	}
+	return
+}
+
+func CreateIcon(hInstance HINSTANCE, nWidth int, nHeight int, cPlanes BYTE, cBitsPixel BYTE, lpbANDbits *BYTE, lpbXORbits *BYTE) (r HICON, err error) {
+	r0, _, e1 := syscall.Syscall9(procCreateIcon.Addr(), 7, uintptr(hInstance), uintptr(nWidth), uintptr(nHeight), uintptr(cPlanes), uintptr(cBitsPixel), uintptr(unsafe.Pointer(lpbANDbits)), uintptr(unsafe.Pointer(lpbXORbits)), 0, 0)
+	r = HICON(r0)
 	if r == 0 {
 		if e1 != 0 {
 			err = errnoErr(e1)
